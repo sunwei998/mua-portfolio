@@ -76,7 +76,25 @@ if [ ! -d .git ]; then
 EOT
   exit 1
 fi
-git config --global --add safe.directory "$REPO_DIR" >/dev/null 2>&1 || true
+# ⚠️ safe.directory 必须在这里配好，且**不能吞掉错误**（2026-10-03 踩过，很隐蔽）。
+#
+#   仓库属主是 root（clone 时 sudo 创建），当脚本以 root 跑时 git 正常；
+#   但只要有任一 git 命令以**非 root** 身份执行（如下面第 8 步构建 admin 时
+#   若切换了用户、或有人手动用 ubuntu 跑过），git 就会报
+#     fatal: detected dubious ownership in repository at '/opt/mua'
+#   而原写法 `git config --global ... >/dev/null 2>&1 || true` 把这个**静默吞掉**，
+#   紧接着的 `git rev-parse origin/$BRANCH` 在 set -e 下失败 ⇒ NEW_REV 为空
+#   ⇒ 脚本拿着一堆空变量继续跑，工作副本永远停在旧提交，
+#   却全程显示"成功"，日志里也找不到任何 git 报错。**部署看起来在跑，其实在原地踏步。**
+#
+#   下面两处都改成"配置后立刻验证，失败就明确退出"：
+git config --global --add safe.directory "$REPO_DIR"
+git config --global --add safe.directory /opt/mua.git
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+  say "✗ git 拒绝访问 $REPO_DIR（dubious ownership）。已尝试写入 safe.directory 但仍失败。"
+  say "  请检查： sudo git config --global --add safe.directory $REPO_DIR"
+  exit 1
+fi
 
 # ------------------------------------------------------------------ 1) 取新代码
 say "拉取 origin/$BRANCH …"
@@ -184,7 +202,18 @@ rollback() {
 cd "$REPO_DIR"
 git checkout --quiet "$BRANCH" 2>/dev/null || git checkout --quiet -B "$BRANCH" "origin/$BRANCH"
 git reset --hard --quiet "$NEW_REV"
-say "代码已切换到 ${NEW_REV:0:8}"
+# ⚠️ 切完必须核对真的到位了（2026-10-03 踩过）：
+#   曾出现裸仓已是新提交、工作副本却停在旧提交的情况，脚本全程无报错、
+#   日志一片正常，但**部署的是旧代码**（编排文件也因此是旧的，缺 diagnose 段）。
+#   根因是 safe.directory 失败被静默吞掉，导致 NEW_REV 取空。
+#   这里显式比对，多花 0.01 秒换掉一整类"假成功"。
+ACTUAL_REV="$(git rev-parse HEAD)"
+if [ "$ACTUAL_REV" != "$NEW_REV" ]; then
+  say "✗ 切代码后校验失败：期望 ${NEW_REV:0:8}，实际 ${ACTUAL_REV:0:8}"
+  say "  多半是 git safe.directory / 权限问题；脚本终止，不要在这种状态下继续。"
+  exit 1
+fi
+say "代码已切换到 ${NEW_REV:0:8}（已校验）"
 
 cd "$SCRIPT_DIR"
 
