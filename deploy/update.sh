@@ -18,9 +18,13 @@
 #      自动还原会用旧数据覆盖这期间录入的内容，那比停机更糟。
 #
 # 环境变量（可选）：
-#   BRANCH      要跟随的分支，默认 main
-#   HEALTH_WAIT 健康检查最长等待秒数，默认 120
+#   BRANCH       要跟随的分支，默认 main
+#   HEALTH_WAIT  健康检查最长等待秒数，默认 120
 #   SKIP_MIGRATE 设为 1 时跳过数据库迁移（纯前端改版时省一次连接开销）
+#   FORCE        设为 1 时**跳过幂等短路**，即使没有新提交也强制走一遍构建。
+#                首次部署必用：此时 HEAD 已等于 origin/main，幂等判断会
+#                「无新提交 → exit 0」，容器根本没起来（排查时极具迷惑性：
+#                脚本 exit 0 一片绿，站点却 502）。
 # ============================================================================
 set -euo pipefail
 
@@ -29,6 +33,7 @@ REPO_DIR="$(dirname "$SCRIPT_DIR")"          # deploy/ 的上一级 = 仓库根
 BRANCH="${BRANCH:-main}"
 HEALTH_WAIT="${HEALTH_WAIT:-120}"
 SKIP_MIGRATE="${SKIP_MIGRATE:-0}"
+FORCE="${FORCE:-0}"
 BACKUP_DIR="${BACKUP_DIR:-/opt/mua/backups}"
 
 # 对外端口（与 env.example 一致；update.sh 里的自检要用）
@@ -83,11 +88,15 @@ fi
 
 NEW_REV="$(git rev-parse "origin/$BRANCH")"
 OLD_REV="$(git rev-parse HEAD)"
-if [ "$NEW_REV" = "$OLD_REV" ]; then
+if [ "$NEW_REV" = "$OLD_REV" ] && [ "$FORCE" != "1" ]; then
   say "无新提交（HEAD=${OLD_REV:0:8}），跳过构建。"
   exit 0
 fi
-say "发现新版本 ${OLD_REV:0:8} → ${NEW_REV:0:8}"
+if [ "$FORCE" = "1" ]; then
+  say "FORCE=1：跳过幂等短路，强制构建 ${OLD_REV:0:8} → ${NEW_REV:0:8}"
+else
+  say "发现新版本 ${OLD_REV:0:8} → ${NEW_REV:0:8}"
+fi
 
 # ------------------------------------------------------------------ 2) 更新前备份
 # 备份放在**迁移之前**：迁移是单向的，出问题时要还原的正是迁移前的数据。
@@ -163,6 +172,13 @@ say "代码已切换到 ${NEW_REV:0:8}"
 
 cd "$SCRIPT_DIR"
 
+# uploads 目录权限：bind mount 的宿主目录必须对容器内 node 用户（uid 1000）可写，
+# 否则后台上传静默 EACCES。git 不跟踪目录权限位，clone 出来是 root:root 755。
+if [ -d "$REPO_DIR/site/img/uploads" ]; then
+  chown -R 1000:1000 "$REPO_DIR/site/img/uploads" 2>/dev/null || true
+  chmod 755 "$REPO_DIR/site/img/uploads" 2>/dev/null || true
+fi
+
 # ------------------------------------------------------------------ 6) 装依赖 + 构建
 # 依赖装在仓库目录（node_modules/），不进镜像层——镜像只带 src 与迁移。
 # 这样切代码后只需增量装变更的依赖，不必每次重建镜像。
@@ -217,8 +233,6 @@ while [ "$(date +%s)" -lt "$deadline" ]; do
      && curl -fsS --max-time 5 "http://127.0.0.1:${HTTP_PORT}/api/health" >/dev/null 2>&1; then
     say "✓ 新版本健康，部署完成：${NEW_REV:0:8}"
     docker compose ps
-    docker image prune -f >/dev/null 2>&1 || true
-    exit 0
   fi
   sleep 5
 done
@@ -227,11 +241,15 @@ done
 #    若继续往下走会同步素材并 exit 0 —— 部署失败却被报成"成功"，是最坏的失败模式。
 rollback "新版本启动后健康检查未通过"
 
-# ------------------------------------------------------------------ 11) 同步上传素材
-# 后台上传的图/视频在容器卷里，Nginx 读的是宿主路径 → 部署后同步一次。
-# 同步失败不阻塞部署（只是新传的图片暂时取不到），故用 || true。
-say "同步上传素材到宿主静态目录…"
-bash "$SCRIPT_DIR/sync-uploads.sh" || say "  ⚠ 素材同步失败（不影响部署，可稍后手动重跑）"
+# ------------------------------------------------------------------ 11) 收尾
+# uploads 已是 bind mount（宿主 /opt/mua/site/img/uploads ⇄ 容器 /site/img/uploads），
+# API 写入与 Nginx 读取同属一个目录，无需同步。sync-uploads.sh 已随之退休。
+# 唯一要确认的是写权限：node 用户（uid 1000）必须能写该目录，否则后台上传会 EACCES。
+if ! docker compose exec -T api test -w /site/img/uploads 2>/dev/null; then
+  say "  ⚠ 容器内 /site/img/uploads 不可写 —— 后台上传会失败。"
+  say "    修复： sudo chown -R 1000:1000 $REPO_DIR/site/img/uploads"
+fi
 
-say "✓ 全部完成：${NEW_REV:0:8}（前端 /  →http://127.0.0.1:${HTTP_PORT}/）"
+say "✓ 全部完成：${NEW_REV:0:8}（前台 /  → http://127.0.0.1:${HTTP_PORT}/）"
+docker image prune -f >/dev/null 2>&1 || true
 exit 0

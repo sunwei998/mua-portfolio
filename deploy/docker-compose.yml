@@ -55,8 +55,24 @@ services:
       TZ: Asia/Shanghai
     volumes:
       # 后台上传的图片/视频落盘处。**不能丢** —— 容器删了素材就没了。
-      # 首次部署需手工 rsync 种子（uploads 被 gitignore，不在仓库里）
-      - mua-uploads:/app/data/uploads
+      #
+      # ⚠️ 挂载点必须与代码里的 UPLOAD_DIR **完全一致**（2026-10-03 首次部署踩过）：
+      #   server/src/admin.ts 的 UPLOAD_DIR 是
+      #     path.join(dirname(import.meta.url), '..', '..', 'site', 'img', 'uploads')
+      #   镜像里源码在 /app/src/admin.ts ⇒ 解析结果是  /app/src/../../site/img/uploads
+      #                                              =  /site/img/uploads      ← 不是 /app/...
+      #   之前挂的是 mua_uploads_assets:/app/data/uploads（还 ENV 了 MUA_UPLOAD_DIR），
+      #   但**代码里零处读这个环境变量** —— 卷空转，素材落进容器可写层，重建即丢；
+      #   且因为 /site 压根没挂载，node 用户（uid 1000）在 / 下无权 mkdir，
+      #   上传会直接 EACCES 失败。
+      #
+      # 为什么用 bind mount 而不是命名卷（本次一并纠正的架构决策）：
+      #   宿主 Nginx 的静态根是 /opt/mua/site，托管 /img/uploads/。
+      #   命名卷方案需要「容器 → 宿主」反向同步（sync-uploads.sh）才能让 Nginx 读到文件，
+      #   多一层、多一个会静默失败的环节（同步没跑 ⇒ 图 404，且查不出原因）。
+      #   bind mount 让 API 写入与 Nginx 读取**落在同一个宿主目录**，
+      #   容器可写、宿主可读、容器重建不丢，同步脚本随之退休。
+      - /opt/mua/site/img/uploads:/site/img/uploads
     # 不对宿主机暴露端口：只有宿主 Nginx 能访问它。
     # 这样即使防火墙漏配，API 也不会直接暴露到公网。
     expose:
@@ -74,11 +90,6 @@ services:
     logging:
       driver: json-file
       options: { max-size: "10m", file: "3" }
-
-volumes:
-  mua-uploads:
-    # 显式命名，避免 compose 项目名变化导致卷"查无此物"、素材看似消失
-    name: mua_uploads_assets
 
 networks:
   # 加入 sanhe 的网络以容器名访问它的 MySQL。
