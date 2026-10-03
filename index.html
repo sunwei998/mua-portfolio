@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#F6F2EA" />
+  <title>禧悦妆造 · 化妆师甜茉 | 跟妆作品集</title>
+  <meta name="description" content="禧悦妆造 · 化妆师甜茉跟妆作品集：新中式 × 西式婚礼跟妆、订婚宴跟妆、孕妇照亲子照跟妆。" />
+  <!-- 字体：上线前可换自托管或国内镜像（fonts.loli.net），保持 font-display:swap -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Noto+Serif+SC:wght@400;600;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/tokens.css" />
+  <link rel="stylesheet" href="styles/base.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <main id="view"></main>
+
+  <!-- 全屏查看器 -->
+  <div id="viewer" class="viewer" role="dialog" aria-modal="true" aria-label="作品查看器">
+    <div class="viewer__bar">
+      <span id="viewerTitle"></span>
+      <button class="viewer__close" id="viewerClose" aria-label="关闭">×</button>
+    </div>
+    <div class="viewer__stage" id="viewerStage"><img id="viewerImg" alt="" /></div>
+    <div class="viewer__foot">
+      <div class="viewer__count" id="viewerCount"></div>
+      <div class="viewer__track"><div class="viewer__bar-fill" id="viewerFill"></div></div>
+      <div class="viewer__hint">左右滑动切换 · 双击放大</div>
+    </div>
+  </div>
+
+  <!-- 墨晕过渡层 -->
+  <div class="ink" id="ink" aria-hidden="true"></div>
+
+  <script src="data/albums.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+</html>

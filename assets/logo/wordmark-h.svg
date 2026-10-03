@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 100" width="240" height="100" role="img" aria-label="予时妍 YUÉ ATELIER 横版主标">
+  <title>予时妍 · 横版主标 Horizontal Wordmark</title>
+  <desc>符号 + 简体三字 + 拉丁注脚。三字等大、统一间距（2026-10-02 拍板：取消「予 ×1.045」光学补偿，见 brand-identity.html 第 01 节）。</desc>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300&amp;family=Bodoni+Moda:wght@400;300&amp;display=swap');
+    .cn{font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;font-weight:200}
+    .lat{font-family:"Bodoni Moda","Didot","Playfair Display",Georgia,serif;font-weight:400}
+  </style>
+
+  <!-- ① 符号（随 currentColor 走） -->
+  <g transform="translate(4,26) scale(0.75)" color="inherit">
+    <circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="2.4"
+            stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+    <circle cx="32" cy="32" r="5.1" fill="currentColor"/>
+  </g>
+
+  <!-- ② 分隔细线 -->
+  <line x1="63" y1="26" x2="63" y2="74" stroke="currentColor" stroke-width="0.7" opacity="0.22"/>
+
+  <!-- ③ 中文主字标：三字等大（33px 同基线）+ 不等距呼吸（予↔时 9.9 紧 / 时↔妍 13.2 松，2026-10-02 拍板保留） -->
+  <text class="cn" fill="currentColor">
+    <tspan x="76" y="58" font-size="33">予</tspan>
+    <tspan x="118.9" y="58" font-size="33">时</tspan>
+    <tspan x="165.1" y="58" font-size="33" fill="#B0707B">妍</tspan>
+  </text>
+
+  <!-- ④ 起笔点 + 金线（结构线，不是第二种强调色） -->
+  <circle cx="85" cy="68.6" r="1.7" fill="#C0A46F"/>
+  <line x1="90" y1="68.6" x2="198" y2="68.6" stroke="#C0A46F" stroke-width="0.9" stroke-linecap="round"/>
+
+  <!-- ⑤ 拉丁注脚：É 保留重音，字距比两侧略松 -->
+  <text class="lat" x="85" y="86" font-size="8.6" letter-spacing="3.5" fill="currentColor" opacity="0.74">YUÉ ATELIER</text>
+</svg>

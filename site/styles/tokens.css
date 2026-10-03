@@ -1,0 +1,47 @@
+/* ============================================================
+   予时妍 · YUÉ ATELIER — 设计令牌（双主题 + 暖白中立项）
+   来源：design-v6.html，一行对一行搬运；不做再发明。
+   主题切换 = 换 <html> 根 class（.ms / .twe / .tcn），DOM 不动。
+   ------------------------------------------------------------
+   .ms  暖白 neutral —— 首页 / 双封面 / 图集 / 关于（083 表 01/02/07/10 屏）
+   .twe 西式婚礼   —— /style/western 与西式婚礼册详情
+   .tcn 新中式婚礼 —— /style/chinese 与新中式婚礼册详情
+   ============================================================ */
+
+/* 缓动（与 v6 文档外壳一致的两个曲线） */
+:root{
+  --ease:cubic-bezier(.22,1,.28,1);
+  --ease-io:cubic-bezier(.66,0,.24,1);
+  --dur-page:.38s;            /* 页面转场时长 */
+}
+
+/* ---------- .ms 暖白（v6 :170） ---------- */
+.ms{
+  --paper:#F7F4F1; --ink:#1D1916; --muted:#8B8378;
+  --accent:#B0707B; --gold:#C2A874; --r:18px;
+  --paper-2:#FFFFFF;
+}
+
+/* ---------- .twe 西式婚礼（v6 :254） ---------- */
+.twe{
+  --paper:#FBF6F5; --ink:#241E1B; --muted:#948880;
+  --accent:#C08994; --gold:#C8AE84; --r:20px;
+  --paper-2:#FFFFFF;
+}
+
+/* ---------- .tcn 新中式婚礼（v6 :277） ---------- */
+.tcn{
+  --paper:#F8F5F1; --ink:#201B17; --muted:#8C8477;
+  --accent:#9E4E55; --gold:#C0A46F; --jade:#6E7C76; --r:3px;
+  --paper-2:#FFFFFF;
+}
+
+/* ---------- 通用类型（v6 :146–150） ---------- */
+.cd{font-family:"Noto Serif SC",serif;font-weight:300;letter-spacing:.22em;line-height:1.35}
+.cn{font-family:"Noto Serif SC",serif;font-weight:300}
+.en{font-size:9px;letter-spacing:.38em;text-transform:uppercase;color:var(--muted);font-weight:300}
+
+/* 字标：三字等大（2026-10-02 拍板，取消「予 ×1.045」缩放修正），
+   字距由统一 letter-spacing 控制 —— 全站唯一口径 */
+.wordmark{font-family:"Noto Serif SC",serif;font-weight:200}
+.wordmark .acc{color:var(--accent)}

@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>予时妍 · YUÉ ATELIER | 品牌字标系统 v1.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400&family=Jost:wght@300;400&family=Cormorant+Garamond:ital,wght@1,300&family=Bodoni+Moda:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   予时妍 · YUÉ ATELIER —— 品牌字标系统 v1.0
+   这是设计交付物：原型 demo（index.html / styles / data）一行未动
+   顶部三个环境开关：西式纸 / 新中式绢白 / 反白 —— 看字标在三套底材上的表现
+   ============================================================ */
+:root{
+  --shell-bg:#EFEDE9;--shell-panel:#fff;--shell-ink:#161412;--shell-muted:#8B857C;
+  --shell-line:rgba(22,20,18,.10);--ease:cubic-bezier(.22,1,.28,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--shell-bg);color:var(--shell-ink);
+  font-family:"Jost","Helvetica Neue",Arial,sans-serif;font-size:14px;line-height:1.62;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:34px 24px 96px}
+
+/* ---------- 外壳 ---------- */
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  padding-bottom:20px;border-bottom:1px solid var(--shell-line)}
+.top h1{font-family:"Noto Serif SC",serif;font-weight:300;font-size:26px;letter-spacing:.14em}
+.top .sub{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--shell-muted);margin-top:6px}
+.legend{font-size:12.5px;color:var(--shell-muted);max-width:60em;margin:16px 0 0;letter-spacing:.03em}
+.legend b{color:var(--shell-ink);font-weight:500}
+.legend code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:rgba(22,20,18,.06);
+  padding:1px 5px;border-radius:3px;color:#6B4F1E}
+.toggles{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 4px;position:sticky;top:0;z-index:40;
+  padding:12px 0;background:linear-gradient(180deg,var(--shell-bg) 62%,rgba(239,237,233,0))}
+.tg{font-size:11px;letter-spacing:.16em;border:1px solid var(--shell-line);background:#fff;border-radius:999px;
+  padding:8px 15px;cursor:pointer;color:var(--shell-ink);transition:.25s;
+  font-family:"Noto Serif SC",serif;font-weight:300}
+.tg:hover{border-color:#B99A62;color:#8A6C2F}
+.tg.on{background:#1D1916;border-color:#1D1916;color:#F7F4F1}
+
+/* ---------- 章节 ---------- */
+.sec{margin-top:52px}
+.sec-h{display:flex;align-items:baseline;gap:14px;padding-bottom:12px;margin-bottom:20px;
+  border-bottom:1px solid var(--shell-line);flex-wrap:wrap}
+.sec-h .no{font-size:10px;letter-spacing:.26em;color:#B99A62;font-family:ui-monospace,Menlo,monospace}
+.sec-h h2{font-family:"Noto Serif SC",serif;font-weight:300;font-size:19px;letter-spacing:.14em}
+.sec-h .note{font-size:11.5px;color:var(--shell-muted);letter-spacing:.08em}
+.lead{font-size:12.5px;color:var(--shell-muted);margin:-6px 0 18px;letter-spacing:.04em;max-width:64em}
+.lead b{color:var(--shell-ink);font-weight:500}
+
+/* ---------- 展示底材（三环境切换） ---------- */
+.board{
+  --paper:#FBF6F5;--ink:#241F1D;--muted:#8E817A;--accent:#C08994;--gold:#C8AE84;--hair:rgba(36,31,29,.14);
+  --glow:radial-gradient(430px 340px at 8% -12%,rgba(224,160,175,.32),transparent 70%),
+         radial-gradient(400px 330px at 94% 112%,rgba(200,174,132,.30),transparent 72%);
+  position:relative;overflow:hidden;background:var(--paper);color:var(--ink);border-radius:4px;
+  padding:34px 30px;transition:background .55s var(--ease),color .55s var(--ease);
+  box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 10px 30px rgba(22,20,18,.06)}
+.board::before{content:"";position:absolute;inset:0;background:var(--glow);pointer-events:none;
+  transition:background .55s var(--ease)}
+.board>*{position:relative;z-index:2}
+body[data-env="cn"] .board{--paper:#F8F5F1;--ink:#22201C;--muted:#8B8378;--accent:#9E4E55;--gold:#C0A46F;
+  --hair:rgba(34,32,28,.14);
+  --glow:radial-gradient(430px 340px at 8% -12%,rgba(158,78,85,.20),transparent 70%),
+         radial-gradient(400px 330px at 94% 112%,rgba(192,164,111,.26),transparent 72%)}
+body[data-env="dark"] .board{--paper:#17130F;--ink:#F2EBE3;--muted:#9A9089;--accent:#E3ABB5;--gold:#D8C098;
+  --hair:rgba(242,235,227,.18);
+  --glow:radial-gradient(430px 340px at 8% -12%,rgba(227,171,181,.20),transparent 70%),
+         radial-gradient(400px 330px at 94% 112%,rgba(216,192,152,.15),transparent 72%)}
+.board + .board{margin-top:14px}
+
+/* ---------- 字标基础类 ---------- */
+.serif{font-family:"Noto Serif SC","Songti SC",serif}
+.lat{font-family:"Bodoni Moda","Didot","Playfair Display","Cormorant Garamond",Georgia,serif;font-weight:400}
+.gold{color:var(--gold)}
+.acc{color:var(--accent)}
+
+.wm-a{font-family:"Noto Serif SC",serif;font-weight:200;font-size:60px;line-height:1.06;
+  letter-spacing:.34em;text-indent:.34em;display:inline-block}
+/* 字标三字等大：原「予 ×1.045 放大 + 上提 1%」已实测推翻，三字墨迹高度本就一致 */
+.wm-a .z3{color:var(--accent);transition:color .55s var(--ease)}
+.wm-a-mid{font-family:"Noto Serif SC",serif;font-weight:300;font-size:36px;letter-spacing:.26em;text-indent:.26em}
+.wm-a-sm{font-family:"Noto Serif SC",serif;font-weight:300;font-size:17px;letter-spacing:.22em;text-indent:.22em}
+.wm-v{writing-mode:vertical-rl;font-family:"Noto Serif SC",serif;font-weight:200;font-size:30px;
+  letter-spacing:.3em;line-height:1}
+.wm-v .z3{color:var(--accent)}
+
+.wm-l{font-family:"Bodoni Moda","Didot",Georgia,serif;font-weight:400;font-size:34px;letter-spacing:.3em;
+  text-transform:uppercase;text-indent:.3em;line-height:1.1}
+.wm-l-xl{font-size:52px;letter-spacing:.32em;text-indent:.32em}
+.wm-l-sm{font-size:12px;letter-spacing:.36em;text-indent:.36em}
+.wm-l .acute{color:var(--accent);transition:color .55s var(--ease)}
+.hair{display:block;width:44px;height:1px;background:var(--gold);opacity:.9;margin:14px 0}
+.hair.wide{width:76px}
+
+.tagline{font-family:"Noto Serif SC",serif;font-weight:300;font-size:13px;letter-spacing:.2em;
+  color:var(--muted);text-indent:.2em}
+.tagline-md{font-size:16px;letter-spacing:.18em}
+.tagline-lg{font-size:22px;letter-spacing:.16em;color:var(--ink)}
+.subline{font-family:"Noto Serif SC",serif;font-weight:300;font-size:11px;letter-spacing:.24em;color:var(--muted)}
+.latline{font-family:"Jost",sans-serif;font-weight:300;font-size:9.5px;letter-spacing:.38em;
+  text-transform:uppercase;color:var(--muted);text-indent:.38em}
+
+/* ---------- 布局小件 ---------- */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.four{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:900px){.two,.three,.four{grid-template-columns:1fr}}
+.cell{border:1px dashed var(--hair);border-radius:3px;padding:22px 18px;position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:150px;text-align:center}
+.cell .cap{position:absolute;left:10px;top:8px;font-size:9px;letter-spacing:.2em;color:var(--muted);
+  font-family:ui-monospace,Menlo,monospace;text-transform:uppercase}
+.cell .cnote{font-size:10.5px;color:var(--muted);margin-top:16px;letter-spacing:.06em;line-height:1.5}
+.cell.left{align-items:flex-start;text-align:left}
+
+/* 安全留白演示 */
+.clearspace{position:relative;padding:38px 44px;display:inline-block}
+.clearspace::before{content:"";position:absolute;inset:0;border:1px dashed var(--accent);opacity:.5}
+.clearspace::after{content:"0.8×";position:absolute;right:6px;bottom:4px;font-size:9px;color:var(--accent);
+  font-family:ui-monospace,Menlo,monospace;letter-spacing:.1em}
+
+/* 印章 */
+.seal-v{width:40px;height:98px;border:1px solid var(--accent);border-radius:2px;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  font-family:"Noto Serif SC",serif;font-weight:400;font-size:17px;color:var(--accent);line-height:1;
+  letter-spacing:0}
+.seal-sq{width:72px;height:72px;border:1px solid var(--accent);border-radius:3px;display:grid;
+  grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;place-items:center;
+  font-family:"Noto Serif SC",serif;font-weight:400;font-size:20px;color:var(--accent);line-height:1}
+.seal-mini{width:30px;height:30px;border:1px solid var(--accent);border-radius:3px;display:grid;
+  place-items:center;font-family:"Noto Serif SC",serif;font-weight:400;font-size:15px;color:var(--accent)}
+.seal-solid{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+.seal-cap{font-size:10px;color:var(--muted);margin-top:12px;letter-spacing:.1em;text-align:center;line-height:1.5}
+
+/* favicon 实尺 */
+.fav-row{display:flex;align-items:flex-end;gap:22px;flex-wrap:wrap}
+.fav{background:var(--accent);color:var(--paper);display:grid;place-items:center;border-radius:22%;
+  font-family:"Noto Serif SC",serif;font-weight:400;flex:none}
+.fav.w{background:transparent;color:var(--ink);border:1px solid var(--accent)}
+.fav-l{font-family:"Bodoni Moda",Georgia,serif;font-weight:500}
+.fav-cap{font-size:9px;color:var(--muted);text-align:center;margin-top:8px;
+  font-family:ui-monospace,Menlo,monospace;letter-spacing:.08em}
+
+/* 触点应用 */
+.tp{border:1px dashed var(--hair);border-radius:3px;padding:16px;position:relative;
+  display:flex;flex-direction:column;gap:0}
+.tp .cap{font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;
+  font-family:ui-monospace,Menlo,monospace;margin-bottom:14px}
+.navbar{display:flex;align-items:center;justify-content:space-between;padding-bottom:10px;
+  border-bottom:1px solid var(--hair)}
+.navbar .burger{display:flex;flex-direction:column;gap:3px;align-items:flex-end}
+.navbar .burger i{display:block;height:1px;width:17px;background:var(--ink);opacity:.6}
+.navbar .burger i:nth-child(2){width:11px}
+.slipdemo{display:flex;gap:12px;align-items:flex-start}
+.slipbox{position:relative;width:74px;height:196px;border-radius:3px;overflow:hidden;flex:none}
+.slipbox img{width:100%;height:100%;object-fit:cover}
+.slipbox .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,16,14,.06),rgba(20,16,14,.34))}
+.slipbox .sb{position:absolute;right:6px;top:8px;padding:7px 5px;border-radius:3px;
+  background:linear-gradient(158deg,rgba(255,255,255,.34),rgba(255,255,255,.14));
+  -webkit-backdrop-filter:blur(16px) saturate(170%);backdrop-filter:blur(16px) saturate(170%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 1px 0 0 rgba(255,205,225,.4),0 8px 22px rgba(0,0,0,.16)}
+.slipbox .sb span{writing-mode:vertical-rl;font-family:"Noto Serif SC",serif;font-weight:300;font-size:9.5px;
+  letter-spacing:.2em;color:#221D19}
+.wm-mark{position:absolute;right:12px;bottom:12px;font-family:"Noto Serif SC",serif;font-weight:300;
+  font-size:11px;letter-spacing:.28em;color:rgba(255,255,255,.5)}
+.qrwrap{display:flex;gap:14px;align-items:center}
+.qr{width:76px;height:76px;border:1px solid var(--hair);border-radius:4px;display:grid;place-items:center;
+  font-size:9px;color:var(--muted);text-align:center;line-height:1.4;flex:none}
+.cta{display:inline-flex;align-items:center;justify-content:center;gap:12px;width:100%;
+  padding:15px 20px;border-radius:999px;background:var(--accent);color:var(--paper);border:0;
+  font-family:"Noto Serif SC",serif;font-weight:400;font-size:13px;letter-spacing:.22em;text-indent:.22em;
+  box-shadow:0 14px 32px rgba(158,78,85,.22)}
+.cta em{font-style:normal;font-family:"Jost",sans-serif;font-size:8.5px;letter-spacing:.3em;
+  opacity:.8;text-indent:.3em}
+.cardface{width:100%;aspect-ratio:1.62/1;border-radius:4px;border:1px solid var(--hair);position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:18px}
+.cardface.back{background:linear-gradient(150deg,var(--accent),rgba(0,0,0,.16));border-color:transparent;
+  color:var(--paper);justify-content:space-between;align-items:flex-start}
+.cardface.back .seal-v{border-color:rgba(255,255,255,.6);color:rgba(255,255,255,.9);width:34px;height:82px;
+  font-size:14px}
+.cardfoot{position:absolute;left:16px;bottom:12px;right:16px;display:flex;justify-content:space-between;
+  font-family:"Jost",sans-serif;font-size:8px;letter-spacing:.24em;text-transform:uppercase;opacity:.72}
+
+/* 禁例 */
+.ban{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:900px){.ban{grid-template-columns:1fr 1fr}}
+.bad{border:1px dashed rgba(180,60,60,.4);border-radius:3px;padding:16px;position:relative}
+.bad::after{content:"✕";position:absolute;right:8px;top:6px;color:#B44;font-size:12px}
+.bad .why{font-size:10.5px;color:#9A5B5B;margin-top:12px;line-height:1.55}
+.bad .demo{font-family:"Noto Serif SC",serif;font-weight:300;font-size:15px;letter-spacing:.14em;
+  color:var(--ink);word-break:break-all}
+.bad .demo.stretch{transform:scaleX(1.4);display:inline-block;transform-origin:left}
+.bad .demo.shadow{text-shadow:0 2px 4px rgba(0,0,0,.5);font-weight:400}
+
+/* 表格 */
+table.spec{width:100%;border-collapse:collapse;margin-top:16px;font-size:12.5px}
+table.spec th,table.spec td{border-bottom:1px solid var(--shell-line);padding:10px 12px;text-align:left;
+  vertical-align:top}
+table.spec th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--shell-muted);
+  font-weight:400;border-bottom-color:rgba(22,20,18,.18)}
+table.spec td:first-child{font-family:"Noto Serif SC",serif;font-weight:300;white-space:nowrap}
+table.spec code{font-family:ui-monospace,Menlo,monospace;font-size:11px;background:rgba(22,20,18,.055);
+  padding:1px 5px;border-radius:3px;color:#6B4F1E}
+table.spec .ok{color:#3E7A4E}
+table.spec .no{color:#A8464C}
+table.spec .todo{color:#8A6C2F;font-weight:500}
+table.spec .done{color:#3E7A4E}
+.pill{display:inline-block;font-size:9.5px;letter-spacing:.14em;padding:2px 8px;border-radius:999px;
+  border:1px solid currentColor;font-family:"Noto Serif SC",serif}
+.pill.todo{color:#8A6C2F}
+.pill.done{color:#3E7A4E}
+.pill.keep{color:#6E7C76}
+
+/* 决策卡 */
+.asks{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+@media(max-width:900px){.asks{grid-template-columns:1fr}}
+.ask{background:var(--shell-panel);border:1px solid var(--shell-line);border-radius:6px;padding:18px 18px 16px}
+.ask .qn{font-size:10px;letter-spacing:.24em;color:#B99A62;font-family:ui-monospace,Menlo,monospace}
+.ask h4{font-family:"Noto Serif SC",serif;font-weight:400;font-size:14px;letter-spacing:.08em;margin:8px 0 8px}
+.ask p{font-size:12px;color:var(--shell-muted);line-height:1.6}
+.ask p b{color:var(--shell-ink);font-weight:500}
+.ask .rec{margin-top:10px;font-size:11.5px;color:#6E7C76;letter-spacing:.04em}
+
+.note-band{margin-top:18px;padding:14px 16px;border-left:2px solid #B99A62;background:rgba(185,154,98,.07);
+  font-size:12.5px;color:#6B5A38;line-height:1.65;border-radius:0 4px 4px 0}
+.note-band b{color:#4A3E24}
+.foot{margin-top:64px;padding-top:18px;border-top:1px solid var(--shell-line);font-size:11px;
+  color:var(--shell-muted);letter-spacing:.14em;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+</style>
+</head>
+<body data-env="we">
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <h1>予时妍 · 品牌字标系统</h1>
+      <div class="sub">YUÉ ATELIER · Brand Wordmark System · v1.0</div>
+    </div>
+    <div style="text-align:right">
+      <div class="sub">Name Locked · 2026-10-02</div>
+      <div class="sub" style="letter-spacing:.2em;color:#B99A62">原型 demo 未改动</div>
+    </div>
+  </header>
+
+  <p class="legend">
+    名字已按你的决定锁定：<b>中文「予时妍」· 英文 YUÉ ATELIER · 标语「为重要时刻，留一份美」</b>。
+    这一份交付物只做一件事——<b>把名字做成一套可落地的字标系统</b>：三字怎么排、É 怎么用、印章怎么刻、小到 16px 的图标怎么认。
+    顶部三个开关可以切换底材（西式纸 / 新中式绢白 / 反白），字标在三套底材上都要站得住，这是验收标准。
+    第 <b>08</b> 节是旧名在代码里的扩散盘点，第 <b>09</b> 节是四个待你拍板的点。
+  </p>
+
+  <div class="toggles">
+    <button class="tg on" data-env="we">西式纸 · 主环境</button>
+    <button class="tg" data-env="cn">新中式绢白</button>
+    <button class="tg" data-env="dark">反白（深色）</button>
+  </div>
+
+  <!-- ==================== 00 名字本身 ==================== -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">00</span><h2>名字本身</h2><span class="note">释义 · 与标语的同构关系</span></div>
+    <p class="lead">
+      这个名字最强的地方是：<b>它和标语是同一句话的两种写法</b>。「予时妍」＝<b>予时以妍</b>＝为这一刻赋予美；
+      标语「为重要时刻，留一份美」就是它的白话版。<b>名字与标语互证</b>，不是两件事硬凑——这种一致性是很多品牌花几年才补上的。
+    </p>
+
+    <div class="board">
+      <div class="three">
+        <div style="text-align:center">
+          <div class="serif" style="font-size:54px;font-weight:200;line-height:1.1">予</div>
+          <span class="hair" style="margin:14px auto"></span>
+          <div class="subline">给予 · 交付</div>
+          <div class="latline" style="margin-top:6px">To Give</div>
+        </div>
+        <div style="text-align:center">
+          <div class="serif" style="font-size:54px;font-weight:200;line-height:1.1">时</div>
+          <span class="hair" style="margin:14px auto"></span>
+          <div class="subline">时刻 · 那一天</div>
+          <div class="latline" style="margin-top:6px">The Moment</div>
+        </div>
+        <div style="text-align:center">
+          <div class="serif acc" style="font-size:54px;font-weight:200;line-height:1.1">妍</div>
+          <span class="hair" style="margin:14px auto"></span>
+          <div class="subline">美 · 美好</div>
+          <div class="latline" style="margin-top:6px">Beauty</div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:30px">
+        <div class="tagline-lg">为重要时刻，留一份美</div>
+        <div class="latline" style="margin-top:12px">Beauty, kept for moments that matter</div>
+      </div>
+    </div>
+
+    <table class="spec">
+      <thead><tr><th style="width:130px">维度</th><th>判断</th><th style="width:330px">理由</th></tr></thead>
+      <tbody>
+        <tr><td>业务覆盖</td><td class="ok">覆盖完整</td><td>「重要时刻」不含「喜」「嫁」，婚礼与日常妆同框成立——这是换名最核心的诉求</td></tr>
+        <tr><td>读音</td><td class="ok">无障碍</td><td>yǔ shí yán，三字全部常用，电话里能一次说清</td></tr>
+        <tr><td>排印友好度</td><td class="ok">良好</td><td>予 4 画 / 时 7 画 / 妍 7 画，笔画递减均匀，大疏排与竖排都撑得住</td></tr>
+        <tr><td>延展性</td><td class="ok">强</td><td>「予时」可作动词短语做文案（予时以妍 / 予你一时 / 予此刻以妍），不锁死</td></tr>
+        <tr><td>英文对译</td><td style="color:#8A6C2F">需规范</td><td>YUÉ 不是拼音，是设计化合词——需要一条「É 保留 / YUE 降级」的规则，见第 02 节</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ==================== 01 中文主字标 ==================== -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">01</span><h2>中文主字标</h2><span class="note">三版排法 · 三字等大</span></div>
+    <p class="lead">
+      三字的字面重量并不相等：<b>予</b>笔画最少，直觉上该放大才不「飘」。但用 canvas
+      <code>measureText().actualBoundingBox*</code> 实测（Noto Serif SC 300 / 100px）得
+      <b>予 90.1 · 时 89.9 · 妍 93.4</b>——<b>三字墨迹高度本来就一致</b>，放大是<em>反的</em>（笔画密度造成的错觉）。
+      故本版起<b>三字等大</b>，字距由统一 <code>letter-spacing</code> 控制。
+      末字「妍」用强调色，是这套字标的<b>唯一彩色点</b>，也是品牌在页面上的记忆锚。
+    </p>
+
+    <div class="board">
+      <div class="cell" style="border:none;padding:6px 0;align-items:flex-start;min-height:0">
+        <span class="cap">A · 主字标 · Display</span>
+        <div style="margin-top:24px">
+          <div class="wm-a"><span class="z1">予</span>时<span class="z3">妍</span></div>
+          <span class="hair wide"></span>
+          <div class="lat" style="font-size:15px;letter-spacing:.34em;text-indent:.34em">YUÉ ATELIER</div>
+          <div class="subline" style="margin-top:10px">妆造 · 婚礼与日常</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="board">
+      <div class="two">
+        <div class="cell">
+          <span class="cap">B · 中密排 · Nav</span>
+          <div class="wm-a-mid" style="margin-top:20px">予时<span class="acc">妍</span></div>
+          <div class="cnote">导航 / 页眉 / 名片 · 26em 疏排</div>
+        </div>
+        <div class="cell">
+          <span class="cap">C · 竖排 · Slip</span>
+          <div class="wm-v" style="margin-top:14px">予时<span class="z3">妍</span></div>
+          <div class="cnote">封面绢签 / 相册烫印 · 30em 竖排</div>
+        </div>
+      </div>
+    </div>
+
+    <table class="spec">
+      <thead><tr><th style="width:150px">场景</th><th style="width:120px">字号 / 字距</th><th>规则</th></tr></thead>
+      <tbody>
+        <tr><td>A 主字标</td><td>60px / <code>.34em</code></td><td>字重 <code>200</code>（细宋）· 必须补 <code>text-indent:.34em</code>，否则整组左偏</td></tr>
+        <tr><td>B 中密排</td><td>36px / <code>.26em</code></td><td>字重提到 <code>300</code>——小字下 200 会虚</td></tr>
+        <tr><td>C 竖排</td><td>30px / <code>.3em</code></td><td><code>writing-mode:vertical-rl</code>；签牌宽度 <b>不得窄于 44px</b>（「时」「妍」是左右结构，窄了会挤）</td></tr>
+        <tr><td>字标尺寸</td><td>三字等大</td><td>不做缩放修正（原「予 ×1.045」已实测推翻）；排版字距由统一 <code>letter-spacing</code> 控制，<b>Logo 资产保留不等距呼吸</b>（予↔时紧 / 时↔妍松，2026-10-02 拍板）</td></tr>
+        <tr><td>强调色</td><td>仅「妍」</td><td>西式 <code>#C08994</code> / 新中式 <code>#9E4E55</code> / 反白 <code>#E3ABB5</code>；<b>其余两字一律用墨色，不再上色</b></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ==================== 02 英文字标 ==================== -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">02</span><h2>英文字标 YUÉ ATELIER</h2><span class="note">É 是这套英文名唯一的「珠宝」</span></div>
+    <p class="lead">
+      这行英文的高级感全在那个 <b>É</b> 上——高对比衬线体（Bodoni / Didot 这一类）的重音符本身就是奢侈品记号：BYREDO、Céline、ÉCRU 都是这个路子。
+      <b>ATELIER 比 STUDIO 高一档</b>（法语「画室 / 工坊」，时尚圈专用），但代价是它<b>不能再加 STUDIO</b>，加了就自相矛盾。
+    </p>
+
+    <div class="board">
+      <div class="cell" style="border:none;align-items:flex-start;min-height:0;padding:0">
+        <span class="cap">A · 主用法 · 双行 lockup</span>
+        <div style="margin-top:26px">
+          <div class="wm-l wm-l-xl">YU<span class="acute">É</span></div>
+          <span class="hair wide" style="margin:16px 0 14px"></span>
+          <div class="wm-l" style="font-size:16px;letter-spacing:.5em">ATELIER</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="board">
+      <div class="two">
+        <div class="cell">
+          <span class="cap">B · 单行横排</span>
+          <div class="wm-l" style="margin-top:18px;font-size:21px">YU<span class="acute">É</span> ATELIER</div>
+          <div class="cnote">导航组合 / 页脚 · 窄空间用这版</div>
+        </div>
+        <div class="cell">
+          <span class="cap">C · É 的处理（三选一）</span>
+          <div style="margin-top:14px;text-align:left;line-height:1.9">
+            <div class="wm-l" style="font-size:17px">YU<span class="acc">É</span> ATELIER <span style="font-family:'Jost';font-size:9px;letter-spacing:.2em;color:var(--muted)">É 上色（推荐）</span></div>
+            <div class="wm-l" style="font-size:17px">YUÉ ATELIER <span style="font-family:'Jost';font-size:9px;letter-spacing:.2em;color:var(--muted)">单色墨</span></div>
+            <div class="wm-l" style="font-size:17px">YUE ATELIER <span style="font-family:'Jost';font-size:9px;letter-spacing:.2em;color:var(--muted)">无重音降级</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-band">
+      <b>关于 É —— 这是唯一一个必须现在定死的技术点。</b>
+      YUÉ 不是拼音（予 yǔ / 时 shí / 妍 yán），它是设计化合词，所以它需要一条使用规则：
+      <b>字标、名片、封面、门店一律保留 É</b>；但 <b>所有「需要用户动手输入」的地方一律降级成 YUE</b>——
+      域名、微信公众号 ID、小红书 ID、邮箱、文件名、发票抬头。理由很实在：客户打不出 É，搜索引擎也会把它折叠成 E，
+      两套写法长期并存反而会让品牌名被搜丢。<br/>
+      第二个连带问题要如实说：中文读者看到 YUÉ 会读成「约」，跟「予时妍」对不上。
+      解法不是加拼音注音（会土），而是<b>让中英永远成对出现</b>——任何出现 YUÉ ATELIER 的地方，上方或左侧三字必然在场，读者自己会建立映射。
+    </div>
+
+    <table class="spec">
+      <thead><tr><th style="width:150px">场景</th><th style="width:170px">字体 / 字距</th><th>规则</th></tr></thead>
+      <tbody>
+        <tr><td>字体</td><td><code>Bodoni Moda</code> 400</td><td>兜底链 <code>Didot → Playfair Display → Georgia</code>；必须用<b>高对比衬线</b>，禁用无衬线（会掉到潮牌感）</td></tr>
+        <tr><td>大小写</td><td>全大写</td><td><code>YUÉ ATELIER</code>，不写 Yué Atelier（小写会掉一档）</td></tr>
+        <tr><td>字距下限</td><td><code>≥ .24em</code></td><td>低于此值就失去奢侈品疏排感；单行版最小宽度 72px</td></tr>
+        <tr><td>É 的颜色</td><td>可选强调色</td><td>只允许「É 上色」或「整行单色」两种，<b>不允许其他字母单独上色</b></td></tr>
+        <tr><td>禁止事项</td><td class="no">3 条</td><td>禁 <code>YUÉ ATELIER STUDIO</code> · 禁斜体 · 禁给 ATELIER 加下划线或字重（主从关系只能靠字号与字距）</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ==================== 03 标语 ==================== -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">03</span><h2>标语 lockup</h2><span class="note">为重要时刻，留一份美</span></div>
+    <p class="lead">
+      这条标语不用改一个字——它把「重要时刻」和「日常」都收进去了，且不出现「喜 / 嫁」。
+      只有两个排印决定要做：<b>去掉句末的「。」</b>（字标语境里句号是多余的），<b>保留中间的「，」</b>（它是断句呼吸，去掉会变成一句口号）。
+    </p>
+
+    <div class="board">
+      <div class="two">
+        <div class="cell">
+          <span class="cap">A · 横排 · 主用法</span>
+          <div class="tagline tagline-md" style="margin-top:18px">为重要时刻，留一份美</div>
+          <div style="margin-top:16px"><span class="latline">Beauty, kept for moments that matter</span></div>
+        </div>
+        <div class="cell">
+          <span class="cap">B · 竖排 · 绢签 / 腰封</span>
+          <div style="writing-mode:vertical-rl;font-family:'Noto Serif SC',serif;font-weight:300;font-size:14px;
+            letter-spacing:.22em;color:var(--ink);margin-top:8px">为重要时刻，留一份美</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="board">
+      <div class="cell" style="border:none;min-height:0;padding:8px 0">
+        <span class="cap">C · 带引导线的组合（页脚 / 二维码卡）</span>
+        <div style="margin-top:22px;display:flex;flex-direction:column;align-items:center;gap:12px">
+          <span class="hair" style="width:28px;margin:0"></span>
+          <div class="tagline">为重要时刻，留一份美</div>
+          <span class="hair" style="width:28px;margin:0"></span>
+        </div>
+      </div>
+    </div>
+
+    <table class="spec">
+      <thead><tr><th style="width:150px">项</th><th style="width:180px">规范</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>字号比例</td><td>主字标的 0.28×</td><td>主字标 60px → 标语 16–17px，绝不能超过 20px（否则与名字抢主位）</td></tr>
+        <tr><td>字距</td><td><code>.18em</code></td><td>比主字标（.34em）紧——标语是句子，不是字标</td></tr>
+        <tr><td>标点</td><td>去句号 · 留逗号</td><td>竖排时逗号改为「、」或直接断行为两段，避免竖排标点歪置</td></tr>
+        <tr><td>英文标语</td><td class="todo">可选</td><td>建议<b>只在「关于」页出现一行</b>，不参与封面主视觉——你的规矩是英文只做点缀</td></tr>
+        <tr><td>禁止事项</td><td class="no">2 条</td><td>禁拆行成两句（会丢节奏）· 禁与主字标同尺寸并排</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ==================== 04 印章 ==================== -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">04</span><h2>印章</h2><span class="note">三字印的两种通行排法 + 小尺寸降级</span></div>
+    <p class="lead">
+      印章是这套视觉里唯一的「证据」——它证明这是作品不是模板。三字印有两条通行路子：<b>细长竖排</b>（一行到底，最稳）与
+      <b>方形回文</b>（右上 → 右下 → 左上，左下留白）。落款位一律在页脚右下或画面右下角，尺寸不超过画面宽度的 1/8。
+    </p>
+
+    <div class="board">
+      <div class="four" style="align-items:center;justify-items:center">
+        <div style="text-align:center">
+          <div class="seal-v" style="margin:0 auto">予<br/>时<br/>妍</div>
+          <div class="seal-cap">A · 竖排三字印<br/>38×98 · 主落款</div>
+        </div>
+        <div style="text-align:center">
+          <div class="seal-sq" style="margin:0 auto">
+            <span style="grid-area:1/1">妍</span><span style="grid-area:1/2">予</span>
+            <span style="grid-area:2/2">时</span>
+          </div>
+          <div class="seal-cap">B · 方形回文印<br/>72×72 · 相册封面</div>
+        </div>
+        <div style="text-align:center">
+          <div class="seal-v seal-solid" style="margin:0 auto">予<br/>时<br/>妍</div>
+          <div class="seal-cap">C · 朱底白文<br/>礼盒 / 烫印</div>
+        </div>
+        <div style="text-align:center">
+          <div class="seal-mini" style="margin:0 auto">妍</div>
+          <div class="seal-cap">D · 小尺寸降级<br/>30×30 单字</div>
+        </div>
+      </div>
+    </div>
+
+    <table class="spec">
+      <thead><tr><th style="width:110px">规格</th><th style="width:180px">取值</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>边线</td><td>1px（视觉）</td><td>细边朱文；<b>禁用粗边、禁用双框、禁用描金</b>——描金会立刻回到土味</td></tr>
+        <tr><td>颜色</td><td>单色朱</td><td>新中式 <code>#9E4E55</code>；西式页面上改用玫瑰 <code>#C08994</code>，不做两色并置</td></tr>
+        <tr><td>最小尺寸</td><td>边长 ≥ 24px</td><td>低于 24px 改用 D 单字印（三字在这个尺寸下不可辨）</td></tr>
+        <tr><td>倾斜</td><td>仅 ±2°</td><td>允许极轻微的手感倾斜；<b>禁随机旋转、禁投影</b></td></tr>
+        <tr><td>繁简</td><td class="todo">待定</td><td>金石惯例刻<b>繁体「予時妍」</b>（有金石气），但需要你接受繁简混用——见第 09 节</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ==================== 05 组合锁定 & 禁用 ==================== -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">05</span><h2>组合锁定与禁用</h2><span class="note">留给以后做物料的人看的</span></div>
+    <p class="lead">
+      这一节是给未来的外包（印刷厂、做礼盒的、拍门店照的）看的。品牌被做坏，八成不是设计不行，是没人告诉他们「不能怎么用」。
+    </p>
+
+    <div class="board">
+      <div class="two">
+        <div class="cell left">
+          <span class="cap">主组合 · 竖版（封面 / 海报）</span>
+          <div style="display:flex;gap:20px;align-items:flex-start;margin-top:22px">
+            <div class="wm-a-sm">予时<span class="acc">妍</span></div>
+            <div style="width:1px;height:60px;background:var(--hair)"></div>
+            <div>
+              <div class="wm-l" style="font-size:12px;letter-spacing:.34em;text-indent:.34em">YUÉ</div>
+              <div class="wm-l" style="font-size:9px;letter-spacing:.4em;text-indent:.4em;color:var(--muted);margin-top:5px">ATELIER</div>
+            </div>
+          </div>
+          <div class="cnote" style="text-align:left">中文在左为主 · 竖线分隔 · 英文在右为注</div>
+        </div>
+        <div class="cell left">
+          <span class="cap">横组合 · 页眉（站点 / 名片）</span>
+          <div style="margin-top:22px">
+            <div class="wm-a-sm">予时<span class="acc">妍</span></div>
+            <div class="latline" style="margin-top:8px">YUÉ ATELIER</div>
+          </div>
+          <div class="cnote" style="text-align:left">中文上 · 英文下 · 左对齐 · 行距 8px</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:28px;align-items:center;margin-top:34px;flex-wrap:wrap;justify-content:center">
+        <div style="text-align:center">
+          <span class="clearspace"><span class="wm-a-sm">予时<span class="acc">妍</span></span></span>
+          <div class="seal-cap">安全留白 = 字高的 0.8 倍<br/>范围内不得放任何其他元素</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ban" style="margin-top:16px">
+      <div class="bad">
+        <div class="demo">予时妍妆造</div>
+        <div class="why">✕ 不得加业务后缀。「妆造 / 工作室 / 造型」一加上，立刻从品牌掉回店名——业务身份全部交给副标「妆造 · 婚礼与日常」。</div>
+      </div>
+      <div class="bad">
+        <div class="demo" style="font-family:'Bodoni Moda',Georgia,serif;letter-spacing:.2em">YUÉ ATELIER STUDIO</div>
+        <div class="why">✕ 英文不得再加 STUDIO。ATELIER 本身就是工坊，两个并列自相矛盾。</div>
+      </div>
+      <div class="bad">
+        <span class="demo stretch">予时妍</span>
+        <div class="why">✕ 不得拉伸、倾斜、加描边或投影。只允许整体等比缩放——变形的字标比小字标更伤品牌。</div>
+      </div>
+      <div class="bad">
+        <div class="demo shadow" style="color:#B0707B">予时妍</div>
+        <div class="why">✕ 不得改色、不得加投影、不得把三字分别上不同颜色。「妍」是唯一的彩色点，破坏这条整组就散了。</div>
+      </div>
+    </div>
+
+    <table class="spec">
+      <thead><tr><th style="width:210px">场景</th><th style="width:120px">最小尺寸</th><th>约束</th></tr></thead>
+      <tbody>
+        <tr><td>主字标（三字 A 版）</td><td>宽 ≥ 96px</td><td>约等于 32px 字号 + .34em 疏排；再小改用 B 版</td></tr>
+        <tr><td>导航组合</td><td>宽 ≥ 64px</td><td>中文 17px + 英文 7px；两行总高 ≥ 30px</td></tr>
+        <tr><td>竖排绢签</td><td>签宽 ≥ 44px</td><td>「时」「妍」为左右结构，窄于 44px 会挤成一团</td></tr>
+        <tr><td>英文单行</td><td>宽 ≥ 72px</td><td>字距不得低于 <code>.24em</code></td></tr>
+        <tr><td>印章</td><td>边 ≥ 24px</td><td>低于此值降级为单字印</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ==================== 06 小尺寸 ==================== -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">06</span><h2>小尺寸与图标</h2><span class="note">按真实像素看，不按想象看</span></div>
+    <p class="lead">
+      三个汉字缩到 <b>16px 就已经认不出是什么字</b>，但——它仍然能被认成「一个方正的中文字标记」，这就是够的。
+      关键是不能让它糊成一团灰点。下面都是真实像素尺寸，你直接看哪个能辨认。
+    </p>
+
+    <div class="board">
+      <span class="cap" style="display:block;font-size:9px;color:var(--muted);letter-spacing:.2em;font-family:ui-monospace,Menlo,monospace;margin-bottom:20px">FAVICON · 1:1 实际尺寸</span>
+      <div class="fav-row">
+        <div style="text-align:center">
+          <div class="fav" style="width:16px;height:16px;font-size:12px">妍</div>
+          <div class="fav-cap">16 · 朱底</div>
+        </div>
+        <div style="text-align:center">
+          <div class="fav w" style="width:16px;height:16px;font-size:12px">妍</div>
+          <div class="fav-cap">16 · 白底</div>
+        </div>
+        <div style="text-align:center">
+          <div class="fav" style="width:32px;height:32px;font-size:23px">妍</div>
+          <div class="fav-cap">32</div>
+        </div>
+        <div style="text-align:center">
+          <div class="fav" style="width:64px;height:64px;font-size:46px">妍</div>
+          <div class="fav-cap">64</div>
+        </div>
+        <div style="text-align:center">
+          <div class="fav" style="width:64px;height:64px;font-size:26px;letter-spacing:.06em">予时<br/>妍</div>
+          <div class="fav-cap">64 · 三字（不可辨）</div>
+        </div>
+        <div style="text-align:center">
+          <div class="fav" style="width:64px;height:64px"><span class="fav-l" style="font-size:34px;line-height:1">Y<span style="font-size:.6em;vertical-align:super">É</span></span></div>
+          <div class="fav-cap">64 · YÉ 字母</div>
+        </div>
+      </div>
+
+      <div class="hair" style="width:100%;margin:32px 0 26px"></div>
+
+      <div class="two">
+        <div class="cell">
+          <span class="cap">社交头像 · 1080×1080</span>
+          <div style="margin-top:16px;display:flex;gap:16px;align-items:center">
+            <div class="fav" style="width:78px;height:78px;font-size:56px;border-radius:50%">妍</div>
+            <div class="fav w" style="width:78px;height:78px;font-size:56px;border-radius:50%;box-shadow:0 0 0 1px var(--gold) inset">妍</div>
+          </div>
+          <div class="cnote">圆形裁切下的余量要留够，字面占直径 72%</div>
+        </div>
+        <div class="cell">
+          <span class="cap">微信 / 小红书头像 · 单色印</span>
+          <div style="margin-top:16px;display:flex;gap:16px;align-items:center">
+            <div class="seal-mini seal-solid" style="width:52px;height:52px;font-size:26px;border-radius:6px">妍</div>
+            <div class="seal-sq seal-solid" style="width:52px;height:52px;font-size:15px">
+              <span style="grid-area:1/1">妍</span><span style="grid-area:1/2">予</span><span style="grid-area:2/2">时</span>
+            </div>
+          </div>
+          <div class="cnote">小平台上推荐朱底白字，比细线更抗缩</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-band">
+      <b>结论：favicon / 头像一律用单字「妍」。</b>三字在任何 ≤ 64px 的场景下都会糊（上面第四、五个示例可以直接对比）。
+      不需要担心「妍」单独出现会看不懂——图标的作用是被<b>记住</b>，不是被<b>读懂</b>；理解名字的活儿交给页面标题。
+    </div>
+  </section>
+
+  <!-- ==================== 07 全触点应用 ==================== -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">07</span><h2>全触点应用</h2><span class="note">在真实场景里看，不在白底上看</span></div>
+    <p class="lead">
+      字标只要落到照片、玻璃、深色底上，问题才会暴露。这一节把上面所有规范放进真实触点里跑一遍——
+      全部沿用 v4 的液态玻璃语言，只换名字。
+    </p>
+
+    <div class="board">
+      <div class="two">
+
+        <div class="tp">
+          <span class="cap">01 · 站内导航条</span>
+          <div class="navbar">
+            <span>
+              <span class="wm-a-sm" style="font-size:15px">予时<span class="acc">妍</span></span>
+              <span class="latline" style="display:block;margin-top:5px;font-size:7.5px;letter-spacing:.34em">YUÉ ATELIER</span>
+            </span>
+            <span class="burger"><i></i><i></i></span>
+          </div>
+          <div class="cnote" style="text-align:left;margin-top:14px">中文 15px / 英文 7.5px；中英成对出现，不写「妆造」</div>
+        </div>
+
+        <div class="tp">
+          <span class="cap">02 · 相册封面 · 竖排玻璃绢签</span>
+          <div class="slipdemo">
+            <div class="slipbox">
+              <img src="assets/img/nc-c.png" />
+              <span class="veil"></span>
+              <span class="sb"><span>予 时 妍</span></span>
+            </div>
+            <div class="slipbox">
+              <img src="assets/img/w-a.png" />
+              <span class="veil"></span>
+              <span class="sb" style="border-radius:999px"><span style="letter-spacing:.22em">予时妍 · 婚礼全程</span></span>
+            </div>
+          </div>
+          <div class="cnote" style="text-align:left;margin-top:14px">真玻璃 16px + 墨色字；签宽 34px ≥ 下限，新中式直角 / 西式胶囊</div>
+        </div>
+
+        <div class="tp">
+          <span class="cap">03 · 详情页落款小印</span>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 4px 8px">
+            <span class="subline">婚礼跟妆 · 其一 · 仪式主纱</span>
+            <span class="seal-mini">妍</span>
+          </div>
+          <div class="cnote" style="text-align:left;margin-top:10px">30px 单字印 · 只在章节标题行右端出现一次，不重复盖</div>
+        </div>
+
+        <div class="tp">
+          <span class="cap">04 · 查看器水印（深色）</span>
+          <div style="position:relative;height:104px;border-radius:4px;overflow:hidden;margin-top:2px">
+            <img src="assets/img/nc-a.png" style="width:100%;height:100%;object-fit:cover" />
+            <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,11,9,.18),rgba(15,11,9,.5))"></span>
+            <span class="wm-mark">予 时 妍</span>
+            <span style="position:absolute;left:12px;top:12px;writing-mode:vertical-rl;font-family:'Noto Serif SC',serif;
+              font-size:9px;letter-spacing:.28em;color:rgba(255,255,255,.42)">YUÉ ATELIER</span>
+          </div>
+          <div class="cnote" style="text-align:left;margin-top:14px">白字透明度 ≤ 50%，不压人物面部；这是防截图外流的唯一手段</div>
+        </div>
+
+        <div class="tp">
+          <span class="cap">05 · 二维码卡（转化位）</span>
+          <div class="qrwrap">
+            <div class="qr">微信<br/>二维码<br/>待替换</div>
+            <div>
+              <div class="wm-a-sm" style="font-size:14px">予时<span class="acc">妍</span></div>
+              <div class="latline" style="margin-top:6px;font-size:8px">YUÉ ATELIER</div>
+              <div class="subline" style="margin-top:10px;font-size:10px;letter-spacing:.16em">为重要时刻，留一份美</div>
+            </div>
+          </div>
+          <div class="cnote" style="text-align:left;margin-top:14px">二维码卡上标语出现一次即可，此处是标语唯一的「转化位」用法</div>
+        </div>
+
+        <div class="tp">
+          <span class="cap">06 · 预约 CTA</span>
+          <button class="cta">预约跟妆 <em>BOOK NOW</em></button>
+          <div class="cnote" style="text-align:left;margin-top:14px">按钮内不放字标——字标与操作按钮混用会稀释识别度</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="board">
+      <span class="cap" style="display:block;font-size:9px;color:var(--muted);letter-spacing:.2em;font-family:ui-monospace,Menlo,monospace;margin-bottom:18px">07 · 名片（正 / 反）· 印刷物料基准</span>
+      <div class="two" style="max-width:640px">
+        <div class="cardface">
+          <div class="subline" style="font-size:10px;letter-spacing:.3em">妆造 · 婚礼与日常</div>
+          <div class="wm-a-sm" style="font-size:22px">予时<span class="acc">妍</span></div>
+          <div class="latline" style="font-size:8px">YUÉ ATELIER</div>
+          <div class="cardfoot"><span>TIANMO · MAKEUP ARTIST</span><span>SHANGHAI</span></div>
+        </div>
+        <div class="cardface back">
+          <div class="seal-v" style="align-self:flex-end">予<br/>时<br/>妍</div>
+          <div style="align-self:flex-start">
+            <div style="font-size:10px;letter-spacing:.24em;opacity:.9">为重要时刻，留一份美</div>
+          </div>
+          <div class="cardfoot"><span>微信 YUE_ATELIER</span><span>+86 138 ····</span></div>
+        </div>
+      </div>
+      <div class="cnote" style="text-align:left;margin-top:16px">
+        正面：副标 → 字标 → 英文，三级递进；反面：竖排白文印 + 标语。印刷建议 300g 棉纸、字标立体烫（不做普通烫金）
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 08 改名口径传播盘点 ==================== -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">08</span><h2>改名口径传播盘点</h2><span class="note">上一轮踩过的坑：改了一处，界面上还留着旧称呼</span></div>
+    <p class="lead">
+      全仓检索「<b>禧悦 / XIYUE / 妆造</b>」的结果如下，共 <b>3 类 24 处</b>。
+      本轮<b>原型 demo 一行未动</b>——这张表是当时的施工单。
+      <b>注：技术栈定稿后该施工单已作废</b>（旧 demo 将被 <code>site/</code> 新工程取代，不再原地改名）。
+    </p>
+
+    <table class="spec">
+      <thead><tr><th style="width:220px">文件 / 位置</th><th style="width:150px">现文</th><th style="width:230px">应改为</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td>index.html:7 · <code>&lt;title&gt;</code></td><td>禧悦妆造 · 化妆师甜茉</td><td>予时妍 YUÉ ATELIER · 化妆师甜茉｜跟妆作品集</td><td><span class="pill todo">待改</span></td></tr>
+        <tr><td>index.html:8 · meta description</td><td>禧悦妆造 · …</td><td>予时妍 YUÉ ATELIER：西式浪漫 × 新中式婚礼跟妆、订婚宴、孕亲照</td><td><span class="pill todo">待改</span></td></tr>
+        <tr><td>data/albums.js:9 · <code>studio</code></td><td>禧悦妆造</td><td>予时妍</td><td><span class="pill todo">待改</span></td></tr>
+        <tr><td>data/albums.js:11 · <code>latin</code></td><td>XIYUE MAKEUP · TIANMO</td><td>YUÉ ATELIER</td><td><span class="pill todo">待改</span></td></tr>
+        <tr><td>data/albums.js:2 / main.js:2 / tokens.css:2</td><td>文件头注释「禧悦妆造 · 绢本妆册」</td><td>予时妍 · YUÉ ATELIER</td><td><span class="pill todo">待改</span></td></tr>
+        <tr><td>README.md:1</td><td># 禧悦妆造 · 绢本妆册</td><td># 予时妍 · YUÉ ATELIER</td><td><span class="pill todo">待改</span></td></tr>
+        <tr><td>design-spec.html / v2 / v3 / v4</td><td>旧名（历史版本）</td><td>保留原样归档，不改</td><td><span class="pill keep">保留</span></td></tr>
+        <tr><td>design-v5.html（本轮新增）</td><td>—</td><td>全部换新名 + 标语上首屏</td><td><span class="pill done">已完成</span></td></tr>
+        <tr><td>化妆师名「甜茉」</td><td>关于页 / 首屏署名</td><td><b>不动</b>——品牌名与主理人名是两个概念</td><td><span class="pill keep">保留</span></td></tr>
+      </tbody>
+    </table>
+
+    <table class="spec" style="margin-top:26px">
+      <thead><tr><th style="width:220px">站外资产</th><th style="width:230px">建议写法</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td>域名</td><td><code>yueatelier.com</code> / <code>yueshiyan.com</code></td><td class="todo">用 YUE 无重音；需先查可用性</td></tr>
+        <tr><td>微信公众号 / 微信 ID</td><td>予时妍 / <code>YUE_ATELIER</code></td><td class="todo">ID 只能字母数字下划线，É 必须降级</td></tr>
+        <tr><td>小红书昵称 / ID</td><td>予时妍 · YUÉ ATELIER</td><td class="todo">先搜重名，避免撞车</td></tr>
+        <tr><td>商标</td><td>第 44 类（美容化妆服务）+ 第 35 类（广告推广）</td><td class="todo">中国商标网自检，具体类别以官方分类表为准</td></tr>
+        <tr><td>邮箱</td><td><code>hello@yueatelier.com</code></td><td>—</td></tr>
+        <tr><td>地图 / 点评店铺名</td><td>予时妍 YUÉ ATELIER</td><td class="todo">高德 / 腾讯地图商户认领，名称要与门头一致</td></tr>
+        <tr><td>印刷物料</td><td>名片 · 相册封面烫印 · 礼盒 · 腰封 · 门头</td><td>按第 07 节基准文件出图</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ==================== 09 待拍板 ==================== -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">09</span><h2>待拍板</h2><span class="note">四条 · 报编号就行</span></div>
+    <div class="asks">
+      <div class="ask">
+        <span class="qn">01</span>
+        <h4>É 的保留策略</h4>
+        <p><b>字标保留 É，所有要用户输入的地方降级 YUE。</b>这是唯一能兼顾「高级感」和「搜得到」的方案。</p>
+        <p class="rec">→ 默认按此执行，除非你希望全站统一 YUE（会更保险，但会掉一档质感）</p>
+      </div>
+      <div class="ask">
+        <span class="qn">02</span>
+        <h4>副标口径</h4>
+        <p><b>A（推荐）</b> 妆造 · 婚礼与日常 —— 短，可进字标<br/>
+           <b>B</b> 婚礼跟妆 · 订婚宴 · 孕亲照 · 日常妆 —— 长，只用于 SEO 与「关于」页</p>
+        <p class="rec">→ 建议 A 进字标、B 进 meta 与关于页，两版并存不冲突</p>
+      </div>
+      <div class="ask">
+        <span class="qn">03</span>
+        <h4>英文标语要不要</h4>
+        <p>「Beauty, kept for moments that matter」建议<b>只在「关于」页出现一行</b>，不参与封面主视觉。</p>
+        <p class="rec">→ 默认采用；若觉得多余，只留中文即可</p>
+      </div>
+      <div class="ask">
+        <span class="qn">04</span>
+        <h4>印章用简体还是繁体</h4>
+        <p>金石惯例刻 <b>「予時妍」</b>（繁体「時」），有篆刻气；简体更统一但少了那口气。</p>
+        <p class="rec">→ 我倾向繁体（只用在印章这一处，不影响正文）</p>
+      </div>
+    </div>
+
+    <div class="note-band" style="margin-top:22px">
+      这四条拍完，名字这一环就彻底定稿，<b>后面不再反复</b>。届时我们按你之前说的，坐下来一起定前后端技术栈
+      （静态托管还是带后台、相册与照片怎么存、上传要不要转码），定了再动 <code>index.html</code> 与 <code>data/</code>。
+    </div>
+  </section>
+
+  <div class="foot">
+    <span>予时妍 · YUÉ ATELIER · 品牌字标系统 v1.0 · 与 v4 视觉语言一致 · 原型 demo 未改动</span>
+    <span>2026-10</span>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var body=document.body;
+  document.querySelectorAll('.tg[data-env]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.tg[data-env]').forEach(function(b){b.classList.remove('on')});
+      btn.classList.add('on');
+      body.setAttribute('data-env',btn.getAttribute('data-env'));
+    });
+  });
+})();
+</script>
+</body>
+</html>

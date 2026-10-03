@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="予时妍 YUÉ ATELIER · 为重要时刻，留一份美">
+  <title>予时妍 · 社交分享图 1200×630（通用横版 · og:image）</title>
+  <desc>暖白绢底 + 极克制的中心柔光 + 四角金角标。中央品牌锁定：开口环符号 112px、予时妍主标 96px（妍 用绛色）、金线、YUÉ ATELIER、标语、短金线落款与个人署名。主体全部落在居中 630 方框安全区内，被微信裁成 1:1 时不丢信息。</desc>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400&amp;family=Bodoni+Moda:wght@400;500&amp;display=swap');
+    .cn{font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif}
+    .lat{font-family:"Bodoni Moda","Didot","Georgia",serif}
+  </style>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#FCFAF9"/>
+      <stop offset="0.55" stop-color="#F8F4F1"/>
+      <stop offset="1" stop-color="#F4EEEB"/>
+    </linearGradient>
+    <radialGradient id="soft" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#E9CBCF" stop-opacity="0.34"/>
+      <stop offset="0.55" stop-color="#E9CBCF" stop-opacity="0.09"/>
+      <stop offset="1" stop-color="#E9CBCF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="envA" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#D8B7A8" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#D8B7A8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="envB" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#C2B6C4" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#C2B6C4" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="hair" width="46" height="46" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="46" stroke="#221D19" stroke-width="1" opacity="0.055"/>
+    </pattern>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch" result="n"/>
+      <feColorMatrix in="n" type="saturate" values="0"/>
+    </filter>
+    <clipPath id="frame"><rect width="1200" height="630"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="1200" height="630" fill="url(#bg)"/>
+    <ellipse cx="600" cy="300" rx="500" ry="330" fill="url(#soft)"/>
+    <ellipse cx="1040" cy="620" rx="500" ry="420" fill="url(#envA)"/>
+    <ellipse cx="120" cy="20" rx="460" ry="380" fill="url(#envB)"/>
+    <rect width="1200" height="630" fill="url(#hair)" opacity="0.28"/>
+    <rect width="1200" height="630" filter="url(#grain)" opacity="0.05" style="mix-blend-mode:multiply"/>
+
+    <!-- 四角金角标 -->
+    <g stroke="#BFA46F" stroke-width="1.15" fill="none" opacity="0.62" stroke-linecap="square">
+      <path d="M44 70 V44 H70"/>
+      <path d="M1130 44 H1156 V70"/>
+      <path d="M1156 560 V586 H1130"/>
+      <path d="M70 586 H44 V560"/>
+    </g>
+
+    <!-- 符号 · 开口环 + 光点（直径 112） -->
+    <g transform="translate(544,80) scale(1.75)">
+      <circle cx="32" cy="32" r="22.5" fill="none" stroke="#9E4E55" stroke-width="1.75" stroke-linecap="round"
+              stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+      <circle cx="32" cy="32" r="5.6" fill="#9E4E55"/>
+    </g>
+
+    <!-- 主标 · 予时妍（实测墨迹等高，三字等大；字距由 0.16em 统一控制） -->
+    <text class="cn" x="607.7" y="320" font-size="96" font-weight="300" letter-spacing="0.16em"
+          fill="#221D19" text-anchor="middle">
+      <tspan>予</tspan><tspan>时</tspan><tspan fill="#9E4E55">妍</tspan>
+    </text>
+
+    <line x1="500" y1="374" x2="700" y2="374" stroke="#BFA46F" stroke-width="1" opacity="0.6"/>
+
+    <text class="lat" x="604.4" y="408" font-size="20" letter-spacing="0.44em" fill="#6C635C"
+          text-anchor="middle">YUÉ ATELIER</text>
+
+    <text class="cn" x="602.5" y="476" font-size="21" font-weight="300" letter-spacing="0.24em"
+          fill="#6C635C" text-anchor="middle">为重要时刻，留一份美</text>
+
+    <line x1="574" y1="540" x2="626" y2="540" stroke="#BFA46F" stroke-width="1" opacity="0.5"/>
+
+    <text class="cn" x="601.5" y="570" font-size="15" font-weight="300" letter-spacing="0.2em"
+          fill="#8C8279" text-anchor="middle">甜茉 · 化妆师个人作品集</text>
+  </g>
+</svg>

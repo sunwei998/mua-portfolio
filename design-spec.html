@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>禧悦妆造 · 设计规格书 | 绢本妆册</title>
+<style>
+/* ===== 设计令牌（与 styles/tokens.css 同源） ===== */
+:root{
+  --bg:#F6F2EA; --surface:#FBF8F2; --surface-deep:#EFE9DC;
+  --silk:#FAEEDA; --silk-ink:#633806;
+  --text:#2A2723; --muted:#8C8478;
+  --accent:#A32D2D; --accent-deep:#8C2424; --gold:#A98B5F;
+  --line:rgba(42,39,35,.14); --line-gold:rgba(169,139,95,.45);
+  --ink-bg:#221E1A; --ink-text:#D3D1C7;
+  --serif:"Noto Serif SC","Songti SC","STSong",serif;
+  --latin:"Cormorant Garamond","Georgia",serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--serif);font-size:15px;line-height:1.8;letter-spacing:.02em}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(163,45,45,.18)}
+
+/* ===== 文档骨架 ===== */
+.doc{max-width:880px;margin:0 auto;padding:0 24px 96px}
+.doc-head{display:flex;align-items:center;gap:20px;padding:56px 0 8px;border-bottom:1px solid var(--line)}
+.doc-head .latin{letter-spacing:.34em}
+h1{font-size:26px;font-weight:900;letter-spacing:.12em}
+.latin{font-family:var(--latin);color:var(--muted);font-size:12px}
+.doc-sub{color:var(--muted);font-size:13px;letter-spacing:.14em;padding:12px 0 0}
+.toc{display:flex;flex-wrap:wrap;gap:10px;padding:20px 0;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
+.toc a{font-size:12px;letter-spacing:.14em;border:1px solid var(--line);border-radius:6px;padding:4px 12px;background:var(--surface);transition:all .18s ease-out}
+.toc a:hover{border-color:var(--gold);color:var(--silk-ink);background:var(--silk)}
+section{padding:56px 0 8px}
+.sec-num{font-family:var(--latin);color:var(--accent);font-size:13px;letter-spacing:.3em}
+h2{font-size:22px;font-weight:900;letter-spacing:.12em;margin:4px 0 8px}
+.sec-intro{color:var(--muted);font-size:14px;max-width:36em;margin-bottom:28px}
+h3{font-size:15px;font-weight:600;letter-spacing:.2em;margin:32px 0 12px}
+.note{font-size:12px;color:var(--muted);letter-spacing:.06em;margin-top:8px}
+
+/* ===== 印章 ===== */
+.seal{width:46px;height:46px;border-radius:6px;background:var(--accent);color:#FBF8F2;display:grid;place-items:center;font-weight:900;font-size:22px;line-height:1;transform:rotate(-3deg);box-shadow:0 2px 8px rgba(42,39,35,.08);flex:none}
+
+/* ===== 色板 ===== */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.sw{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.sw i{display:block;height:64px}
+.sw b{display:block;font-size:13px;font-weight:600;padding:8px 12px 0;letter-spacing:.08em}
+.sw span{display:block;font-family:var(--latin);font-size:11px;color:var(--muted);padding:0 12px 10px;letter-spacing:.06em}
+.ratio{display:flex;height:34px;border-radius:6px;overflow:hidden;border:1px solid var(--line);margin-top:20px}
+.ratio i{display:grid;place-items:center;font-style:normal;font-size:11px;letter-spacing:.1em}
+
+/* ===== 字阶 ===== */
+.spec-table{width:100%;border-collapse:collapse;font-size:13px;background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.spec-table th{font-weight:600;text-align:left;letter-spacing:.1em;padding:10px 14px;background:var(--surface-deep);font-size:12px}
+.spec-table td{padding:10px 14px;border-top:1px solid var(--line);vertical-align:top}
+.spec-table code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--silk-ink)}
+.type-demo{display:flex;align-items:baseline;gap:18px;padding:14px 0;border-bottom:1px solid var(--line)}
+.type-demo small{font-family:var(--latin);color:var(--muted);font-size:11px;width:110px;flex:none}
+
+/* ===== 动效参数 ===== */
+.demo-box{display:inline-block;background:var(--silk);border:1px solid var(--line-gold);border-radius:6px;padding:8px 18px;font-size:13px;letter-spacing:.2em;color:var(--silk-ink)}
+
+/* ===== 组件演示 ===== */
+.comp{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:24px;margin-bottom:20px}
+.comp-tag{font-size:11px;letter-spacing:.24em;color:var(--accent);margin-bottom:14px;display:block}
+.comp-stage{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:center;padding:12px 0}
+.comp-spec{font-size:12px;color:var(--muted);border-top:1px dashed var(--line);margin-top:14px;padding-top:10px;letter-spacing:.04em}
+.comp-spec code{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--silk-ink)}
+
+/* 入口牌 */
+.entry{display:flex;align-items:center;gap:16px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px 24px;min-height:60px;box-shadow:0 2px 8px rgba(42,39,35,.08);width:min(320px,100%)}
+.entry__num{color:var(--accent);font-weight:900;font-size:20px;width:28px}
+.entry__label{font-weight:600;font-size:17px;flex:1}
+.entry__thumb{width:40px;height:52px;object-fit:cover;border-radius:3px;filter:saturate(.9);background:var(--surface-deep)}
+.entry__chev{color:var(--muted)}
+/* 大数编号 + 绢签 */
+.album-demo{position:relative;width:200px;aspect-ratio:3/4;background:var(--surface-deep);border-radius:4px;box-shadow:0 8px 28px rgba(42,39,35,.12)}
+.album-demo__num{position:absolute;top:-14px;left:-12px;font-size:44px;font-weight:900;color:var(--accent);line-height:1;text-shadow:0 1px 0 rgba(246,242,234,.9)}
+.album-demo__silk{position:absolute;left:12px;right:12px;bottom:12px;background:var(--silk);color:var(--silk-ink);font-size:12px;letter-spacing:.2em;padding:5px 10px;text-align:center}
+/* gate / chip */
+.gate{min-height:52px;border-radius:6px;border:1px solid var(--line);background:var(--surface);font-weight:600;letter-spacing:.3em;text-indent:.3em;font-size:17px;padding:0 20px;font-family:var(--serif)}
+.gate.is-on{background:var(--accent);color:#FBF8F2;border-color:var(--accent)}
+.chip{min-height:38px;padding:0 14px;border-radius:6px;border:1px solid var(--line);background:var(--surface);font-size:15px;letter-spacing:.08em;font-family:var(--serif)}
+.chip.is-on{background:var(--silk);border-color:var(--gold);color:var(--silk-ink);font-weight:600}
+/* 团扇 */
+.fan{text-align:center}
+.fan__disc{width:120px;aspect-ratio:1;border-radius:50%;overflow:hidden;border:1px solid var(--gold);padding:5px;background:var(--surface);display:block}
+.fan__disc i{display:block;width:100%;height:100%;border-radius:50%;background:var(--surface-deep)}
+.fan__disc::after{content:"";display:block;width:3px;height:14px;background:var(--gold);margin:6px auto -14px;border-radius:2px}
+.fan__label{margin-top:18px;font-size:12px;letter-spacing:.24em;color:var(--muted)}
+/* CTA / QR */
+.cta{display:block;width:100%;min-height:52px;background:var(--accent);color:#FBF8F2;border-radius:8px;font-weight:600;letter-spacing:.4em;text-indent:.4em;font-size:17px;font-family:var(--serif)}
+.qr-card{width:300px;background:var(--surface);border:1px solid var(--line-gold);border-radius:10px;padding:24px;text-align:center;box-shadow:0 2px 8px rgba(42,39,35,.08)}
+.qr-card__box{width:150px;height:150px;margin:0 auto 16px;border:1px dashed var(--gold);border-radius:6px;display:grid;place-items:center;color:var(--gold);font-size:12px;letter-spacing:.2em}
+/* 查看器 */
+.viewer-demo{width:100%;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--ink-bg);color:var(--ink-text)}
+.viewer-demo__bar{display:flex;justify-content:space-between;padding:12px 20px;font-size:12px;letter-spacing:.14em}
+.viewer-demo__stage{display:grid;place-items:center;min-height:140px;background:var(--ink-bg)}
+.viewer-demo__stage i{width:180px;height:110px;background:#332E28;border-radius:4px;font-style:normal;display:grid;place-items:center;font-size:12px;letter-spacing:.2em}
+.viewer-demo__foot{padding:12px 20px 20px}
+.viewer-demo__track{height:2px;background:rgba(211,209,199,.25);position:relative;margin-top:8px}
+.viewer-demo__track i{position:absolute;left:0;top:0;height:100%;width:40%;background:#F5F1EA}
+
+/* ===== 线框图 ===== */
+.wire-row{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;margin-bottom:36px}
+.wire{width:280px;flex:none;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:16px}
+.wire .blk{border:1px dashed var(--gold);border-radius:4px;background:var(--surface-deep);display:grid;place-items:center;font-size:11px;letter-spacing:.12em;color:var(--muted);text-align:center;min-height:28px}
+.wire .gap{height:10px}
+.wire-anno{flex:1;min-width:240px;font-size:13px}
+.wire-anno h3{margin-top:0}
+.wire-anno ul{padding-left:18px}
+.wire-anno li{margin-bottom:6px;color:var(--text)}
+.wire-anno li b{color:var(--accent);font-weight:600}
+
+/* 决策表 */
+.decide td:first-child{width:120px;color:var(--accent);font-weight:600}
+footer{border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--muted);font-size:12px;letter-spacing:.14em;text-align:center}
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <header class="doc-head">
+    <div class="seal">禧</div>
+    <div>
+      <h1>禧悦妆造 · 设计规格书</h1>
+      <span class="latin">XIYUE MAKEUP · DESIGN SPEC · v1.0</span>
+    </div>
+  </header>
+  <p class="doc-sub">绢本妆册 —— 跟妆作品集 H5 · 设计方向：Luxury / refined × 新中式编辑排版 · 本规格书与代码实现一一对应</p>
+
+  <nav class="toc">
+    <a href="#s1">01 设计定位</a>
+    <a href="#s2">02 色彩</a>
+    <a href="#s3">03 字体</a>
+    <a href="#s4">04 几何</a>
+    <a href="#s5">05 动效</a>
+    <a href="#s6">06 组件</a>
+    <a href="#s7">07 页面线框</a>
+    <a href="#s8">08 信息架构</a>
+    <a href="#s9">09 待拍板</a>
+  </nav>
+
+  <!-- ============ 01 ============ -->
+  <section id="s1">
+    <span class="sec-num">01 / DESIGN INTENT</span>
+    <h2>设计定位</h2>
+    <p class="sec-intro">作品集是化妆师的「第二张脸」——安静、克制、留白足够，让客片自己说话。整套视觉从宣纸与绢本册页取意：<b>宣纸米白为底、墨色为文、朱砂印章为魂</b>，竖排书法标题承担品牌记忆点，朱砂是全站唯一强调色，只出现在需要「盖章」的地方。</p>
+    <div class="spec-table" style="border-radius:8px">
+      <table class="spec-table">
+        <tr><th style="width:9em">维度</th><th>决策</th></tr>
+        <tr><td>气质关键词</td><td>绢本 · 册页 · 印章 · 留白 · 编辑排版（editorial）</td></tr>
+        <tr><td>内容原则</td><td>只呈现作品 —— 不写客户姓名、不写婚期、不放价格；绢签只写「婚礼跟妆 · 其壹」</td></tr>
+        <tr><td>版式主张</td><td>单列窄幅（内容区 max-width 520px，H5 优先）；相册封面左右交错破格打破单调</td></tr>
+        <tr><td>强调色纪律</td><td>朱砂 ≤ 10%：印章、壹贰叁编号、选中态、CTA。其余一律墨色/弱化墨</td></tr>
+        <tr><td>中西双语</td><td>中文大字（Noto Serif SC 900）+ 拉丁小字（Cormorant，0.34em 疏排）上下呼应，中英不混排</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ 02 ============ -->
+  <section id="s2">
+    <span class="sec-num">02 / COLOR</span>
+    <h2>色彩系统</h2>
+    <p class="sec-intro">三组色彩各司其职：纸面系负责氛围，墨色系负责层级，朱砂+金负责强调。查看器用暖近黑而非纯黑，保护客片肤色不发灰。</p>
+    <div class="swatches">
+      <div class="sw"><i style="background:#F6F2EA;border-bottom:1px solid var(--line)"></i><b>宣纸米白</b><span>#F6F2EA · 页面底</span></div>
+      <div class="sw"><i style="background:#FBF8F2;border-bottom:1px solid var(--line)"></i><b>卡片面</b><span>#FBF8F2 · surface</span></div>
+      <div class="sw"><i style="background:#EFE9DC"></i><b>深纸面</b><span>#EFE9DC · 墨晕/占位</span></div>
+      <div class="sw"><i style="background:#FAEEDA"></i><b>绢底</b><span>#FAEEDA · 绢签/选中</span></div>
+      <div class="sw"><i style="background:#633806"></i><b>绢签墨</b><span>#633806 · 绢上文字</span></div>
+      <div class="sw"><i style="background:#2A2723"></i><b>墨</b><span>#2A2723 · 正文标题</span></div>
+      <div class="sw"><i style="background:#8C8478"></i><b>弱化墨</b><span>#8C8478 · 辅助文字</span></div>
+      <div class="sw"><i style="background:#A32D2D"></i><b>朱砂</b><span>#A32D2D · 唯一强调色</span></div>
+      <div class="sw"><i style="background:#A98B5F"></i><b>香槟金</b><span>#A98B5F · 描边/发丝线</span></div>
+      <div class="sw"><i style="background:#221E1A"></i><b>暖近黑</b><span>#221E1A · 查看器底</span></div>
+    </div>
+    <div class="ratio">
+      <i style="flex:6;background:#F6F2EA;color:#8C8478">宣纸米白 60%</i>
+      <i style="flex:3;background:#EFE9DC;color:#633806">墨色与金 30%</i>
+      <i style="flex:1;background:#A32D2D;color:#FBF8F2">朱砂 10%</i>
+    </div>
+    <p class="note">使用比例 6 : 3 : 1。分隔线一律半透明墨（rgba(42,39,35,.14)）或半透明金（rgba(169,139,95,.45)），不用实色灰。</p>
+  </section>
+
+  <!-- ============ 03 ============ -->
+  <section id="s3">
+    <span class="sec-num">03 / TYPOGRAPHY</span>
+    <h2>字体系统</h2>
+    <p class="sec-intro">两套衬线，中文为主角。Noto Serif SC 的 900 黑度承担「书法感」，正文只用 400；拉丁文永远是配角小字。国内上线时字体换自托管或镜像（fonts.loli.net），保持 font-display: swap。</p>
+    <div class="type-demo"><small>hero / 8vw</small><span style="font-weight:900;font-size:clamp(30px,8vw,40px);letter-spacing:.32em">以妆为笺</span></div>
+    <div class="type-demo"><small>h1 / 22px 900</small><span style="font-weight:900;font-size:22px;letter-spacing:.12em">婚庆跟妆</span></div>
+    <div class="type-demo"><small>h2 / 17px 600</small><span style="font-weight:600;font-size:17px;letter-spacing:.3em;text-indent:.3em">仪式 · 主纱</span></div>
+    <div class="type-demo"><small>body / 15px 400</small><span style="font-size:15px">妆面干净透亮，造型考究；新中式取古意而不老气。</span></div>
+    <div class="type-demo"><small>latin / 12px</small><span class="latin" style="letter-spacing:.34em">XIYUE MAKEUP · TIANMO</span></div>
+    <table class="spec-table" style="margin-top:24px">
+      <tr><th>场景</th><th>字重</th><th>字距</th><th>理由</th></tr>
+      <tr><td>竖排书法标题</td><td>900</td><td>0.32em</td><td>竖排需大字距才有「题签」感</td></tr>
+      <tr><td>内页大标题</td><td>900</td><td>0.12em</td><td>横排标题轻疏排即可</td></tr>
+      <tr><td>按钮 / 门禁字</td><td>600</td><td>0.3–0.4em + 缩进补偿</td><td>疏排后用 text-indent 找回视觉居中</td></tr>
+      <tr><td>拉丁小字</td><td>400</td><td>0.34em</td><td>纯装饰，弱化墨色</td></tr>
+      <tr><td>正文</td><td>400</td><td>0.02em / 行高 1.8</td><td>长文可读性优先</td></tr>
+    </table>
+  </section>
+
+  <!-- ============ 04 ============ -->
+  <section id="s4">
+    <span class="sec-num">04 / GEOMETRY</span>
+    <h2>几何系统</h2>
+    <p class="sec-intro">间距 6 级梯度、圆角 4 档、阴影 3 级带环境色（不用纯黑投影，避免在暖纸底上发脏）。</p>
+    <table class="spec-table">
+      <tr><th style="width:9em">维度</th><th>梯度</th><th>用法</th></tr>
+      <tr><td>间距</td><td><code>4 / 8 / 16 / 24 / 40 / 64</code></td><td>组件内 4–16，组件间 24，区块间 40，页尾 64</td></tr>
+      <tr><td>圆角</td><td><code>3 / 4 / 6 / 8 / 10</code></td><td>图片 3–4，按钮/卡片 6–8，QR 卡 10；印章 6 微圆</td></tr>
+      <tr><td>阴影</td><td>0 2 8 / 0 8 28 / 0 24 64</td><td>均基于 rgba(42,39,35,…)：悬浮件 1 级、封面 2 级、暂未用 3 级</td></tr>
+      <tr><td>图片比例</td><td>3 : 4</td><td>首图、相册封面统一竖幅，人物跟妆的天然比例</td></tr>
+      <tr><td>发丝线</td><td>1px 实线</td><td>页脚分隔、区块分隔，替代粗分割</td></tr>
+    </table>
+  </section>
+
+  <!-- ============ 05 ============ -->
+  <section id="s5">
+    <span class="sec-num">05 / MOTION</span>
+    <h2>动效系统</h2>
+    <p class="sec-intro">一速（180ms 交互）一折（360ms 入场）一景（640ms 场景），共用一条缓出曲线 <code>cubic-bezier(.16,1,.3,1)</code>。原则：动效只出现在「内容入场」与「页级切换」，绝不给 hover 加浮夸位移。<code>prefers-reduced-motion</code> 下一律关闭。</p>
+    <table class="spec-table">
+      <tr><th>动效</th><th>参数</th><th>位置</th></tr>
+      <tr><td>页面入场 pageIn</td><td>上移 18px 淡入 · 360ms</td><td>所有页面切换</td></tr>
+      <tr><td>滚动 reveal</td><td>上移 20px 淡入 · 360ms · 触发阈值 0.12</td><td>相册卡 / 团扇 / 关于页</td></tr>
+      <tr><td>盖章 stamp</td><td>rotate -9°→-3° · scale 1.35→1 · 360ms</td><td>首页印章</td></tr>
+      <tr><td>竖排逐字 vIn</td><td>下落 10px · 640ms · 每字延迟 80ms</td><td>首页两侧题签</td></tr>
+      <tr><td>呼吸 breathe</td><td>scale 1→1.05 · 9s 无限循环</td><td>首页主图（唯一常驻动效）</td></tr>
+      <tr><td>墨晕过渡 ink</td><td>clip-path 圆形扩散 0→130% · 640ms · 中点换内容</td><td>中西式切换 / 进册</td></tr>
+      <tr><td>进册翻页 flip</td><td>perspective 900px · rotateY -10° 淡出 · 280ms</td><td>相册墙点封面</td></tr>
+      <tr><td>团扇归正</td><td>rotate 12°→0 · scale .92→1 · 640ms</td><td>特写区入场</td></tr>
+      <tr><td>查看器缩放</td><td>双击 scale 1.9 · 360ms</td><td>全屏查看器</td></tr>
+      <tr><td>懒加载淡入</td><td>opacity 0→1 · 360ms</td><td>全部图片（loaded 类）</td></tr>
+    </table>
+    <p class="note">手勢：查看器支持左右滑动切换（阈值 42px）与双击放大（300ms 内）；键盘 ←/→/Esc 同步可用。</p>
+  </section>
+
+  <!-- ============ 06 ============ -->
+  <section id="s6">
+    <span class="sec-num">06 / COMPONENTS</span>
+    <h2>组件规格</h2>
+    <p class="sec-intro">以下组件与 components.css 一一对应，所见即真实样式参数。</p>
+
+    <div class="comp">
+      <span class="comp-tag">印章 SEAL · 品牌记忆点</span>
+      <div class="comp-stage"><div class="seal">禧</div></div>
+      <p class="comp-spec">46×46 · 圆角 6 · 朱砂底白字 900 · 固定 rotate(-3deg)（盖章手感）· 入场时盖章动效。首字取「禧悦妆造」首字。</p>
+    </div>
+
+    <div class="comp">
+      <span class="comp-tag">册页入口 ENTRY · 首页导航</span>
+      <div class="comp-stage">
+        <a class="entry" href="#"><span class="entry__num">壹</span><span class="entry__label">婚庆跟妆</span><span class="entry__thumb"></span><span class="entry__chev">›</span></a>
+      </div>
+      <p class="comp-spec">最小高 60 · 圆角 8 · 卡片面+发丝线+1 级阴影 · 编号朱砂 20px/900 · 缩略图 40×52 降饱和 0.9 · 按压时下沉 1px。</p>
+    </div>
+
+    <div class="comp">
+      <span class="comp-tag">相册封面 ALBUM CARD · 破格编号 + 绢签</span>
+      <div class="comp-stage" style="padding:24px 0">
+        <div class="album-demo"><span class="album-demo__num">壹</span><span class="album-demo__silk">婚礼跟妆 · 其壹</span></div>
+      </div>
+      <p class="comp-spec">宽 78%（偶数项右对齐，交错破格）· 3:4 竖幅 · 圆角 4 · 2 级阴影 · 大编号 44px/900 朱砂悬出图外上角 · 绢签 #FAEEDA 底 + 0.2em 疏排，只写作品信息。进册时 rotateY(-10°) 翻页淡出。</p>
+    </div>
+
+    <div class="comp">
+      <span class="comp-tag">风格门禁 GATE + 流程签牌 CHIP · 相册详情</span>
+      <div class="comp-stage">
+        <button class="gate is-on">新中式</button><button class="gate">西式</button>
+        <button class="chip is-on">晨袍</button><button class="chip">出门</button><button class="chip">仪式</button>
+      </div>
+      <p class="comp-spec">gate：等宽两列 · 最小高 52 · 0.3em 疏排 · 选中变朱砂底（整块「翻牌」感，360ms）。chip：横滑 · 最小高 38 · 选中变绢底金字（比 gate 低一级，用材质而不是变色块区分层级）。</p>
+    </div>
+
+    <div class="comp">
+      <span class="comp-tag">团扇 FAN · 细节特写</span>
+      <div class="comp-stage">
+        <span class="fan"><span class="fan__disc"><i></i></span><span class="fan__label">头饰造型</span></span>
+        <span class="fan"><span class="fan__disc"><i></i></span><span class="fan__label">面部细节</span></span>
+      </div>
+      <p class="comp-spec">直径 40vw / 上限 168 · 金色描边内衬 5px 白边 · 底部 3×14 金色扇柄 · 入场时从 rotate(12°) 归正（开扇感）· 点击进查看器。</p>
+    </div>
+
+    <div class="comp">
+      <span class="comp-tag">全屏查看器 VIEWER · 暗房</span>
+      <div class="viewer-demo">
+        <div class="viewer-demo__bar"><span>婚礼跟妆 · 其壹 · 仪式</span><span>×</span></div>
+        <div class="viewer-demo__stage"><i>作品图</i></div>
+        <div class="viewer-demo__foot"><span style="font-size:12px;letter-spacing:.2em">3 / 8</span><div class="viewer-demo__track"><i></i></div></div>
+      </div>
+      <p class="comp-spec">暖近黑 #221E1A（护肤色）· 顶栏标题+关闭 · 底部计数 + 2px 进度条（暖白）+ 手势提示 · 图片 contain 完整呈现，双击放大 1.9 倍。</p>
+    </div>
+
+    <div class="comp">
+      <span class="comp-tag">CTA + 预约卡 · 关于页</span>
+      <div class="comp-stage">
+        <div class="qr-card"><div class="qr-card__box">微信二维码<br />（待替换）</div>扫码添加微信 · 沟通档期与试妆</div>
+        <button class="cta" style="width:220px">预约跟妆</button>
+      </div>
+      <p class="comp-spec">CTA：通栏 · 最小高 52 · 0.4em 疏排 · 朱砂底，按压变深并下沉 1px。QR 卡：300 宽 · 金色发丝线边 + 金色虚线占位框 150×150，上线前替换真实二维码。</p>
+    </div>
+  </section>
+
+  <!-- ============ 07 ============ -->
+  <section id="s7">
+    <span class="sec-num">07 / WIREFRAMES</span>
+    <h2>页面线框</h2>
+    <p class="sec-intro">五个页面的版式结构（low-fi）。手机宽度 280px 示意，实际内容区 520px 封顶。</p>
+
+    <div class="wire-row">
+      <div class="wire">
+        <div class="blk" style="min-height:40px">印章 禧 ←→ XIYUE MAKEUP</div><div class="gap"></div>
+        <div class="blk" style="min-height:150px;position:relative">主图 62% 宽 3:4（呼吸）<span style="position:absolute;left:6px;top:50%;writing-mode:vertical-rl;font-weight:900;color:#A32D2D">以妆为笺</span><span style="position:absolute;right:6px;top:50%;writing-mode:vertical-rl;font-weight:900;color:#2A2723">禧悦妆造</span></div><div class="gap"></div>
+        <div class="blk">壹 · 婚庆跟妆 ›</div><div class="gap"></div>
+        <div class="blk">贰 · 订婚宴跟妆 ›</div><div class="gap"></div>
+        <div class="blk">叁 · 孕妇照 亲子照 ›</div><div class="gap"></div>
+        <div class="blk" style="min-height:34px">关于我 · 微信预约（发丝线上方居中）</div>
+      </div>
+      <div class="wire-anno">
+        <h3>首页 #/</h3>
+        <ul>
+          <li><b>对章构图</b>：印章在左上、拉丁小字在右上；两侧竖排题签夹住中央主图，形成「题签 + 画心」的立轴关系</li>
+          <li><b>竖排逐字入场</b>（80ms/字）+ 印章盖章 + 主图 9s 呼吸，首屏即定调</li>
+          <li>三个入口 = 信息架构三大板块，编号朱砂点睛</li>
+          <li>预约入口不设弹窗，直接落「关于我」页</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="wire-row">
+      <div class="wire">
+        <div class="blk" style="min-height:38px">‹ 婚庆跟妆 WEDDING DAY</div><div class="gap"></div>
+        <div class="blk" style="width:78%;min-height:150px">封面 其壹（大编号悬出左上角 + 绢签）</div><div class="gap"></div>
+        <div class="blk" style="width:78%;min-height:150px;margin-left:22%">封面 其贰（右对齐）</div><div class="gap"></div>
+        <div class="blk" style="width:78%;min-height:150px">封面 其叁</div><div class="gap"></div>
+        <div class="blk" style="min-height:26px;border:none;background:none">点开封面 · 翻开这一册</div>
+      </div>
+      <div class="wire-anno">
+        <h3>婚庆相册墙 #/wedding</h3>
+        <ul>
+          <li><b>交错破格</b>：封面宽 78%，奇左偶右，模拟手工册页翻乱的错落感，避免竖图连排的呆板</li>
+          <li>大编号「壹贰叁」44px 悬出图外上角，是本页唯一的朱砂大字</li>
+          <li>绢签只写「婚礼跟妆 · 其壹」——不出现人名、婚期、价格</li>
+          <li>点封面 → 翻页动效 280ms 后再跳转，暗示「进册」</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="wire-row">
+      <div class="wire">
+        <div class="blk" style="min-height:38px">‹ 婚礼跟妆 · 其壹</div><div class="gap"></div>
+        <div class="blk" style="min-height:46px">[ 新中式 ] [ 西式 ] ← 风格门禁</div><div class="gap"></div>
+        <div class="blk" style="min-height:34px">晨袍 | 出门 | 仪式 | 迎宾 | 敬酒 ← 横滑</div><div class="gap"></div>
+        <div class="blk" style="min-height:120px">瀑布流 2 列 · 当日流程照片</div><div class="gap"></div>
+        <div class="blk" style="min-height:30px;border-style:solid;background:none">细节 · 特写 CLOSE-UP</div><div class="gap"></div>
+        <div class="blk" style="min-height:110px">○ 团扇 · 头饰　○ 团扇 · 面部</div><div class="gap"></div>
+        <div class="blk" style="min-height:34px">下一册 · 贰 ›（发丝线上方）</div>
+      </div>
+      <div class="wire-anno">
+        <h3>相册详情 #/album/:id</h3>
+        <ul>
+          <li><b>两级导航</b>：一级「新中式/西式」严格隔离（朱砂选中），二级按婚礼流程五段横滑（绢底金字选中）——材质区分层级</li>
+          <li>切风格触发<b>墨晕过渡</b>（640ms 圆形扩散，中点换内容），切流程轻淡出 160ms</li>
+          <li>照片 2 列瀑布流，点任意图进查看器（该组连播）</li>
+          <li>团扇特写固定收尾：头饰造型 / 面部细节，金边圆形 + 扇柄</li>
+          <li>「下一册」环形串联三册，风格/流程状态在册间保持</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="wire-row">
+      <div class="wire">
+        <div class="blk" style="min-height:38px">‹ 订婚宴跟妆 ENGAGEMENT</div><div class="gap"></div>
+        <div class="blk" style="min-height:110px">瀑布流 2 列（首图 eager）</div><div class="gap"></div>
+        <div class="blk" style="min-height:110px">（懒加载续排）</div>
+      </div>
+      <div class="wire-anno">
+        <h3>平铺图集 #/gallery/engagement · #/gallery/family</h3>
+        <ul>
+          <li>次要板块<b>不设分类</b>：单层瀑布流直达照片，点图进查看器</li>
+          <li>页头带拉丁小字，与前两类页面同构，降低学习成本</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="wire-row">
+      <div class="wire">
+        <div class="blk" style="min-height:38px">关于我 ABOUT</div><div class="gap"></div>
+        <div class="blk" style="width:60%;min-height:130px;margin:0 auto">工作照 3:4</div><div class="gap"></div>
+        <div class="blk" style="min-height:30px;border:none;background:none;font-weight:900;color:#2A2723">化妆师甜茉</div>
+        <div class="blk" style="min-height:24px;border:none;background:none;color:#8C8478">禧悦妆造 · 跟妆八年</div><div class="gap"></div>
+        <div class="blk" style="min-height:56px">自述文案（max 30em 居中）</div><div class="gap"></div>
+        <div class="blk" style="min-height:30px">沟通 · 试妆 · 跟妆 · 补场（四枚签牌）</div><div class="gap"></div>
+        <div class="blk" style="width:70%;min-height:110px;margin:0 auto">QR 卡 · 金线边框</div><div class="gap"></div>
+        <div class="blk" style="min-height:44px;background:#A32D2D;border:none;color:#FBF8F2">预约跟妆（CTA 通栏）</div>
+      </div>
+      <div class="wire-anno">
+        <h3>关于我 #/about</h3>
+        <ul>
+          <li>自述居中窄栏（30em），人像不抢戏</li>
+          <li>服务流程四枚签牌横排，复用 chip 组件</li>
+          <li>QR 卡是本页唯一的金线元素，CTA 点击平滑滚到 QR 卡 —— <b>转化闭环不离开页面</b></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 08 ============ -->
+  <section id="s8">
+    <span class="sec-num">08 / IA</span>
+    <h2>信息架构</h2>
+    <table class="spec-table">
+      <tr><th style="width:12em">路由</th><th>页面</th><th>数据来源</th></tr>
+      <tr><td><code>#/</code></td><td>首页（三入口 + 立轴主视觉）</td><td>brand</td></tr>
+      <tr><td><code>#/wedding</code></td><td>婚庆相册墙（每场婚礼一册）</td><td>weddings[]</td></tr>
+      <tr><td><code>#/album/:id</code></td><td>相册详情（风格门禁 + 流程签牌 + 团扇）</td><td>weddings[].styles</td></tr>
+      <tr><td><code>#/gallery/:key</code></td><td>平铺图集（engagement / family）</td><td>engagement / family</td></tr>
+      <tr><td><code>#/about</code></td><td>关于我 + 预约闭环</td><td>about / brand</td></tr>
+    </table>
+    <p class="note">加一场婚礼 = 在 albums.js 加一条数据，UI 零改动。后期接 FastAPI 时把 window.MUA 换成 fetch 即可。</p>
+  </section>
+
+  <!-- ============ 09 ============ -->
+  <section id="s9">
+    <span class="sec-num">09 / DECISIONS</span>
+    <h2>待拍板点</h2>
+    <p class="sec-intro">这些是当前实现里我替你做过的设计决定，最值得你亲自过目的几处：</p>
+    <div class="spec-table decide" style="border-radius:8px">
+      <table class="spec-table">
+        <tr><th>决策</th><th>现状</th><th>可调整方向</th></tr>
+        <tr><td>相册墙破格</td><td>封面 78% 宽奇左偶右交错</td><td>可改全宽纵列（更稳）或 2 列网格（更密），当前方案最「编辑感」</td></tr>
+        <tr><td>风格切换动效</td><td>墨晕圆形扩散 640ms</td><td>有分量、有仪式感；若嫌重可降为 400ms 或普通淡入</td></tr>
+        <tr><td>首页主图呼吸</td><td>9s 循环 scale 1→1.05</td><td>唯一常驻动效，嫌动可去；去后首屏会更「静」</td></tr>
+        <tr><td>大编号悬出图外</td><td>壹贰叁 44px 压在封面左上角外沿</td><td>是破格记忆点；若觉锐利可收回图内并降为 32px</td></tr>
+        <tr><td>团扇扇柄</td><td>3×14 金色柄 + 入场归正 12°</td><td>装饰性最强的一处；可去柄只留圆</td></tr>
+        <tr><td>选中态语言</td><td>gate 用朱砂色块，chip 用绢底金字</td><td>刻意分层级；若想统一可都改绢底</td></tr>
+        <tr><td>二维码</td><td>金色虚线占位框</td><td>上线前必须替换真实二维码</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <footer>禧悦妆造 · 绢本妆册 · 设计规格书 v1.0 · 与代码实现同步 · 2026-10</footer>
+</div>
+</body>
+</html>

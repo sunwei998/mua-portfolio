@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>予时妍 · 社交分享图交付</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400;500&family=Bodoni+Moda:wght@400;500&display=swap');
+
+:root{
+  --paper:#F6F2EF; --card:#FFFFFF;
+  --ink:#221D19; --ink2:#4A423C; --muted:#6C635C; --faint:#9A9089;
+  --accent:#9E4E55; --rose:#C08994; --gold:#BFA46F;
+  --line:rgba(34,29,25,.11); --line2:rgba(34,29,25,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  -webkit-font-smoothing:antialiased; line-height:1.7;
+}
+.lat{font-family:"Bodoni Moda","Didot",Georgia,serif}
+.wrap{max-width:1180px;margin:0 auto;padding:0 40px 120px}
+
+/* ---------- 头 ---------- */
+header{padding:76px 0 46px;border-bottom:1px solid var(--line);position:relative}
+header .sym{position:absolute;right:0;top:70px;width:96px;height:96px;color:var(--accent);opacity:.9}
+header .kick{font-size:10.5px;letter-spacing:.4em;color:var(--faint);text-transform:uppercase}
+header h1{font-size:40px;font-weight:300;letter-spacing:.16em;margin:16px 0 0;text-indent:.16em}
+header h1 em{font-style:normal;color:var(--accent)}
+header .sub{margin-top:14px;font-size:13px;letter-spacing:.2em;color:var(--muted)}
+header .meta{margin-top:26px;display:flex;gap:38px;flex-wrap:wrap}
+header .meta div{font-size:11.5px;letter-spacing:.12em;color:var(--muted)}
+header .meta b{display:block;font-family:"Bodoni Moda",Georgia,serif;font-size:24px;font-weight:400;
+  letter-spacing:.02em;color:var(--ink);margin-bottom:2px}
+
+/* ---------- 节 ---------- */
+.sec{padding-top:66px}
+.sec-h{display:flex;align-items:baseline;gap:14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.sec-h .no{font-family:"Bodoni Moda",Georgia,serif;font-size:15px;color:var(--accent);letter-spacing:.1em}
+.sec-h .t{font-size:19px;font-weight:400;letter-spacing:.2em}
+.sec-h .en{margin-left:auto;font-size:9.5px;letter-spacing:.34em;color:var(--faint);text-transform:uppercase}
+.note{margin-top:16px;font-size:12.5px;line-height:1.95;color:var(--ink2)}
+.note b{color:var(--accent);font-weight:400}
+.note code{font-family:"SF Mono",Menlo,monospace;font-size:11.5px;background:rgba(158,78,85,.07);
+  padding:1px 5px;border-radius:3px;color:#7E3F45}
+
+/* ---------- 图卡 ---------- */
+.plates{margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.plate{background:var(--card);border:1px solid var(--line2);border-radius:4px;padding:14px;
+  box-shadow:0 18px 44px rgba(34,29,25,.055)}
+.plate.wide{grid-column:1 / -1}
+.plate .cap{display:flex;align-items:baseline;gap:9px;margin:0 0 11px}
+.plate .cap b{font-size:12.5px;font-weight:400;letter-spacing:.14em}
+.plate .cap span{font-family:"Bodoni Moda",Georgia,serif;font-size:10px;letter-spacing:.06em;color:var(--faint)}
+.plate .cap em{margin-left:auto;font-style:normal;font-size:10px;letter-spacing:.14em;color:var(--faint)}
+.plate img{display:block;width:100%;border-radius:2px}
+
+/* ---------- 裁切安全区 ---------- */
+.clipwrap{position:relative;overflow:hidden;border-radius:2px}
+.clipwrap img{display:block;width:100%}
+.clipbox{position:absolute;border:1.4px solid rgba(255,255,255,.95);
+  box-shadow:0 0 0 9999px rgba(34,29,25,.46),0 0 0 1.4px rgba(34,29,25,.3);
+  border-radius:1px}
+.clipbox::after{content:attr(data-l);position:absolute;left:0;top:0;
+  background:rgba(158,78,85,.94);color:#fff;font-size:9.5px;letter-spacing:.16em;padding:3px 8px;
+  white-space:nowrap;font-family:"Noto Serif SC",serif}
+.clipwrap .outmark{position:absolute;font-size:9.5px;letter-spacing:.18em;color:rgba(255,255,255,.92);
+  font-family:"Noto Serif SC",serif}
+
+/* ---------- 小尺寸实测 ---------- */
+.scaletable{margin-top:24px;display:flex;align-items:flex-end;gap:34px;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--line2);border-radius:4px;padding:26px 28px;
+  box-shadow:0 18px 44px rgba(34,29,25,.05)}
+.sc{text-align:center}
+.sc .bx{display:inline-block;overflow:hidden;border-radius:3px;box-shadow:0 6px 18px rgba(34,29,25,.16)}
+.sc img{display:block}
+.sc .lb{margin-top:10px;font-size:10px;letter-spacing:.14em;color:var(--muted);line-height:1.6}
+.sc .lb b{display:block;font-family:"Bodoni Moda",Georgia,serif;font-size:12px;color:var(--ink);font-weight:400}
+.verdict{margin-top:20px;font-size:12.5px;line-height:1.95;color:var(--ink2)}
+.verdict .ok{color:#4C7A57}
+.verdict .bad{color:var(--accent)}
+
+/* ---------- 场景模拟 ---------- */
+.mock-grid{margin-top:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.mock{background:var(--card);border:1px solid var(--line2);border-radius:4px;padding:16px 18px 20px;
+  box-shadow:0 18px 44px rgba(34,29,25,.05)}
+.mock .cap{display:flex;align-items:baseline;gap:9px;margin-bottom:14px}
+.mock .cap b{font-size:12.5px;font-weight:400;letter-spacing:.14em}
+.mock .cap em{margin-left:auto;font-style:normal;font-size:10px;letter-spacing:.12em;color:var(--faint)}
+
+/* 微信聊天卡片 */
+.wx{background:#EDEDED;border-radius:12px;padding:14px}
+.wxcard{background:#fff;border-radius:6px;padding:10px;display:flex;gap:10px;align-items:flex-start}
+.wxcard .tx{flex:1;min-width:0}
+.wxcard .tx .t{font-size:13px;line-height:1.45;color:#111;display:-webkit-box;
+  -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wxcard .tx .d{margin-top:5px;font-size:11px;line-height:1.4;color:#8C8C8C;display:-webkit-box;
+  -webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.wxcard .th{width:44px;height:44px;border-radius:3px;overflow:hidden;flex:none;background:#F2F2F2}
+.wxcard .th img{width:100%;height:100%;object-fit:cover;display:block}
+.wxcard.lg .th{width:56px;height:56px}
+
+/* 朋友圈 */
+.moments{background:#fff;display:flex;gap:10px}
+.moments .th{width:72px;height:72px;border-radius:3px;overflow:hidden;flex:none}
+.moments .th img{width:100%;height:100%;object-fit:cover;display:block}
+.moments .tx .t{font-size:12.5px;color:#576B95;line-height:1.5}
+
+/* 小红书 */
+.xhs{width:178px;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.07)}
+.xhs .cov{width:100%;aspect-ratio:3/4;overflow:hidden;background:#F5F5F5}
+.xhs .cov img{width:100%;height:100%;object-fit:cover;display:block}
+.xhs .tt{font-size:11.5px;line-height:1.45;color:#333;padding:7px 8px 9px;display:-webkit-box;
+  -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.xhs .ft{display:flex;align-items:center;gap:5px;padding:0 8px 9px;font-size:9.5px;color:#999}
+.xhs .ft i{width:14px;height:14px;border-radius:50%;background:#E7DEDA;display:block}
+
+/* X / Twitter */
+.tw{border:1px solid #E1E8ED;border-radius:14px;overflow:hidden;background:#fff}
+.tw img{display:block;width:100%}
+.tw .tx{padding:10px 12px 12px;border-top:1px solid #EDF1F4}
+.tw .tx .d{font-size:10.5px;color:#8899A6;letter-spacing:.04em;text-transform:uppercase}
+.tw .tx .t{font-size:12.5px;color:#14171A;margin-top:4px;line-height:1.45}
+
+/* QQ 分享 */
+.qq{background:#FFFFFF;border-radius:8px;padding:10px 12px;display:flex;gap:10px;align-items:center;
+  border:1px solid #E3E3E3}
+.qq .th{width:60px;height:60px;border-radius:4px;overflow:hidden;flex:none}
+.qq .th img{width:100%;height:100%;object-fit:cover;display:block}
+.qq .tx .t{font-size:12.5px;color:#222}
+.qq .tx .d{font-size:10.5px;color:#999;margin-top:4px}
+
+/* ---------- 表格 ---------- */
+table{margin-top:24px;width:100%;border-collapse:collapse;font-size:12px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line2);vertical-align:top}
+th{font-size:10px;letter-spacing:.2em;color:var(--faint);font-weight:400;text-transform:uppercase;
+  border-bottom:1px solid var(--line)}
+td b{font-weight:400;color:var(--ink)}
+td .dim{font-family:"Bodoni Moda",Georgia,serif;font-size:12px;color:var(--accent)}
+td.mono{font-family:"SF Mono",Menlo,monospace;font-size:11px;color:var(--ink2)}
+tr:last-child td{border-bottom:0}
+
+/* ---------- 代码块 ---------- */
+.code{margin-top:20px;background:#241F1D;border-radius:4px;padding:20px 22px;overflow:auto;
+  position:relative}
+.code pre{margin:0;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:11.5px;line-height:1.85;
+  color:#E8DED8;white-space:pre}
+.code .cm{color:#8E7F78}
+.code .k{color:#D6A0AA}
+.code .v{color:#C9BE8E}
+.copy{position:absolute;right:14px;top:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  color:#E8DED8;font-size:10px;letter-spacing:.16em;padding:5px 11px;border-radius:3px;cursor:pointer;
+  font-family:"Noto Serif SC",serif;transition:.2s}
+.copy:hover{background:rgba(255,255,255,.2)}
+
+/* ---------- 待拍板 ---------- */
+.todo{margin-top:24px;display:grid;gap:12px}
+.todo .it{background:var(--card);border:1px solid var(--line2);border-left:2px solid var(--accent);
+  border-radius:3px;padding:15px 18px}
+.todo .it .h{font-size:12.5px;letter-spacing:.1em}
+.todo .it .h i{font-style:normal;font-family:"Bodoni Moda",Georgia,serif;color:var(--accent);
+  margin-right:9px;font-size:13px}
+.todo .it .b{margin-top:7px;font-size:11.5px;line-height:1.85;color:var(--muted)}
+.todo .it .b em{font-style:normal;color:var(--accent)}
+
+footer{margin-top:74px;padding-top:26px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;font-size:10.5px;letter-spacing:.18em;color:var(--faint)}
+
+@media (max-width:900px){
+  .wrap{padding:0 20px 80px}
+  .plates,.mock-grid{grid-template-columns:1fr}
+  header .sym{width:64px;height:64px;top:56px}
+  header h1{font-size:28px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <svg class="sym" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <circle cx="32" cy="32" r="22.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+              stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+      <circle cx="32" cy="32" r="5.6" fill="currentColor"/>
+    </svg>
+    <div class="kick">Social Share Kit</div>
+    <h1>予时<em>妍</em> · 社交分享图</h1>
+    <div class="sub">为重要时刻，留一份美</div>
+    <div class="meta">
+      <div><b>4</b>个格式</div>
+      <div><b>16</b>个文件</div>
+      <div><b>66–118</b>KB　JPG 体积</div>
+      <div><b>630</b>px　微信裁切安全区</div>
+    </div>
+  </header>
+
+  <!-- 01 -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">01</span><span class="t">交付了什么</span>
+      <span class="en">Deliverables</span></div>
+    <p class="note">
+      四种版式 × 三种格式（矢量源 <code>.svg</code> · 无损 <code>.png</code> · 轻量 <code>.jpg</code>），
+      全部落在 <code>assets/share/</code>。<b>og:image 一定用 JPG</b>——PNG 单张 658KB～1.28MB，
+      JPG 只有 66～118KB，视觉上肉眼看不出差别。
+    </p>
+    <table>
+      <thead><tr><th>文件</th><th>像素</th><th>体积</th><th>用在哪</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">og-1200x630.jpg</td><td class="dim">1200×630</td><td>66 KB</td>
+            <td><b>og:image 主用</b>　微信/QQ/微博/X 链接卡片</td></tr>
+        <tr><td class="mono">og-1200x630.png</td><td class="dim">1200×630</td><td>658 KB</td>
+            <td>无损备份：投放素材、印刷、需要透明通道时</td></tr>
+        <tr><td class="mono">og-1200x630-dark.jpg</td><td class="dim">1200×630</td><td>90 KB</td>
+            <td>深色场景 / 夜间投放 / 深色主题站</td></tr>
+        <tr><td class="mono">square-1080.jpg</td><td class="dim">1080×1080</td><td>85 KB</td>
+            <td>微信「发送给朋友」方图、朋友圈方图、公众号头图</td></tr>
+        <tr><td class="mono">poster-1080x1440.jpg</td><td class="dim">1080×1440</td><td>118 KB</td>
+            <td>小红书笔记封面、朋友圈长图</td></tr>
+        <tr><td class="mono">*.svg</td><td class="dim">矢量</td><td>4～5 KB</td>
+            <td>源文件：改标语、换年份、调整再导出，全在这里</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 02 -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">02</span><span class="t">四个版式</span>
+      <span class="en">Formats</span></div>
+    <p class="note">
+      全部同构：<b>开口环符号 → 予时妍主标（妍 用绛色）→ 金线 → YUÉ ATELIER → 标语 → 短金线落款 → 署名</b>。
+      只换比例，不换语言。三字等大，字距统一 0.16em 疏排。
+    </p>
+    <div class="plates">
+      <div class="plate wide">
+        <div class="cap"><b>通用横版</b><span>og-1200x630</span><em>1.91 : 1　微信 / QQ / X</em></div>
+        <img src="assets/share/og-1200x630.jpg" alt="通用横版分享图">
+      </div>
+      <div class="plate">
+        <div class="cap"><b>方版</b><span>square-1080</span><em>1 : 1　朋友圈</em></div>
+        <img src="assets/share/square-1080.jpg" alt="方版分享图">
+      </div>
+      <div class="plate">
+        <div class="cap"><b>竖版海报</b><span>poster-1080x1440</span><em>3 : 4　小红书</em></div>
+        <img src="assets/share/poster-1080x1440.jpg" alt="竖版海报">
+      </div>
+      <div class="plate wide">
+        <div class="cap"><b>暗场反白版</b><span>og-1200x630-dark</span><em>1.91 : 1　夜间 / 深色场景</em></div>
+        <img src="assets/share/og-1200x630-dark.jpg" alt="暗场反白版分享图">
+      </div>
+    </div>
+    <p class="note">
+      暗版有一条特别纪律：<b>暗底上金色只走细线，绝不铺光晕</b>。
+      第一稿我在暗底上铺了香槟金光晕，结果整片变成浑浊的褐色——那是金色叠加在深暖棕上的必然结果，不是浓度问题。
+    </p>
+  </section>
+
+  <!-- 03 -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">03</span><span class="t">裁切安全区</span>
+      <span class="en">Safe Area</span></div>
+    <p class="note">
+      这是分享图最容易翻车的地方：<b>微信把链接卡片缩略图按「居中 1:1 裁切」显示</b>，
+      1200×630 的图会被砍成中间 630×630。所以左对齐的编辑式排版在微信里会被裁掉一半——
+      主体必须落在中央。下面两个框就是实际会被保留的区域。
+    </p>
+    <div class="plates">
+      <div class="plate wide">
+        <div class="cap"><b>横版 · 微信裁切后保留区</b><span>630×630 centered</span><em>白框内 = 微信缩略图</em></div>
+        <div class="clipwrap">
+          <img src="assets/share/og-1200x630.jpg" alt="横版裁切安全区">
+          <div class="clipbox" style="left:23.75%;top:0;width:52.5%;height:100%"
+               data-l="微信聊天卡片实际显示区"></div>
+        </div>
+      </div>
+      <div class="plate">
+        <div class="cap"><b>方版</b><span>1080×1080</span><em>不裁切　100% 保留</em></div>
+        <img src="assets/share/square-1080.jpg" alt="方版">
+      </div>
+      <div class="plate">
+        <div class="cap"><b>竖版 · 被裁时保留区</b><span>1080×1080 centered</span><em>上下各裁 180</em></div>
+        <div class="clipwrap">
+          <img src="assets/share/poster-1080x1440.jpg" alt="竖版裁切安全区">
+          <div class="clipbox" style="left:0;top:12.5%;width:100%;height:75%"
+               data-l="被裁成 1:1 时保留区"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">04</span><span class="t">小尺寸实测</span>
+      <span class="en">Legibility Test</span></div>
+    <p class="note">
+      别猜，看真实尺寸。下面是同一张横版图在<b>微信聊天卡片里的实际显示大小</b>，
+      微信缩略图约 56pt @2x ≈ 112px，群聊卡片更小。
+    </p>
+    <div class="scaletable">
+      <div class="sc">
+        <span class="bx" style="width:112px;height:59px"><img src="assets/share/og-1200x630.jpg" style="width:112px"></span>
+        <div class="lb"><b>112px</b>单聊卡片缩略图</div>
+      </div>
+      <div class="sc">
+        <span class="bx" style="width:76px;height:40px"><img src="assets/share/og-1200x630.jpg" style="width:76px"></span>
+        <div class="lb"><b>76px</b>群聊卡片缩略图</div>
+      </div>
+      <div class="sc">
+        <span class="bx" style="width:160px;height:160px"><img src="assets/share/og-1200x630.jpg" style="width:160px;height:160px;object-fit:cover;object-position:center"></span>
+        <div class="lb"><b>160px</b>朋友圈方图缩略</div>
+      </div>
+      <div class="sc">
+        <span class="bx" style="width:178px;height:133px"><img src="assets/share/og-1200x630.jpg" style="width:178px"></span>
+        <div class="lb"><b>178px</b>微博 / X 卡片</div>
+      </div>
+    </div>
+    <p class="verdict">
+      结论（我照实说）：<br>
+      <span class="bad">112px 和 76px 下，只有「予时妍」三个字和那个开口环还能辨认</span>，
+      YUÉ ATELIER、标语、署名全部糊掉。      <span class="ok">这是物理限制，不是设计缺陷</span>——
+      微信缩略图就是这么小，任何品牌都逃不掉。<br>
+      好在 <b>链接卡片不靠图传递信息</b>：标题和描述是文字渲染的，永远清晰（见下一节模拟）。
+      图的作用只有一个——<b>在扫过的一瞬间让人认出「这是个有品味的牌子」</b>。
+      所以这张图做对了的事是：<b>把品牌名放到最大、构图居中、颜色极少</b>，而不是塞满信息。
+    </p>
+    <p class="note">
+      <b>那方版和竖版是给谁用的？</b>——这是个落地时必须分清的事：<br>
+      微信链接卡片<b>只认 og:image 一张图</b>，它会把这张图裁成方形来显示，你无法为它单独指定方版。
+      所以 <code>square-1080</code> 的真正场景是<b>公众号头图、视频号封面、群公告配图、私聊时手动发图</b>；
+      <code>poster-1080x1440</code> 是<b>小红书笔记封面</b>（小红书不读 og，全靠手动上传）。
+      一句话：<b>横版是给机器读的，方版和竖版是给人手动发的。</b>
+    </p>
+  </section>
+
+  <!-- 05 -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">05</span><span class="t">真实场景模拟</span>
+      <span class="en">In Context</span></div>
+    <p class="note">按各平台真实的卡片布局与尺寸还原，不是示意图。</p>
+    <div class="mock-grid">
+
+      <div class="mock">
+        <div class="cap"><b>微信 · 单聊 / 群聊卡片</b><em>缩略图 56pt</em></div>
+        <div class="wx">
+          <div class="wxcard lg">
+            <div class="tx">
+              <div class="t">予时妍 YUÉ ATELIER · 为重要时刻，留一份美</div>
+              <div class="d">婚礼跟妆 · 订婚宴 · 孕亲照 · 日常妆</div>
+            </div>
+            <div class="th"><img src="assets/share/og-1200x630.jpg" alt=""></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock">
+        <div class="cap"><b>微信 · 朋友圈</b><em>方图 72pt</em></div>
+        <div class="wx" style="background:#fff">
+          <div class="moments">
+            <div class="tx">
+              <div class="t">予时妍 YUÉ ATELIER · 为重要时刻，留一份美</div>
+            </div>
+            <div class="th"><img src="assets/share/og-1200x630.jpg" alt=""></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock">
+        <div class="cap"><b>小红书 · 笔记封面</b><em>瀑布流 3:4</em></div>
+        <div style="display:flex;justify-content:center">
+          <div class="xhs">
+            <div class="cov"><img src="assets/share/poster-1080x1440.jpg" alt=""></div>
+            <div class="tt">婚礼跟妆全记录｜晨袍到敬酒，六段造型拆给你看</div>
+            <div class="ft"><i></i>甜茉 · 予时妍</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock">
+        <div class="cap"><b>QQ / 微博 · 分享卡</b><em>缩略图 60pt</em></div>
+        <div class="qq">
+          <div class="th"><img src="assets/share/og-1200x630.jpg" alt=""></div>
+          <div class="tx">
+            <div class="t">予时妍 YUÉ ATELIER · 为重要时刻，留一份美</div>
+            <div class="d">婚礼跟妆 · 订婚宴 · 孕亲照 · 日常妆</div>
+          </div>
+        </div>
+        <div style="height:12px"></div>
+        <div class="tw">
+          <img src="assets/share/og-1200x630.jpg" alt="">
+          <div class="tx">
+            <div class="d">yueatelier.com</div>
+            <div class="t">予时妍 YUÉ ATELIER · 为重要时刻，留一份美</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">06</span><span class="t">接入代码</span>
+      <span class="en">Meta Tags</span></div>
+    <p class="note">
+      直接贴进 <code>index.html</code> 的 <code>&lt;head&gt;</code>。
+      把 <code>你的域名</code> 换成真实域名，<b>必须是完整 https 绝对地址</b>——
+      微信不认相对路径，写成 <code>/assets/…</code> 会抓不到图。
+    </p>
+    <div class="code">
+      <button class="copy" onclick="cp(this)">复制</button>
+<pre><span class="cm">&lt;!-- Open Graph · 通用（微信 / QQ / 微博 / X 都读这段）--&gt;</span>
+&lt;meta <span class="k">property</span>=<span class="v">"og:type"</span> content=<span class="v">"website"</span>&gt;
+&lt;meta <span class="k">property</span>=<span class="v">"og:site_name"</span> content=<span class="v">"予时妍 YUÉ ATELIER"</span>&gt;
+&lt;meta <span class="k">property</span>=<span class="v">"og:title"</span> content=<span class="v">"予时妍 YUÉ ATELIER · 为重要时刻，留一份美"</span>&gt;
+&lt;meta <span class="k">property</span>=<span class="v">"og:description"</span> content=<span class="v">"婚礼跟妆 · 订婚宴 · 孕亲照 · 日常妆 —— 甜茉个人作品集"</span>&gt;
+&lt;meta <span class="k">property</span>=<span class="v">"og:image"</span> content=<span class="v">"https://你的域名/assets/share/og-1200x630.jpg"</span>&gt;
+&lt;meta <span class="k">property</span>=<span class="v">"og:image:width"</span> content=<span class="v">"1200"</span>&gt;
+&lt;meta <span class="k">property</span>=<span class="v">"og:image:height"</span> content=<span class="v">"630"</span>&gt;
+&lt;meta <span class="k">property</span>=<span class="v">"og:image:alt"</span> content=<span class="v">"予时妍 —— 为重要时刻，留一份美"</span>&gt;
+&lt;meta <span class="k">property</span>=<span class="v">"og:url"</span> content=<span class="v">"https://你的域名/"</span>&gt;
+&lt;meta <span class="k">property</span>=<span class="v">"og:locale"</span> content=<span class="v">"zh_CN"</span>&gt;
+
+<span class="cm">&lt;!-- 老客户端兜底：QQ 空间 / 部分安卓微信不读 og，读这一行 --&gt;</span>
+&lt;link <span class="k">rel</span>=<span class="v">"image_src"</span> href=<span class="v">"https://你的域名/assets/share/og-1200x630.jpg"</span>&gt;
+
+<span class="cm">&lt;!-- Twitter / X 大图卡 --&gt;</span>
+&lt;meta <span class="k">name</span>=<span class="v">"twitter:card"</span> content=<span class="v">"summary_large_image"</span>&gt;
+&lt;meta <span class="k">name</span>=<span class="v">"twitter:title"</span> content=<span class="v">"予时妍 YUÉ ATELIER · 为重要时刻，留一份美"</span>&gt;
+&lt;meta <span class="k">name</span>=<span class="v">"twitter:description"</span> content=<span class="v">"婚礼跟妆 · 订婚宴 · 孕亲照 · 日常妆"</span>&gt;
+&lt;meta <span class="k">name</span>=<span class="v">"twitter:image"</span> content=<span class="v">"https://你的域名/assets/share/og-1200x630.jpg"</span>&gt;
+
+<span class="cm">&lt;!-- 站点图标（三级降级：SVG → PNG → 老 IE）--&gt;</span>
+&lt;link <span class="k">rel</span>=<span class="v">"icon"</span> href=<span class="v">"/assets/logo/favicon.svg"</span> type=<span class="v">"image/svg+xml"</span>&gt;
+&lt;link <span class="k">rel</span>=<span class="v">"icon"</span> href=<span class="v">"/assets/logo/favicon-32.png"</span> sizes=<span class="v">"32x32"</span>&gt;
+&lt;link <span class="k">rel</span>=<span class="v">"apple-touch-icon"</span> href=<span class="v">"/assets/logo/apple-touch-icon-180.png"</span>&gt;
+&lt;meta <span class="k">name</span>=<span class="v">"theme-color"</span> content=<span class="v">"#9E4E55"</span>&gt;</pre>
+    </div>
+    <p class="note">
+      <b>三个坑先讲清楚：</b><br>
+      ① <b>微信有缓存</b>。换了图之后旧卡片会继续显示很久，调试时在链接后面加 <code>?v=2</code> 骗过缓存，
+      或者直接用微信开发者工具的「分享调试」。<br>
+      ② <b>图片地址不能带中文</b>。目录名 <code>share</code>、文件名全 ASCII，是对的——
+      <code>assets/社交分享/</code> 这种路径在部分安卓机上会 404。<br>
+      ③ <b>启用 HTTPS</b>。微信对 http 图片一律不抓，本地 <code>file://</code> 预览正常不代表线上正常。
+    </p>
+  </section>
+
+  <!-- 07 -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">07</span><span class="t">分享文案</span>
+      <span class="en">Copy</span></div>
+    <p class="note">
+      卡片上的文字不走图片，走这些字符。两者要配套——图负责「一眼的高级感」，文字负责「说清楚是谁、做什么」。
+    </p>
+    <table>
+      <thead><tr><th>位置</th><th>内容</th><th>字符</th></tr></thead>
+      <tbody>
+        <tr><td>标题</td><td><b>予时妍 YUÉ ATELIER · 为重要时刻，留一份美</b></td><td class="dim">24</td></tr>
+        <tr><td>描述</td><td><b>婚礼跟妆 · 订婚宴 · 孕亲照 · 日常妆 —— 甜茉个人作品集</b></td><td class="dim">30</td></tr>
+        <tr><td>朋友圈配文</td><td><b>为重要时刻，留一份美。</b>　婚礼是一日，日常也是一日。</td><td class="dim">—</td></tr>
+        <tr><td>小红书首图标题</td><td><b>婚礼跟妆全记录｜晨袍到敬酒，六段造型拆给你看</b></td><td class="dim">24</td></tr>
+        <tr><td>英文标语（关于页一行）</td><td class="lat">Beauty, kept for moments that matter.</td><td class="dim">—</td></tr>
+      </tbody>
+    </table>
+    <p class="note">
+      标题已经顶到微信单行的极限附近，<b>别再往标题里加字</b>——微信会截断成「予时妍 YUÉ ATELIER · 为重要…」。
+      业务信息全部下沉到描述行。
+    </p>
+  </section>
+
+  <!-- 08 -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">08</span><span class="t">待你拍板</span>
+      <span class="en">Open Items</span></div>
+    <div class="todo">
+      <div class="it">
+        <div class="h"><i>01</i>署名要不要带英文行</div>
+        <div class="b">方版与竖版底部现在是两行：<em>甜茉 · 化妆师个人作品集</em> + <em>TIANMO · MAKEUP ARTIST</em>。
+          横版只留中文一行（空间不够）。要统一成只有中文，还是都加英文？</div>
+      </div>
+      <div class="it">
+        <div class="h"><i>02</i>要不要再出一版「作品向」分享图</div>
+        <div class="b">现在四张都是<em>品牌向</em>（纯色底 + 字标）。另一种做法是<em>作品向</em>——用一张真实客片做底、
+          左下压一小块玻璃条放字标。后者点击率通常更高，但需要你给一张授权客片。</div>
+      </div>
+      <div class="it">
+        <div class="h"><i>03</i>「予」的字标缩放 —— 已回改</div>
+        <div class="b"><b>已落定（2026-10-02）：取消缩放。</b>实测三字墨迹高度本来就一致（予 90.1 / 时 89.9 / 妍 93.4 per 100px），
+          原「予 放大 1.045×」是<em>反的</em>。<code>brand-identity.html</code> · <code>design-v6.html</code> ·
+          <code>logo-board.html</code> 三处均已回改为<b>三字等大</b>。</div>
+      </div>
+      <div class="it">
+        <div class="h"><i>04</i>旧稿归档</div>
+        <div class="b">根目录现在堆着 <code>design-spec / v2 / v3 / v4 / v5 / v6 / brand-identity / logo-board</code> 八份 HTML。
+          要不要收进 <code>archive/</code>，只留 v6 和品牌/Logo 两份在当前目录？</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>予时妍 · YUÉ ATELIER　社交分享图 v1.0</span>
+    <span>原型 demo 未改动 · 2026-10</span>
+  </footer>
+
+</div>
+
+<script>
+function cp(btn){
+  const t = btn.parentElement.querySelector('pre').innerText;
+  navigator.clipboard.writeText(t).then(()=>{
+    const o=btn.textContent; btn.textContent='已复制'; setTimeout(()=>btn.textContent=o,1400);
+  }).catch(()=>{ btn.textContent='请手动选择'; setTimeout(()=>btn.textContent='复制',1400); });
+}
+</script>
+</body>
+</html>

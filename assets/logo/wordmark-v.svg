@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 300" width="120" height="300" role="img" aria-label="予时妍 YUÉ ATELIER 竖版主标">
+  <title>予时妍 · 竖版主标 Vertical Wordmark</title>
+  <desc>用于封面绢签、相册烫印、腰封。符号居顶，三字竖排，金线收尾，拉丁注脚横排于底。</desc>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300&amp;family=Bodoni+Moda:wght@400&amp;display=swap');
+    .cn{font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;font-weight:200}
+    .lat{font-family:"Bodoni Moda","Didot","Playfair Display",Georgia,serif;font-weight:400}
+  </style>
+
+  <!-- 符号：顶部居中 -->
+  <g transform="translate(36.9,22) scale(0.72)" color="inherit">
+    <circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+    <circle cx="32" cy="32" r="5.1" fill="currentColor"/>
+  </g>
+
+  <!-- 三字竖排：三字等大（29.5px），锚点居中，保留不等距呼吸（步进 44 / 46）；妍 用强调色 -->
+  <text class="cn" text-anchor="middle" fill="currentColor">
+    <tspan x="60" y="104" font-size="29.5">予</tspan>
+    <tspan x="60" y="148" font-size="29.5">时</tspan>
+    <tspan x="60" y="194" font-size="29.5" fill="#B0707B">妍</tspan>
+  </text>
+
+  <!-- 收尾金线（竖） -->
+  <line x1="60" y1="216" x2="60" y2="246" stroke="#C0A46F" stroke-width="0.9" stroke-linecap="round"/>
+
+  <!-- 拉丁注脚横排 -->
+  <text class="lat" x="60" y="274" font-size="7.6" letter-spacing="3.2" fill="currentColor"
+        opacity="0.74" text-anchor="middle">YUÉ ATELIER</text>
+</svg>

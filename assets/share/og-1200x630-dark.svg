@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="予时妍 YUÉ ATELIER · 为重要时刻，留一份美（暗场反白）">
+  <title>予时妍 · 社交分享图 1200×630（暗场反白版）</title>
+  <desc>深暖棕底，只用绛与玫瑰两团低透明柔光（金色不上光晕，只走细线），避免暗底上出现浑浊褐。主标反白、末字妍用亮玫瑰。</desc>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400&amp;family=Bodoni+Moda:wght@400;500&amp;display=swap');
+    .cn{font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif}
+    .lat{font-family:"Bodoni Moda","Didot","Georgia",serif}
+  </style>
+
+  <defs>
+    <linearGradient id="bgd" x1="0" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#241D1B"/>
+      <stop offset="0.55" stop-color="#1C1615"/>
+      <stop offset="1" stop-color="#14100F"/>
+    </linearGradient>
+    <radialGradient id="softd" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#9E4E55" stop-opacity="0.30"/>
+      <stop offset="0.55" stop-color="#9E4E55" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#9E4E55" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="envAd" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#C08994" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#C08994" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="envBd" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#7E8AA0" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#7E8AA0" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="haird" width="46" height="46" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="46" stroke="#FFFFFF" stroke-width="1" opacity="0.05"/>
+    </pattern>
+    <filter id="graind" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch" result="n"/>
+      <feColorMatrix in="n" type="saturate" values="0"/>
+    </filter>
+    <clipPath id="framed"><rect width="1200" height="630"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#framed)">
+    <rect width="1200" height="630" fill="url(#bgd)"/>
+    <ellipse cx="600" cy="300" rx="500" ry="330" fill="url(#softd)"/>
+    <ellipse cx="1040" cy="620" rx="500" ry="420" fill="url(#envAd)"/>
+    <ellipse cx="120" cy="20" rx="460" ry="380" fill="url(#envBd)"/>
+    <rect width="1200" height="630" fill="url(#haird)" opacity="0.5"/>
+    <rect width="1200" height="630" filter="url(#graind)" opacity="0.055" style="mix-blend-mode:screen"/>
+
+    <g stroke="#CDB183" stroke-width="1.15" fill="none" opacity="0.36" stroke-linecap="square">
+      <path d="M44 70 V44 H70"/>
+      <path d="M1130 44 H1156 V70"/>
+      <path d="M1156 560 V586 H1130"/>
+      <path d="M70 586 H44 V560"/>
+    </g>
+
+    <g transform="translate(544,80) scale(1.75)">
+      <circle cx="32" cy="32" r="22.5" fill="none" stroke="#D9A6AF" stroke-width="1.75" stroke-linecap="round"
+              stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+      <circle cx="32" cy="32" r="5.6" fill="#D9A6AF"/>
+    </g>
+
+    <text class="cn" x="607.7" y="320" font-size="96" font-weight="300" letter-spacing="0.16em"
+          fill="#F5EFE9" text-anchor="middle">
+      <tspan>予</tspan><tspan>时</tspan><tspan fill="#D9A6AF">妍</tspan>
+    </text>
+
+    <line x1="500" y1="374" x2="700" y2="374" stroke="#CDB183" stroke-width="1" opacity="0.5"/>
+
+    <text class="lat" x="604.4" y="408" font-size="20" letter-spacing="0.44em" fill="#B9ABA1"
+          text-anchor="middle">YUÉ ATELIER</text>
+
+    <text class="cn" x="602.5" y="476" font-size="21" font-weight="300" letter-spacing="0.24em"
+          fill="#C6B7AD" text-anchor="middle">为重要时刻，留一份美</text>
+
+    <line x1="574" y1="540" x2="626" y2="540" stroke="#CDB183" stroke-width="1" opacity="0.4"/>
+
+    <text class="cn" x="601.5" y="570" font-size="15" font-weight="300" letter-spacing="0.2em"
+          fill="#8E8177" text-anchor="middle">甜茉 · 化妆师个人作品集</text>
+  </g>
+</svg>

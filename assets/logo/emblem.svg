@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="予时妍 YUÉ ATELIER 圆形徽章">
+  <title>予时妍 · 圆形徽章 Emblem</title>
+  <desc>双环徽章：外环 + 内细环，中心品牌符号，上「予时妍」下「YUÉ ATELIER」。</desc>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300&amp;family=Bodoni+Moda:wght@400&amp;display=swap');
+    .cn{font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;font-weight:300}
+    .lat{font-family:"Bodoni Moda","Didot","Playfair Display",Georgia,serif;font-weight:400}
+  </style>
+
+  <circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" stroke-width="1.1"/>
+  <circle cx="100" cy="100" r="86" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.42"/>
+
+  <!-- 上：中文 -->
+  <text class="cn" x="100" y="57" font-size="13" letter-spacing="5.4" fill="currentColor"
+        text-anchor="middle">予时妍</text>
+
+  <!-- 中：符号 -->
+  <g transform="translate(66,66) scale(1.0625)" color="inherit">
+    <circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="1.9"
+            stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+    <circle cx="32" cy="32" r="5.1" fill="currentColor"/>
+  </g>
+
+  <!-- 下：拉丁 + 金线 -->
+  <line x1="78" y1="146" x2="122" y2="146" stroke="#C0A46F" stroke-width="0.7" opacity="0.85"/>
+  <text class="lat" x="100" y="161" font-size="7.4" letter-spacing="3" fill="currentColor"
+        opacity="0.74" text-anchor="middle">YUÉ ATELIER</text>
+</svg>

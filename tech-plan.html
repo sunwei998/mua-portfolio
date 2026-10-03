@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>予时妍 YUÉ ATELIER · 技术方案（服务器实测版）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F4F0; --card:#FFFFFF; --ink:#221D19; --ink2:#4A423B; --muted:#8A8078;
+  --accent:#9E4E55; --rose:#B0707B; --gold:#BFA46F; --line:rgba(34,29,25,.10);
+  --ok:#5F7A63; --warn:#A9652F; --bad:#9E4E55;
+  --sans:Inter,-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  --serif:"Noto Serif SC","Songti SC",serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:14px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:64px 40px 120px}
+
+.hd{border-bottom:1px solid var(--line);padding-bottom:32px;margin-bottom:44px}
+.hd .brand{font-family:var(--serif);font-weight:300;font-size:13px;letter-spacing:.34em;
+  color:var(--accent);text-indent:.34em}
+.hd h1{font-family:var(--serif);font-weight:200;font-size:38px;letter-spacing:.06em;
+  margin:16px 0 10px;line-height:1.25}
+.hd .sub{font-size:13px;color:var(--muted);letter-spacing:.14em}
+.hd .meta{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px}
+.hd .meta span{font-size:11.5px;letter-spacing:.1em;color:var(--ink2);
+  background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 12px}
+
+.sec{margin:56px 0 0}
+.sec > .no{font-family:var(--serif);font-weight:200;font-size:13px;letter-spacing:.3em;color:var(--gold)}
+.sec > h2{font-family:var(--serif);font-weight:300;font-size:23px;letter-spacing:.05em;margin:8px 0 6px}
+.sec > .lead{font-size:13.5px;color:var(--muted);margin:0 0 22px;max-width:760px}
+.sec hr{border:0;border-top:1px solid var(--line);margin:0 0 22px}
+
+.grid{display:grid;gap:14px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.card .k{font-size:11px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.card .v{font-family:var(--serif);font-weight:300;font-size:27px;letter-spacing:.03em;margin:6px 0 2px}
+.card .d{font-size:12.5px;color:var(--muted);line-height:1.6}
+.card.acc{border-color:rgba(158,78,85,.35);background:linear-gradient(180deg,#fff,#FDF8F8)}
+
+table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;
+  border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;font-size:11.5px;letter-spacing:.14em;color:var(--muted);
+  background:#FCFAF8;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--ink2)}
+.pill{display:inline-block;font-size:11px;letter-spacing:.08em;padding:2px 9px;border-radius:999px;
+  border:1px solid currentColor;white-space:nowrap}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+
+.note{border-left:2px solid var(--gold);padding:2px 0 2px 16px;margin:18px 0;
+  font-size:13px;color:var(--ink2)}
+.note.bad{border-color:var(--accent)}
+.note.good{border-color:#7C9A7E}
+.note b{font-weight:500}
+
+pre{background:#2C2C2A;color:#EDE9E3;border-radius:10px;padding:16px 18px;overflow-x:auto;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.7;margin:14px 0}
+pre .c{color:#9A928A}
+.c{color:#8A8078}
+pre .g{color:#9FC49B}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.2px;
+  background:rgba(158,78,85,.07);color:var(--accent);padding:1px 6px;border-radius:4px}
+
+.flow{display:flex;flex-direction:column;gap:10px;margin:20px 0}
+.row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.node{flex:1;min-width:150px;background:#fff;border:1px solid var(--line);border-radius:10px;
+  padding:12px 15px}
+.node .t{font-weight:500;font-size:13px}
+.node .s{font-size:11.5px;color:var(--muted);margin-top:2px}
+.node.new{border-color:rgba(158,78,85,.4);background:#FDF8F8}
+.node.keep{border-color:rgba(95,122,99,.35);background:#F8FAF8}
+.arw{color:var(--gold);font-size:15px;flex:none}
+
+.bar{display:flex;height:26px;border-radius:6px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.bar i{display:block;height:100%}
+.lgd{margin-top:10px;font-size:12px;color:var(--muted);line-height:2}
+.lgd em{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;
+  vertical-align:middle;font-style:normal}
+
+.tl{border-left:1px solid var(--line);margin-left:8px;padding-left:22px}
+.tl .it{position:relative;padding:0 0 22px}
+.tl .it::before{content:"";position:absolute;left:-27px;top:7px;width:9px;height:9px;border-radius:50%;
+  background:var(--paper);border:1.5px solid var(--gold)}
+.tl .it.crit::before{border-color:var(--accent);background:var(--accent)}
+.tl .it .t{font-weight:500;font-size:13.5px}
+.tl .it .d{font-size:12.5px;color:var(--muted)}
+
+.ft{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);
+  font-size:11.5px;letter-spacing:.14em;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hd">
+    <div class="brand">予时妍 · YUÉ ATELIER</div>
+    <h1>H5 技术方案 <span style="color:var(--muted);font-size:22px">· 服务器实测版</span></h1>
+    <div class="sub">基于 119.45.182.37 的真实体检数据 · 含容量测算与部署路径</div>
+    <div class="meta">
+      <span>Ubuntu 24.04 LTS</span><span>2 核 / 1.6 GB</span><span>实测于 2026-10-02 03:00</span>
+      <span>原型 demo 未改动</span>
+    </div>
+  </div>
+
+  <div class="grid g3">
+    <div class="card acc">
+      <div class="k">核心结论</div>
+      <div class="v">复用服务器</div>
+      <div class="d">边际成本 0。CloudBase 方案撤回 —— 有服务器时它是负收益。</div>
+    </div>
+    <div class="card">
+      <div class="k">最长关键路径</div>
+      <div class="v">域名 + 备案</div>
+      <div class="d">服务器无域名、无证书。这是 1–3 周的等待，其他事都能并行。</div>
+    </div>
+    <div class="card">
+      <div class="k">最紧的资源</div>
+      <div class="v">内存 1.6 GB</div>
+      <div class="d">已用 1049 MB 且吃了 469 MB swap。够跑，但必须先关掉一个白占 213 MB 的服务。</div>
+    </div>
+  </div>
+
+  <!-- 01 -->
+  <div class="sec">
+    <div class="no">SECTION 01</div>
+    <h2>服务器实测体检</h2>
+    <p class="lead">以下全部是登录后实测的数字，不是估计。</p>
+    <hr>
+    <table>
+      <thead><tr><th>项目</th><th>实测值</th><th>判断</th></tr></thead>
+      <tbody>
+        <tr><td>系统 / 机型</td><td class="mono">Ubuntu 24.04 LTS · 腾讯云轻量</td><td><span class="pill ok">正常</span></td></tr>
+        <tr><td>CPU</td><td class="mono">2 核 AMD EPYC 7K83</td><td><span class="pill ok">够用</span></td></tr>
+        <tr><td>内存</td><td class="mono">1679 MB 总 · <b>现可用 791 MB</b> · swap 已吃 460 MB</td><td><span class="pill ok">已缓解</span></td></tr>
+        <tr><td>磁盘</td><td class="mono">50 GB · 已用 16 GB · 剩 32 GB</td><td><span class="pill ok">充足</span></td></tr>
+        <tr><td>负载</td><td class="mono">0.00 / 0.01 / 0.00 · 已运行 9 天</td><td><span class="pill ok">空闲</span></td></tr>
+        <tr><td>已有容器</td><td class="mono">sanhe-web（占 80 端口）· sanhe-server（318 MB）· sanhe-mysql（106 MB）</td><td><span class="pill ok">运行正常</span></td></tr>
+        <tr><td>443 端口</td><td class="mono">空闲（无服务监听）</td><td><span class="pill ok">可用</span></td></tr>
+        <tr><td>云防火墙 443</td><td class="mono">外网实测 → <b>Connection refused</b>（已放行）· 对照 8081/9999 → timed out（未放行）</td><td><span class="pill ok">已放行</span></td></tr>
+        <tr><td>宿主机 Nginx</td><td class="mono">未安装（sanhe 的 Nginx 跑在容器里）</td><td><span class="pill warn">需安装</span></td></tr>
+        <tr><td>Docker 拉镜像</td><td class="mono">实测 <code>docker pull</code> 成功 · hello-world 耗时 <b>0.98 秒</b></td><td><span class="pill ok">正常</span></td></tr>
+        <tr><td>腾讯云内网镜像源</td><td class="mono">mirror.ccs.tencentyun.com · <b>原有配置中已存在</b>（非本次新增）</td><td><span class="pill ok">已生效</span></td></tr>
+        <tr><td>域名 / 证书</td><td class="mono">无域名 · 无 certbot · 无 letsencrypt</td><td><span class="pill bad">需采购</span></td></tr>
+        <tr><td>数据库</td><td class="mono">MySQL 8.0 · 已有库 sanhe_aquatic（仅 2.7 MB）</td><td><span class="pill ok">可复用</span></td></tr>
+        <tr><td>构建缓存</td><td class="mono">221 个对象 / 6.5 GB（全部可回收）</td><td><span class="pill warn">可清理</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="note good">
+      <b>更正 · 上一版报告里的「Docker Hub 拉不到镜像」是误判。</b>
+      当时我用 <code>curl</code> 直连 <code>registry-1.docker.io</code>，它被 DNS 解析到 IPv6 污染地址、服务器无 IPv6 出口，
+      于是超时 —— 但 <b><code>curl</code> 根本不读 docker 的镜像源配置，这个探测从方法上就是错的</b>。
+      真实情况：服务器上 <code>/etc/docker/daemon.json</code> <b>早就配好了</b>腾讯云内网源，
+      实测 <code>docker pull hello-world</code> <b>0.98 秒</b>完成，部署第一步不存在障碍。
+    </div>
+    <div class="note good">
+      <b>更正 2 · 上一版报告里的「443 未放行」同样是误判（用户当场指出）。</b>
+      控制台防火墙里 <b>HTTPS 443 → 允许</b> 一直在列。原因：腾讯云轻量的「防火墙」<b>等同安全组、位于云平台层，
+      实例内部看不到它</b>；我上机只看到 <code>iptables INPUT</code> 里一条 <code>YJ-FIREWALL-INPUT</code> 跳转，
+      <b>没展开链、也没做外网探测，就臆断了"未放行"</b>。
+      <br><br>
+      <span class="c">两次误判是同一类病根：<b>拿一个看不到全貌的本地视角，去推断一个由外部控制的事实。</b>
+      正确姿势 —— 「能不能连上」这类问题，<b>只能在外部实测</b>：<code>nc -z -v &lt;IP&gt; &lt;port&gt;</code>，
+      <b>refused = 已放行（包到达内核）／timed out = 未放行（SYN 被丢弃）</b>，并用一个已知未放行的端口做对照。</span>
+    </div>
+    <div class="note good">
+      <b>发现 2 · 有一个服务白占内存（已处理 ✅）。</b><code>fwupd</code> 是 Ubuntu 的固件更新守护进程，
+      在云服务器上毫无用处（没有物理固件要更新）。已 <code>stop + disable + mask</code>，
+      进程退出后<b>可用内存从 615 MB 涨到 791 MB（+176 MB）</b>，比我们要新增的两个容器加起来还多。
+    </div>
+    <div class="note">
+      <b>发现 3 · 不能手搓 sanhe 的 compose。</b><code>/opt/sanhe/.env</code> 不存在，
+      而 compose 里 <code>MYSQL_ROOT_PASSWORD</code> 是必填项。直接跑 <code>docker compose up</code> 会启动失败。
+      这个文件由 <code>update.sh</code> 生成 —— 所以 <b>sanhe 的一切操作都必须走它自己的 update.sh</b>。
+    </div>
+  </div>
+
+  <!-- 02 -->
+  <div class="sec">
+    <div class="no">SECTION 02</div>
+    <h2>容量与成本测算</h2>
+    <p class="lead">按你给的量级：20+ 相册 × 每册约 20 张照片，每册最多 1 个视频。</p>
+    <hr>
+    <table>
+      <thead><tr><th>项目</th><th>数量</th><th>体积估算</th><th>月成本</th></tr></thead>
+      <tbody>
+        <tr><td>照片原图</td><td class="mono">400 张 × ~5 MB</td><td class="mono">约 2 GB</td><td rowspan="2" class="mono">≈ 0.6 元</td></tr>
+        <tr><td>照片转码（4 档 + WebP）</td><td class="mono">约 1.6 倍原图</td><td class="mono">约 2.5 GB</td></tr>
+        <tr><td>视频原片</td><td class="mono">≤ 20 个 × ~350 MB</td><td class="mono">约 7 GB</td><td rowspan="2" class="mono">≈ 1.8 元</td></tr>
+        <tr><td>视频转码（2 档 + 封面帧）</td><td class="mono">约 1.1 倍原片</td><td class="mono">约 8 GB</td></tr>
+        <tr><td>CDN 流量 · 照片</td><td class="mono">估 15 GB/月</td><td class="mono">—</td><td class="mono">≈ 3 元</td></tr>
+        <tr><td>CDN 流量 · 视频</td><td class="mono">按点播计，不自动播放</td><td class="mono">—</td><td class="mono">≈ 7 元 / 100 次播放</td></tr>
+        <tr><td>服务器</td><td class="mono">已有</td><td class="mono">—</td><td class="mono">0 元</td></tr>
+        <tr><td>SSL 证书</td><td class="mono">免费 DV</td><td class="mono">—</td><td class="mono">0 元</td></tr>
+        <tr><td colspan="3"><b>合计（不含域名）</b></td><td class="mono"><b>约 12–15 元 / 月</b></td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <b>结论：照片的成本可以忽略，视频才是唯一的变量。</b>
+      全部照片存下来一个月不到 4 块钱。所以<b>绝对不要把图片放到服务器磁盘上</b> ——
+      放 COS 更便宜、更快，还不占那 32 GB 里的空间。
+    </div>
+  </div>
+
+  <!-- 03 -->
+  <div class="sec">
+    <div class="no">SECTION 03</div>
+    <h2>内存预算：关掉 fwupd 之前 vs 之后</h2>
+    <p class="lead">这是整台机器上唯一需要精打细算的资源。</p>
+    <hr>
+
+    <div style="font-size:12.5px;color:var(--muted);margin-bottom:8px">操作前（可用 615 MB，swap 已吃 470 MB）</div>
+    <div class="bar">
+      <i style="width:19.6%;background:#8A8078" title="java / sanhe-server"></i>
+      <i style="width:12.7%;background:#C9A9A0" title="fwupd 白占"></i>
+      <i style="width:6.2%;background:#5F7A63" title="mysqld"></i>
+      <i style="width:4.8%;background:#D8D2CA" title="dockerd"></i>
+      <i style="width:19.4%;background:#EDE9E3" title="系统与缓存"></i>
+      <i style="width:37.3%;background:repeating-linear-gradient(45deg,#F7F4F0,#F7F4F0 5px,#EDE9E3 5px,#EDE9E3 10px)" title="可用"></i>
+    </div>
+    <div class="lgd">
+      <em style="background:#8A8078"></em>sanhe-server 329 MB　
+      <em style="background:#C9A9A0"></em><b>fwupd 213 MB（白占）</b>　
+      <em style="background:#5F7A63"></em>mysqld 104 MB　
+      <em style="background:#D8D2CA"></em>dockerd 81 MB　
+      <em style="background:#EDE9E3"></em>系统 / 腾讯云组件 / 缓存　
+      <em style="background:repeating-linear-gradient(45deg,#F7F4F0,#F7F4F0 5px,#EDE9E3 5px,#EDE9E3 10px)"></em>可用
+    </div>
+
+    <div style="font-size:12.5px;color:var(--muted);margin:26px 0 8px">关掉 fwupd 后实测可用 <b>791 MB</b>（+176 MB）；再新增两个容器后预计约 640 MB</div>
+    <div class="bar">
+      <i style="width:19.6%;background:#8A8078" title="sanhe-server"></i>
+      <i style="width:6.2%;background:#5F7A63" title="mysqld"></i>
+      <i style="width:4.8%;background:#D8D2CA" title="dockerd"></i>
+      <i style="width:4.8%;background:#9E4E55" title="mua-api"></i>
+      <i style="width:0.5%;background:#B0707B" title="mua-web"></i>
+      <i style="width:19.4%;background:#EDE9E3" title="系统"></i>
+      <i style="width:44.7%;background:repeating-linear-gradient(45deg,#F7F4F0,#F7F4F0 5px,#EDE9E3 5px,#EDE9E3 10px)" title="可用"></i>
+    </div>
+    <div class="lgd">
+      <em style="background:#9E4E55"></em>mua-api（Node）80 MB　
+      <em style="background:#B0707B"></em>mua-web（静态）8 MB　
+      <em style="background:repeating-linear-gradient(45deg,#F7F4F0,#F7F4F0 5px,#EDE9E3 5px,#EDE9E3 10px)"></em>剩余约 755 MB
+    </div>
+
+    <div class="note">
+      <b>要不要上 Spring Boot？这就是答案。</b>sanhe-server 一个 Java 进程就吃 329 MB —— 接近我们两个新容器的 4 倍。
+      同样的功能用 Node 写，只占 80 MB。在 1.6 GB 的机器上，这个差别是决定性的。
+    </div>
+  </div>
+
+  <!-- 04 -->
+  <div class="sec">
+    <div class="no">SECTION 04</div>
+    <h2>最终技术栈</h2>
+    <p class="lead">每一行的理由都对应上面某个实测约束。</p>
+    <hr>
+    <table>
+      <thead><tr><th>层</th><th>选型</th><th>为什么是它</th></tr></thead>
+      <tbody>
+        <tr><td>前端</td><td class="mono">Vue 3 + Vite + TypeScript</td><td>你熟；编译期优化好；<b>不引 UI 组件库</b>（液态玻璃定制视觉用不上，只增体积与样式冲突）</td></tr>
+        <tr><td>运行环境</td><td class="mono">Node 22</td><td>服务器 <code>node</code> 未安装，但容器内自带，不影响宿主机</td></tr>
+        <tr><td>后端</td><td class="mono">Fastify（约 6 个接口）</td><td>常驻 80 MB；能用 <b>构建产物直接跑镜像</b>，不需要服务器装 maven</td></tr>
+        <tr><td>数据库</td><td class="mono">复用 sanhe-mysql 容器 → 新建 <code>mua_portfolio</code> 库</td><td>零新增依赖。独立 database，碰不到 <code>sanhe_aquatic</code></td></tr>
+        <tr><td>图片 / 视频</td><td class="mono">COS + CDN + 数据万象</td><td>转码、WebP、EXIF 纠正、视频截帧全部托管，不用自己写任务队列</td></tr>
+        <tr><td>入口</td><td class="mono">宿主机 Nginx（只监听 443）</td><td>80 端口被 sanhe-web 占着，443 空闲 → <b>完全不用动 sanhe</b></td></tr>
+        <tr><td>证书</td><td class="mono">腾讯云免费 DV 证书</td><td>DNS 验证，不需要 80 端口（HTTP-01 走不通），一年一换</td></tr>
+        <tr><td>部署</td><td class="mono">独立 Compose 项目 <code>/opt/mua</code></td><td>与 <code>/opt/sanhe</code> 完全隔离，各自独立生命周期</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 05 -->
+  <div class="sec">
+    <div class="no">SECTION 05</div>
+    <h2>部署拓扑：怎么在不碰 sanhe 的前提下把站挂上去</h2>
+    <p class="lead">关键判断 —— 80 被占、443 空闲，那就只用 443。</p>
+    <hr>
+
+    <div class="flow">
+      <div class="row"><div class="node"><div class="t">用户 · 微信内置浏览器</div><div class="s">扫码 / 分享链接，全站 https</div></div></div>
+      <div class="row" style="justify-content:center"><span class="arw">↓</span></div>
+      <div class="row">
+        <div class="node new"><div class="t">宿主机 Nginx · 监听 443</div><div class="s">新装 · 按域名分流 · 约 10 MB</div></div>
+      </div>
+      <div class="row" style="justify-content:center"><span class="arw">↓</span></div>
+      <div class="row">
+        <div class="node new"><div class="t">mua.域名 → 127.0.0.1:8081</div><div class="s">mua-web 容器 · 静态前端 + /api 反代</div></div>
+        <div class="node keep"><div class="t">sanhe.域名 → 127.0.0.1:80</div><div class="s">sanhe-web · 原样不动，只是顺手也能上 https</div></div>
+      </div>
+      <div class="row" style="justify-content:center"><span class="arw">↓</span></div>
+      <div class="row">
+        <div class="node new"><div class="t">mua-api · Node 容器</div><div class="s">127.0.0.1:8082 · mem_limit 256m</div></div>
+        <div class="node keep"><div class="t">sanhe-mysql · MySQL 8.0</div><div class="s">复用同一实例 · 独立 database</div></div>
+      </div>
+      <div class="row" style="justify-content:center"><span class="arw">↓</span></div>
+      <div class="row">
+        <div class="node new"><div class="t">COS + CDN + 数据万象</div><div class="s">照片与视频不落服务器磁盘</div></div>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>为什么不改 sanhe 的端口来腾出 80。</b>技术上可行（compose 里 <code>${HTTP_PORT:-80}</code> 是可配的），
+      但那要重建 sanhe-web、会中断生产、而且 <code>.env</code> 不在手边，风险不对称。
+      <b>用 443 分流能拿到同样的结果，代价是零。</b>唯一的功能损失是 http → https 自动跳转 ——
+      而微信里的链接本来都是 https，实际无感。
+    </div>
+    <div class="note">
+      <b>证书为什么要用免费 DV 而不是 certbot 自动续期。</b>Let's Encrypt 的 HTTP-01 验证必须走 80 端口，
+      而 80 被 sanhe 占着 —— 除非动 sanhe，否则收不到验证请求。腾讯云免费 DV 走 DNS 验证，绕开这个死结。
+      代价是一年手动换一次。
+    </div>
+  </div>
+
+  <!-- 06 -->
+  <div class="sec">
+    <div class="no">SECTION 06</div>
+    <h2>图片与视频链路</h2>
+    <p class="lead">真正的工程难点在这里，不在业务代码。</p>
+    <hr>
+
+    <table>
+      <thead><tr><th>环节</th><th>做法</th><th>不做会怎样</th></tr></thead>
+      <tbody>
+        <tr><td>上传</td><td>管理后台拿 <b>STS 临时凭证</b>，图片直传 COS</td><td>过业务服务器 → 上传慢、超时、带宽打满</td></tr>
+        <tr><td>方向</td><td>转码时 <b>EXIF 方向纠正</b></td><td>客人竖拍的照片横着显示（iOS 高频）</td></tr>
+        <tr><td>尺寸</td><td class="mono">480 / 960 / 1600 / 2400 四档</td><td>列表页加载原图 → 首屏几秒空白</td></tr>
+        <tr><td>格式</td><td>自动出 WebP，保留 JPEG 兜底</td><td>流量翻倍</td></tr>
+        <tr><td>视频</td><td>转 2 档 + 自动截帧封面，<code>preload="none"</code></td><td>列表页自动拉视频 → 流量失控</td></tr>
+        <tr><td>播放</td><td>原生 <code>&lt;video playsinline&gt;</code>，点击才播</td><td>iOS 全屏劫持、微信内自动播放被禁</td></tr>
+        <tr><td>前端加载</td><td><code>srcset</code> + <code>loading="lazy"</code> + 查看器预载相邻两张</td><td>引懒加载库 = 白加体积</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <b>视频建议现在就加两条硬约束：</b>单个视频 ≤ 90 秒、输出码率 ≤ 4 Mbps。
+      在 H5 里超过这个长度，用户在微信里等不起，而且流量成本会从每月几块变成几十块。
+      数据结构现在就按「每册 0 或 1 个视频」预留字段，一期可以先只出照片，但库表不用改。
+    </div>
+  </div>
+
+  <!-- 07 -->
+  <div class="sec">
+    <div class="no">SECTION 07</div>
+    <h2>开工前准备 · 执行状态</h2>
+    <p class="lead">2026-10-02 03:0x 执行。只动了服务器本机，<b>未触碰 sanhe 任何容器、配置或数据</b>。</p>
+    <hr>
+
+    <div class="card" style="margin-bottom:14px;border-left:3px solid #7C9A7E">
+      <div class="k" style="color:#5E8060">01 · 已完成 ✅</div>
+      <div style="font-weight:500;margin:6px 0">关闭 fwupd，回收内存</div>
+      <div class="d" style="margin-bottom:6px">
+        实际执行：<code>stop + disable + mask</code> fwupd / fwupd-refresh 服务与定时器（mask 防止被 dbus 拉起）。
+        <b>可用内存 615 MB → 791 MB（+176 MB）</b>，进程已完全退出。
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;border-left:3px solid #7C9A7E">
+      <div class="k" style="color:#5E8060">02 · 无需操作 ✅（上一版判断有误）</div>
+      <div style="font-weight:500;margin:6px 0">Docker 镜像源已存在且可用</div>
+      <div class="d">
+        服务器<b>原本就配好了</b> <code>registry-mirrors = mirror.ccs.tencentyun.com</code>。
+        本次用 <code>systemctl reload docker</code>（热重载，<b>没有重启 daemon</b>）验证生效，
+        实测 <code>docker pull hello-world</code> <b>0.98 秒</b>。
+        <br><br>
+        <span class="c">教训：上一版用 <code>curl</code> 直连 registry-1.docker.io 判断"Docker 拉不到镜像"是错的 ——
+        curl 不读 docker 的镜像源配置。系统文件也应用 <code>sudo cat</code> 读，普通用户 <code>cat</code> 因权限 640 会静默失败、被误判为"文件不存在"。</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;border-left:3px solid #7C9A7E">
+      <div class="k" style="color:#5E8060">03 · 无需操作 ✅（上一版判断有误，用户已指出）</div>
+      <div style="font-weight:500;margin:6px 0">腾讯云 443 早已放行</div>
+      <div class="d" style="margin-bottom:6px">
+        控制台「防火墙」里 <b>HTTPS (443) TCP 全部 IPv4 → 允许</b> 一直在列。
+        外网实测证实：<code>443</code> 返回 <b>Connection refused</b>（SYN 到达内核、无服务监听 → 内核回 RST），
+        而同样未放行的 <code>8081 / 9999</code> 返回 <b>Operation timed out</b>（SYN 被丢弃）。
+        <b>refused 与 timeout 的区别，就是"放行"与"未放行"的铁证。</b>
+      </div>
+      <div class="d" style="border-top:1px dashed rgba(29,25,22,.12);padding-top:9px">
+        <span class="c">为什么我会判断错：腾讯云轻量的「防火墙」= 云平台层的安全组，<b>实例内部完全看不到它</b>。
+        我上机查 <code>ufw</code>（inactive）和 <code>iptables -L INPUT</code>（policy ACCEPT，只有一条
+        <code>YJ-FIREWALL-INPUT</code> 跳转），<b>没有展开那条链、也没有做外网探测，就臆断了"443 未放行"</b>。
+        这和上一版"Docker 拉不到镜像"是<b>同一类错误</b>：拿一个看不到全貌的本地视角，去推断一个由外部控制的事实。</span>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:16px">
+      <b>还发现两个可选的优化项</b>（不影响开工，要不要做你说）：
+      <br>① <b>容器日志没有上限</b>：<code>daemon.json</code> 里没设 <code>log-opts</code>，默认 json-file 会无限增长 ——
+      长期跑会把 32 GB 剩余磁盘慢慢吃掉。加 <code>max-size: 20m / max-file: 3</code>，<b>需要重启 docker 才生效</b>。
+      <br>② <b><code>live-restore</code> 未开启</b>：开启后重启 docker daemon 时容器不中断 ——
+      以后我们要动 daemon 就不会波及 sanhe。同样需要重启一次才生效。
+      <br>这两条可以合并到<b>未来某次必然要重启 docker 的窗口</b>里一起做，不必单独制造一次中断。
+    </div>
+  </div>
+
+  <!-- 08 -->
+  <div class="sec">
+    <div class="no">SECTION 08</div>
+    <h2>上线关键路径</h2>
+    <p class="lead">除了备案，其余全部可并行。</p>
+    <hr>
+    <div class="tl">
+      <div class="it crit">
+        <div class="t">① 买域名 + 提交备案（立刻做）</div>
+        <div class="d">1–3 周，全项目唯一的阻塞项。备案期间开发照常进行，不冲突。</div>
+      </div>
+      <div class="it">
+        <div class="t">② 服务器准备 ✅ 全部完成</div>
+        <div class="d">关 fwupd（+176 MB）· 镜像源本就可用（实测 0.98s）· <b>443 本就已放行（外网实测确认）</b> —— 零待办</div>
+      </div>
+      <div class="it">
+        <div class="t">③ 开通 COS 与数据万象</div>
+        <div class="d">建存储桶、绑定自定义域名、开图片处理样式、建 STS 子账号</div>
+      </div>
+      <div class="it">
+        <div class="t">④ 前端开发 + 后端 6 个接口</div>
+        <div class="d">不依赖域名，本地就能全流程跑通</div>
+      </div>
+      <div class="it">
+        <div class="t">⑤ 管理后台</div>
+        <div class="d">单账号登录 + 相册 CRUD + 六章节多图上传排序</div>
+      </div>
+      <div class="it">
+        <div class="t">⑥ 备案通过 → 装 Nginx + 签证书 + 上线</div>
+        <div class="d">申请免费 DV 证书（DNS 验证）→ 宿主机 Nginx 配 443 → 切域名</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 09 -->
+  <div class="sec">
+    <div class="no">SECTION 09</div>
+    <h2>风险与取舍</h2>
+    <hr>
+    <table>
+      <thead><tr><th>风险</th><th>影响</th><th>对策</th></tr></thead>
+      <tbody>
+        <tr><td>单机同驻，OOM 互相拖累</td><td>一个服务内存暴涨可能拖垮另外两个</td><td>所有容器设 <code>mem_limit</code>；已有 1.9 GB swap 兜底</td></tr>
+        <tr><td>服务器上跑 <code>vite build</code></td><td>2 核 1.6 GB 上有 OOM 风险（本地都踩过）</td><td><b>本地构建，只把 dist 传上去</b>。前端改动频率低，完全可行</td></tr>
+        <tr><td>视频流量</td><td>唯一不可控成本项</td><td>不自动播放、限制时长与码率、可上低频存储</td></tr>
+        <tr><td>域名未备案</td><td>微信会拦截，站点等于不能上线</td><td>今天就提交，别等</td></tr>
+        <tr><td>证书手动年更</td><td>忘记续期 → 站点报错</td><td>可加一条日历提醒；后续若腾出 80 端口再换自动续期</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 10 -->
+  <div class="sec">
+    <div class="no">SECTION 10</div>
+    <h2>待你拍板</h2>
+    <p class="lead">报编号即可。前两条定了我就能开工。</p>
+    <hr>
+    <table>
+      <thead><tr><th>#</th><th>问题</th><th>我的建议</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>域名怎么买、备案主体用谁</td><td>买新域名；主体优先用<b>个体户/公司</b>，个人主体对经营性内容容易被驳回</td></tr>
+        <tr><td>2</td><td>视频一期做还是二期做</td><td><b>表结构一期留好，功能二期做</b>。先出照片，验证视觉与速度</td></tr>
+        <tr><td>3</td><td>入口用宿主机 Nginx 还是容器内 Nginx</td><td><b>宿主机 Nginx</b>。证书续期最顺，以后给 sanhe 上 https 也只加一个 server 块</td></tr>
+        <tr><td>4</td><td>要不要我现在就把服务器三件事做了</td><td><b>三件全部完成 ✅</b>。关 fwupd：+176 MB；镜像源：本就可用（实测 0.98s，未重启 daemon）；<b>443：用户指出本就已放行，外网实测确认</b></td></tr>
+        <tr><td>6</td><td>要不要顺手加上日志上限 + live-restore</td><td>建议加，但<b>合并到未来某次必然会重启 docker 的窗口</b>一起做，不为此单独制造一次中断</td></tr>
+        <tr><td>5</td><td>管理后台的登录方式</td><td>单账号密码 + JWT。不做注册、不做找回密码、不做多用户</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ft">予时妍 · YUÉ ATELIER · 技术方案 v1 · 基于实测数据 · 原型 demo 未改动 · 2026-10-02</div>
+</div>
+</body>
+</html>

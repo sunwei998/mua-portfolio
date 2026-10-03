@@ -1,0 +1,79 @@
+/* ============================================================
+   予时妍 · glass.css — 液态玻璃三档（全站唯一实现，配方逐行取自 v6）
+   ------------------------------------------------------------
+   三档：
+   .glass        真玻璃 —— 固定层（Dock / 顶栏 / 查看器底栏），blur 22px + saturate 180%
+   .glass.light  轻玻璃 —— 滚动区内的少数强调卡，blur 11px
+   .glass.fake   假玻璃 —— X5 降级（html.noblur 自动切换），零 GPU
+
+   五条红线（来自 v6 §玻璃分层配方，违反任意一条都会在真机上翻车）：
+   ① 玻璃元素本身禁止 overflow:hidden + border-radius 同现（Safari 会放弃模糊）；
+      裁切一律交给 ::before 的 border-radius:inherit
+   ② 玻璃上的文字一律墨色 + 8–12% 暖色 scrim（客片大面积白纱，白字会糊）
+   ③ backdrop-filter 必须同时写 -webkit- 前缀（X5 / 老 iOS 只认前缀）
+   ④ 真玻璃只给固定层；滚动区内用 light；数量收敛（domBudget）
+   ⑤ mix-blend-mode:screen 的高光层不加在含正文的小卡上，避免文字发灰
+   ============================================================ */
+
+.glass{
+  --gb:22px;                       /* blur 半径 */
+  --gs:180%;                       /* saturate */
+  --gt:linear-gradient(158deg,rgba(255,255,255,.30),rgba(255,255,255,.10) 54%,rgba(255,255,255,.16));
+  position:relative;isolation:isolate;
+  border-radius:var(--r,18px);
+  background:var(--gt);
+  -webkit-backdrop-filter:blur(var(--gb)) saturate(var(--gs)) brightness(1.04);
+  backdrop-filter:blur(var(--gb)) saturate(var(--gs)) brightness(1.04);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.72),
+    inset 0 -1px 0 rgba(255,255,255,.14),
+    inset .5px 0 0 rgba(255,255,255,.30),
+    inset -.5px 0 0 rgba(255,255,255,.22),
+    0 16px 40px rgba(30,22,18,.13);
+}
+
+/* ① 高光层：静态斜向光泽 + 跟随指针/陀螺仪的液态光斑（M5 接 ambient） */
+.glass::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:2;
+  background:
+    radial-gradient(240px 200px at var(--mx,42%) var(--my,26%),rgba(255,255,255,.46),transparent 68%),
+    linear-gradient(118deg,rgba(255,255,255,.48),rgba(255,255,255,.05) 36%,transparent 60%);
+  mix-blend-mode:screen;opacity:.92;
+  transition:background .45s var(--ease);
+}
+
+/* ② 色散描边（折射的边缘彩边）；主题差异由 tokens 覆盖 */
+.glass::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:3;
+  box-shadow:
+    inset 1px 0 0 rgba(255,205,225,.42),
+    inset -1px 0 0 rgba(190,225,255,.34),
+    inset 0 -1px 0 rgba(255,255,255,.20);
+}
+
+/* 轻玻璃：滚动区内的少数强调卡 */
+.glass.light{--gb:11px;--gs:150%;
+  --gt:linear-gradient(158deg,rgba(255,255,255,.22),rgba(255,255,255,.08) 60%,rgba(255,255,255,.12))}
+
+/* 假玻璃：零 GPU，Android 微信 X5 走这一档 */
+.glass.fake{--gb:0px;
+  --gt:linear-gradient(158deg,rgba(255,255,255,.78),rgba(255,255,255,.56) 60%,rgba(255,255,255,.64));
+  -webkit-backdrop-filter:none;backdrop-filter:none}
+.glass.fake::before{opacity:.42}
+
+/* 玻璃上的文字 scrim（红线②） */
+.glass .scrim{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;
+  background:rgba(255,246,240,.10)}
+.glass>*{position:relative;z-index:4}
+
+/* 主题级色散边覆盖（v6 :262 / :285） */
+.twe .glass::after{box-shadow:inset 1px 0 0 rgba(255,214,226,.5),inset -1px 0 0 rgba(255,236,214,.4),inset 0 -1px 0 rgba(255,255,255,.22)}
+.tcn .glass{--r:3px}
+.tcn .glass::after{box-shadow:inset 1px 0 0 rgba(192,164,111,.55),inset -1px 0 0 rgba(110,124,118,.38),inset 0 -1px 0 rgba(255,255,255,.18)}
+
+/* ---------- X5 降级：backdrop-filter 不可用（探测失败或 ?noblur=1 强制） ---------- */
+html.noblur .glass{-webkit-backdrop-filter:none;backdrop-filter:none;
+  --gt:linear-gradient(158deg,rgba(255,255,255,.78),rgba(255,255,255,.54) 58%,rgba(255,255,255,.62));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.92),inset 0 -1px 0 rgba(0,0,0,.045),0 14px 30px rgba(30,22,18,.10)}
+html.noblur .glass::before{opacity:.40}
+html.noblur .glass::after{box-shadow:inset 0 0 0 .5px rgba(255,255,255,.7)}

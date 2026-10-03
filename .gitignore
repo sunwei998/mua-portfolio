@@ -1,0 +1,52 @@
+# ============================================================
+# mua-portfolio · .gitignore
+# 在「首次提交之前」定稿：.gitignore 只影响未被跟踪的文件，
+# 一旦提交过再补规则，历史里的 blob 永久保留、clone 体积不会回退。
+# 每组都写清「为什么」，方便后来人判断能不能删这条规则。
+# ============================================================
+
+# ---------- ① 依赖（node_modules 合计约 584MB）----------
+node_modules/
+
+# ---------- ② 构建产物（本地 build 生成，部署时现构建）----------
+admin/dist/
+*.tsbuildinfo
+.vite/
+
+# ---------- ③ 运行期数据（后台「上传视频/图片」的落盘目录，约 62MB）----------
+# 精确到路径而不是泛化 img/：site/img/*.png 是站点自带素材、必须入库，
+# 泛化规则会把它们一起吞掉（clone 出来前台直接缺图）。
+site/img/uploads/
+server/.tmp/
+
+# ---------- ④ 凭据与本地环境（严禁入库）----------
+.env
+.env.*
+!.env.example          # 否定规则必须晚于被否定的规则，否则模板会被一并忽略
+server/.env.mua
+*.pem
+*.key
+
+# ---------- ⑤ 工具本地状态（只是不入库，不要删文件）----------
+.workbuddy/
+.idea/
+.vscode/
+.DS_Store
+*.log                  # 必须写在仓库根：子目录的 .gitignore 覆盖不到这里
+
+# ---------- ⑥ 杂项临时文件 ----------
+.cache/
+*.tmp
+*.bak
+
+# ============================================================
+# 以下内容「必须入库」，请勿为省体积加规则：
+#   · 前台源码：site/（index.html、app.js、router.js、api.js、views/、components/、styles/）
+#   · 后端源码：server/src/；数据库迁移：server/migrations/
+#       （migrate.ts 用 _migrations 账本 + sha256 校验，缺文件会直接 exit 1）
+#   · 锁文件：admin/package-lock.json、server/package-lock.json
+#   · 站点图片：site/img/*.png（welcome/nc-* 等，前台实际引用，约 24MB）
+#   · 品牌资产：assets/（logo 矢量 + 分享板成品，约 23MB）
+#   · 交付文档：README.md、design-*.html、build-plan.html、tech-plan.html
+# 体积焦虑的正解是把图片搬去 COS + CDN，不是把它们从版本库里删掉。
+# ============================================================

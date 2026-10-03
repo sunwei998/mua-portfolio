@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>予时妍 YUÉ ATELIER · 实施方案（施工总图）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F4F0; --card:#FFFFFF; --ink:#221D19; --ink2:#4A423B; --muted:#8A8078;
+  --accent:#9E4E55; --rose:#B0707B; --gold:#BFA46F; --line:rgba(34,29,25,.10);
+  --ok:#5F7A63; --warn:#A9652F; --bad:#9E4E55; --jade:#6E7C76;
+  --sans:Inter,-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  --serif:"Noto Serif SC","Songti SC",serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:14px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:64px 40px 120px}
+
+.hd{border-bottom:1px solid var(--line);padding-bottom:32px;margin-bottom:44px}
+.hd .brand{font-family:var(--serif);font-weight:300;font-size:13px;letter-spacing:.34em;
+  color:var(--accent);text-indent:.34em}
+.hd h1{font-family:var(--serif);font-weight:200;font-size:38px;letter-spacing:.06em;
+  margin:16px 0 10px;line-height:1.25}
+.hd .sub{font-size:13px;color:var(--muted);letter-spacing:.14em}
+.hd .meta{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px}
+.hd .meta span{font-size:11.5px;letter-spacing:.1em;color:var(--ink2);
+  background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 12px}
+
+.sec{margin:56px 0 0}
+.sec > .no{font-family:var(--serif);font-weight:200;font-size:13px;letter-spacing:.3em;color:var(--gold)}
+.sec > h2{font-family:var(--serif);font-weight:300;font-size:23px;letter-spacing:.05em;margin:8px 0 6px}
+.sec > .lead{font-size:13.5px;color:var(--muted);margin:0 0 22px;max-width:800px}
+.sec hr{border:0;border-top:1px solid var(--line);margin:0 0 22px}
+.sec h3{font-family:var(--serif);font-weight:300;font-size:17px;letter-spacing:.08em;margin:38px 0 12px}
+.sec h3:first-of-type{margin-top:0}
+
+.grid{display:grid;gap:14px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(330px,1fr))}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.card .k{font-size:11px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.card .v{font-family:var(--serif);font-weight:300;font-size:25px;letter-spacing:.03em;margin:6px 0 2px}
+.card .d{font-size:12.5px;color:var(--muted);line-height:1.6}
+.card.acc{border-color:rgba(158,78,85,.35);background:linear-gradient(180deg,#fff,#FDF8F8)}
+
+table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:0 0 6px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;font-size:11.5px;letter-spacing:.14em;color:var(--muted);
+  background:#FCFAF8;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.mono,code,.mono{font-family:var(--mono);font-size:12px;color:var(--ink2)}
+code{background:rgba(158,78,85,.07);color:var(--accent);padding:1px 6px;border-radius:4px;font-size:12px}
+.pill{display:inline-block;font-size:11px;letter-spacing:.08em;padding:2px 9px;border-radius:999px;
+  border:1px solid currentColor;white-space:nowrap}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}.jd{color:var(--jade)}
+
+.note{border-left:2px solid var(--gold);padding:2px 0 2px 16px;margin:18px 0;
+  font-size:13px;color:var(--ink2)}
+.note.bad{border-color:var(--accent)}
+.note.good{border-color:#7C9A7E}
+.note b{font-weight:500}
+
+pre{background:#2C2C2A;color:#EDE9E3;border-radius:10px;padding:16px 18px;overflow-x:auto;
+  font-family:var(--mono);font-size:12px;line-height:1.72;margin:14px 0}
+pre .c{color:#9A928A}
+pre .g{color:#9FC49B}
+pre .y{color:#DCC38A}
+pre .r{color:#E0A3A6}
+
+.flow{display:flex;flex-direction:column;gap:10px;margin:20px 0}
+.row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.node{flex:1;min-width:150px;background:#fff;border:1px solid var(--line);border-radius:10px;
+  padding:12px 15px}
+.node .t{font-weight:500;font-size:13px}
+.node .s{font-size:11.5px;color:var(--muted);margin-top:2px}
+.node.new{border-color:rgba(158,78,85,.4);background:#FDF8F8}
+.node.keep{border-color:rgba(95,122,99,.35);background:#F8FAF8}
+.node.opt{border-color:rgba(191,164,111,.5);background:#FCFAF5}
+.arw{color:var(--gold);font-size:15px;flex:none}
+
+.tl{border-left:1px solid var(--line);margin-left:8px;padding-left:22px}
+.tl .it{position:relative;padding:0 0 24px}
+.tl .it::before{content:"";position:absolute;left:-27px;top:7px;width:9px;height:9px;border-radius:50%;
+  background:var(--paper);border:1.5px solid var(--gold)}
+.tl .it.crit::before{border-color:var(--accent);background:var(--accent)}
+.tl .it.now::before{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(158,78,85,.16)}
+.tl .it .t{font-weight:500;font-size:13.5px}
+.tl .it .t em{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted);
+  border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin-left:8px}
+.tl .it .d{font-size:12.5px;color:var(--muted)}
+.tl .it .d b{color:var(--ink2);font-weight:500}
+.tl .it ul{margin:6px 0 0;padding-left:18px;font-size:12.5px;color:var(--muted)}
+.tl .it ul li{margin-bottom:3px}
+
+.ft{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);
+  font-size:11.5px;letter-spacing:.14em;color:var(--muted);text-align:center}
+.ask{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.ask .q{display:flex;gap:14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.ask .q:last-child{border-bottom:0}
+.ask .n{font-family:var(--serif);font-weight:200;font-size:20px;color:var(--accent);
+  line-height:1.2;flex:none;width:22px}
+.ask .b{flex:1}
+.ask .b .t{font-weight:500;font-size:13.5px}
+.ask .b .d{font-size:12.5px;color:var(--muted);margin-top:3px}
+.ask .b .d b{color:var(--ink2);font-weight:500}
+@media (max-width:720px){.wrap{padding:36px 20px 80px}.hd h1{font-size:28px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hd">
+    <div class="brand">予时妍 · YUÉ ATELIER</div>
+    <h1>实施方案 <span style="color:var(--muted);font-size:22px">· 施工总图 v2</span></h1>
+    <div class="sub">依据 design-v6 设计稿（11 屏）+ 119.45.182.37 服务器实测约束</div>
+    <div class="meta">
+      <span>前台：原生 · 零构建</span>
+      <span>后台：Vue 3 + Element Plus</span>
+      <span>后端：Node 22 + Fastify 5</span>
+      <span>域名备案：并行，不阻塞</span>
+      <span>现有 demo：零改动</span>
+    </div>
+  </div>
+
+  <div class="grid g3">
+    <div class="card acc">
+      <div class="k">技术栈</div>
+      <div class="v">前台零构建</div>
+      <div class="d">H5 用原生 ES modules，<b>0 个运行时依赖</b>；只有管理后台用 Vue。<br>理由见第 01 节。</div>
+    </div>
+    <div class="card">
+      <div class="k">页面 / 接口</div>
+      <div class="v">11 屏 → 7 路由</div>
+      <div class="d">前台 6 个只读接口，后台 11 个管理接口。</div>
+    </div>
+    <div class="card">
+      <div class="k">服务器增量</div>
+      <div class="v">1 个容器</div>
+      <div class="d">只新增 mua-api。静态站由宿主机 Nginx 直接托管，复用 sanhe-mysql。</div>
+    </div>
+  </div>
+
+  <!-- 00 -->
+  <div class="sec">
+    <div class="no">SECTION 00</div>
+    <h2>定下的五件事</h2>
+    <p class="lead">你说了「域名和备案不急，先把项目做起来」—— 这份文档里所有事都不依赖域名，本地就能全流程跑通。</p>
+    <hr>
+    <table>
+      <thead><tr><th style="width:130px">决策</th><th style="width:320px">结论</th><th>依据</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>H5 前台</b></td>
+          <td class="mono">原生 ES modules · 零框架 · 零依赖 · 零构建</td>
+          <td>7 个页面、结构固定、访客全在微信里 —— <b>性能与兼容性优先</b>。现有 demo 已用 850 行零构建跑通 6 页 + 查看器 + 转场，这是一手证据</td>
+        </tr>
+        <tr>
+          <td><b>管理后台</b></td>
+          <td class="mono">Vue 3 + Vite + TS + Element Plus</td>
+          <td>表单密集、六段编辑、多图拖拽排序 —— <b>开发效率优先</b>。这里用框架省 300–500 行，是实打实的账</td>
+        </tr>
+        <tr>
+          <td><b>后端</b></td>
+          <td class="mono">Node 22 + Fastify 5 + TS · 常驻约 80 MB</td>
+          <td>1.6 GB 内存是唯一硬约束：Java 329 MB vs Node 80 MB —— <b>4 倍差</b>，在这里是决定性的</td>
+        </tr>
+        <tr>
+          <td><b>部署形态</b></td>
+          <td class="mono">宿主机 Nginx（443 · TLS + 两份静态 + 反代 /api）＋ 单一 mua-api 容器</td>
+          <td>比上一版<b>简化一层</b>：不再单独跑 mua-web 容器，省一个组件、一层跳转、一份配置</td>
+        </tr>
+        <tr>
+          <td><b>数据来源</b></td>
+          <td class="mono">全部走 DB + API，<code>data/albums.js</code> 退役</td>
+          <td>v6 的 IA 与旧数据<b>结构不兼容</b>（详见第 08 节），不是改名字能解决的 —— 但这一条与框架选择无关</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note good">
+      <b>为什么现在可以开工：</b>唯一的长关键路径是域名备案（1–3 周），但它只卡<b>上线</b>，不卡<b>开发</b>。
+      前台 <code>localhost</code> 跑、后端 <code>localhost</code> 跑、数据库本机跑，图片先用现成的 10 张占位图。
+      域名下来后，只剩「装 Nginx + 签证书 + 指域名」半天的事。
+    </div>
+  </div>
+
+  <!-- 01 -->
+  <div class="sec">
+    <div class="no">SECTION 01</div>
+    <h2>技术栈定案</h2>
+    <p class="lead">同一个站点，前后两半的需求正好相反，所以用两套栈。每一行左边是选型，右边是它对应的理由 —— 没有一条是为了「技术先进」选的。</p>
+    <hr>
+
+    <h3>H5 前台 · 原生，零构建</h3>
+    <table>
+      <thead><tr><th style="width:130px">项</th><th style="width:250px">选型</th><th>为什么是它</th></tr></thead>
+      <tbody>
+        <tr><td>框架</td><td class="mono"><b>无</b></td><td>7 个页面、结构固定（六段是写死的枚举）。框架在这里主要解决「数据→视图同步」，而我们的数据规模是一次请求几十条记录</td></tr>
+        <tr><td>语言</td><td class="mono">JS + JSDoc <code>// @ts-check</code></td><td>零构建下仍能拿到字段级类型提示与拼写检查（VS Code 原生支持），补掉「没有 TS」这个真实短板</td></tr>
+        <tr><td>组织方式</td><td class="mono">多文件 ES modules</td><td>按页面 / 组件拆文件，代替「一个 <code>main.js</code> 拼 1000 行模板字符串」</td></tr>
+        <tr><td>路由</td><td class="mono">自写 history 路由（约 40 行）</td><td>分享出去的链接要是 <code>/album/w1</code> 而不是 <code>#/album/w1</code>。实现是 <code>pushState</code> + <code>popstate</code> + 拦截站内 <code>&lt;a&gt;</code>，配合 Nginx <code>try_files</code> 兜底</td></tr>
+        <tr><td>运行时依赖</td><td class="mono"><b>0 个</b></td><td>没有 <code>node_modules</code>、没有版本升级、没有依赖漏洞、没有构建等待</td></tr>
+        <tr><td>样式</td><td class="mono">原生 CSS（变量 + 分层）</td><td>双主题 = 换根 class（<code>.twe</code> / <code>.tcn</code>）；玻璃三档 = 三组 CSS 变量。这两件事本来就该在 CSS 里做</td></tr>
+        <tr><td>动效</td><td class="mono">CSS + IntersectionObserver</td><td><b>不上 GSAP</b>。光斑漂移、扫光、呼吸、走马灯、滚动入场 —— 设计稿里全部动效原生就能做</td></tr>
+        <tr><td>i18n</td><td class="mono"><b>不做 locale 切换</b></td><td>设计稿里的英文是「9px 疏排点缀」，属于<b>版式的一部分</b>。DB 存 <code>*_cn</code> / <code>*_en</code> 双字段，同屏并列渲染</td></tr>
+        <tr><td>体积预估</td><td class="mono">≈ 25 KB 未压缩 / ≈ 10 KB gzip</td><td>对微信弱网最友好。对比：Vue + router 约 +45 KB gzip，而一页图片就是 1–3 MB</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <b>为什么前台不上 Vue（虽然 +45KB 相对图片量级不大）。</b>
+      真正的理由不是体积，是<b>这个站没有任何需要框架的场景</b>：无跨页共享状态、无复杂表单、无长列表虚拟化、无实时更新。
+      引入框架只买到「模板写起来舒服一点」，代价是构建链路 + 依赖管理 + 版本升级 + 服务器不能 build（必须本地 build 传 dist）。
+      一个内容每年更新几次的展示站，不值得长期背上这些。
+    </div>
+
+    <div class="note bad">
+      <b>一个必须实测才知道的项：Android 微信 X5 对 ES modules 的支持。</b>
+      我不能凭记忆断言它的支持矩阵，所以把它当成<b>开工第一件要验证的事</b>：
+      M1 跑通后立刻在真机微信里打开，测四件事 ——
+      ① <code>&lt;script type="module"&gt;</code> 是否执行；② 可选链 <code>?.</code> / 空值合并 <code>??</code>；
+      ③ <code>backdrop-filter</code> 的降级是否生效；④ <code>aspect-ratio</code> 是否按预期算高。
+      <br><br>
+      <b>最坏情况也不改架构：</b>若 ①② 不通过，加一步 <code>esbuild</code> 把多文件合成单文件（单二进制、无依赖树、构建 &lt;100ms），
+      或把语法基线降到 ES2017。<b>这些全是可降级项，不是架构风险。</b>
+    </div>
+
+    <h3>管理后台 · Vue 3</h3>
+    <table>
+      <thead><tr><th style="width:130px">项</th><th style="width:250px">选型</th><th>为什么是它</th></tr></thead>
+      <tbody>
+        <tr><td>框架</td><td class="mono">Vue 3 + Vite + TypeScript</td><td>你熟；双向绑定正好对上表单密集的场景</td></tr>
+        <tr><td>UI 库</td><td class="mono">Element Plus</td><td>表格、表单校验、抽屉、上传、消息提示全是现成的；<b>只进 <code>/admin</code>，不污染前台</b></td></tr>
+        <tr><td>拖拽排序</td><td class="mono">原生 HTML5 drag &amp; drop 或轻量 sortable</td><td>多图排序是后台最核心的交互，必须有拖拽</td></tr>
+        <tr><td>构建</td><td class="mono">本地 <code>npm run build</code> → 传 dist</td><td>服务器 2 核 1.6 GB 不 build（本地都踩过 OOM）</td></tr>
+        <tr><td>鉴权</td><td class="mono">单账号密码 + JWT（7 天）</td><td>只有一个人用。不做注册、不做找回密码、不做多用户、不做权限树</td></tr>
+      </tbody>
+    </table>
+
+    <h3>后端 · Node + Fastify</h3>
+    <table>
+      <thead><tr><th style="width:130px">项</th><th style="width:250px">选型</th><th>为什么是它</th></tr></thead>
+      <tbody>
+        <tr><td>运行时</td><td class="mono">Node 22（容器内自带）</td><td>宿主机不需要装 Node —— 镜像里带，宿主机保持干净</td></tr>
+        <tr><td>框架</td><td class="mono">Fastify 5</td><td>常驻约 80 MB；内置 JSON Schema 校验与序列化，比 Express 快一个量级</td></tr>
+        <tr><td>数据库驱动</td><td class="mono">mysql2（连接池）</td><td><b>不引 ORM / Prisma</b>：Prisma 要额外跑二进制 engine，在 1.6 GB 机器上是负收益。表一共 8 张，手写 SQL 更可控</td></tr>
+        <tr><td>迁移</td><td class="mono">自写 runner（约 40 行）</td><td><code>migrations/*.sql</code> + 一张 <code>_migrations</code> 表，按文件名顺序执行、已执行的跳过。不引重型迁移框架</td></tr>
+        <tr><td>类型</td><td class="mono">TypeScript，<code>types.ts</code> 作为 API 契约</td><td>后台直接 <code>import type</code> 复用，接口字段改名时编译期就报错</td></tr>
+        <tr><td>密码</td><td class="mono">bcrypt 哈希存库</td><td>账号密码写在 <code>.env</code>（权限 600，不进 git）</td></tr>
+        <tr><td>日志</td><td class="mono">pino（Fastify 内置）</td><td>容器日志已被 <code>log-opts</code> 限制在 20m×3，不会吃盘</td></tr>
+      </tbody>
+    </table>
+
+    <h3>数据与图片</h3>
+    <table>
+      <thead><tr><th style="width:130px">项</th><th style="width:250px">选型</th><th>为什么是它</th></tr></thead>
+      <tbody>
+        <tr><td>数据库</td><td class="mono">复用 sanhe-mysql · 新建库 <code>mua_portfolio</code></td><td>零新增依赖；<b>独立 database + 独立账号</b>，物理上碰不到 <code>sanhe_aquatic</code></td></tr>
+        <tr><td>连接方式</td><td class="mono">加入 sanhe 的 Docker 网络，用容器名 <code>sanhe-mysql:3306</code></td><td>不依赖宿主端口映射（不确定它有没有映射），容器名解析最稳</td></tr>
+        <tr><td>字符集</td><td class="mono">utf8mb4 / utf8mb4_0900_ai_ci</td><td>要存繁体「予時妍」与 emoji</td></tr>
+        <tr><td>图片</td><td class="mono">COS + CDN + 数据万象</td><td>转码 / WebP / <b>EXIF 纠向</b> / 视频截帧全托管。<b>照片不落服务器磁盘</b>（400 张 ≈ 0.6 元/月）</td></tr>
+        <tr><td>上传</td><td class="mono">STS 临时凭证，浏览器直传 COS</td><td>不过业务服务器 —— 2 核 1.6 GB 的机器经不起图片流</td></tr>
+        <tr><td>尺寸变体</td><td class="mono">不预生成，走 COS 处理样式实时出图</td><td>存原图 key + 宽高，前端按样式名拼 URL</td></tr>
+        <tr><td>本地开发</td><td class="mono">先用 <code>assets/img/</code> 那 10 张占位图</td><td>DB 里存的路径与 COS key 同构 → 上线时只换 base URL，<b>代码零改动</b></td></tr>
+      </tbody>
+    </table>
+
+    <div class="note bad">
+      <b>唯一的版本红线：不打「latest」标签上生产。</b>镜像与依赖在 <code>package.json</code> / <code>Dockerfile</code> 里锁版本，
+      否则半年后重建镜像会拉到不兼容的主版本，而那时你已经不记得当初装的是什么了。
+    </div>
+  </div>
+
+  <!-- 02 -->
+  <div class="sec">
+    <div class="no">SECTION 02</div>
+    <h2>信息架构与路由</h2>
+    <p class="lead">设计稿 v6 给的是 11 个屏幕，其中 3 个不是独立页面（比例适配是规则、多图布局是组件、查看器是浮层），实际落到 7 条路由。</p>
+    <hr>
+
+    <h3>路由表</h3>
+    <table>
+      <thead><tr><th style="width:56px">屏</th><th style="width:150px">页面</th><th style="width:200px">路由</th><th>主题 / 数据</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">01</td><td>首页</td><td class="mono">/</td><td><code>.ms</code> 暖白 · <code>GET /api/home</code></td></tr>
+        <tr><td class="mono">02</td><td>系列双封面</td><td class="mono">/collection</td><td><code>.ms</code> · <code>GET /api/collections</code>（西式在前）</td></tr>
+        <tr><td class="mono">03</td><td>西式 · 册页</td><td class="mono">/style/western</td><td><b><code>.twe</code></b> · <code>GET /api/albums?style=western</code></td></tr>
+        <tr><td class="mono">04</td><td>新中式 · 册页</td><td class="mono">/style/chinese</td><td><b><code>.tcn</code></b> · <code>GET /api/albums?style=chinese</code></td></tr>
+        <tr><td class="mono">05/06</td><td>册详情 · 六段叙事</td><td class="mono">/album/:slug</td><td>主题由 <code>album.style</code> 决定 · <code>GET /api/albums/:slug</code></td></tr>
+        <tr><td class="mono">07</td><td>平铺图集</td><td class="mono">/gallery/:slug</td><td><code>.ms</code> · <code>GET /api/galleries/:slug</code></td></tr>
+        <tr><td class="mono">08</td><td><span class="pill warn">非页面</span> 比例适配</td><td class="mono">—</td><td>是 <code>photoGrid</code> 组件内的规则，不占路由</td></tr>
+        <tr><td class="mono">09</td><td><span class="pill warn">非页面</span> 查看器</td><td class="mono">?photo=n（浮层）</td><td>复用详情页已加载的照片数组，<b>零额外请求</b></td></tr>
+        <tr><td class="mono">10</td><td>关于 · 预约</td><td class="mono">/about</td><td><code>.ms</code> · <code>GET /api/site</code></td></tr>
+        <tr><td class="mono">11</td><td><span class="pill warn">非页面</span> 多图布局</td><td class="mono">—</td><td>是 <code>photoGrid</code> 的 6 种布局分支</td></tr>
+        <tr><td class="mono">—</td><td>管理后台</td><td class="mono">/admin/*</td><td>独立入口 · 独立产物 · JWT</td></tr>
+      </tbody>
+    </table>
+
+    <h3>导航层级</h3>
+    <p style="font-size:13px;color:var(--ink2);margin:0 0 4px">
+      这里有一处设计稿<b>没有画到</b>的接缝：首页「作品系列」是三类入口，而第 02 屏是「西式 / 新中式」两个封面 ——
+      二者的从属关系稿子里没连起来。下面是我的推断，<b>请核对</b>：
+    </p>
+<pre><span class="c"># 首页「作品系列」三个入口，只有第一个需要再下一层</span>
+/
+├── 婚庆跟妆        →  /collection        <span class="c">西式浪漫 / 新中式 双封面</span>
+│                       ├── 西式浪漫  →  /style/western   <span class="c">册列表（.twe）</span>
+│                       └── 新中式    →  /style/chinese   <span class="c">册列表（.tcn）</span>
+│                                          └── 册  →  /album/:slug   <span class="c">六段叙事</span>
+├── 订婚宴跟妆      →  /gallery/engagement   <span class="c">平铺图集，不分风格</span>
+└── 孕妇照·亲子照   →  /gallery/maternity    <span class="c">平铺图集，不分风格</span>
+</pre>
+    <div class="note">
+      <b>为什么订婚宴 / 孕亲照不做双风格。</b>设计稿第 07 屏自己写了「全程记录 · 不设分类」——
+      这两类是<b>次要板块</b>，现实里客人也不会按「西式 / 新中式」去挑订婚宴。
+      给它们双封面，等于凭空多出 4 条路由和一套筛选心智，收益是负的。
+    </div>
+
+    <h3>底部 Dock 与首屏署名</h3>
+    <table>
+      <thead><tr><th style="width:150px">入口</th><th style="width:170px">指向</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>Dock · 首页</td><td class="mono">/</td><td rowspan="4">Dock 是 <code>position:sticky</code> 贴底，只在 4 个主页面出现；详情页 / 查看器不出现（避免遮挡叙事）</td></tr>
+        <tr><td>Dock · 作品</td><td class="mono">/collection</td></tr>
+        <tr><td>Dock · 关于</td><td class="mono">/about</td></tr>
+        <tr><td>Dock · 联系</td><td class="mono">/about#contact</td></tr>
+        <tr><td>署名条（Hero 下方）</td><td class="mono">/about</td><td>整条可点。这是「个人工作室」身份的第一落点</td></tr>
+        <tr><td>导航右上头像章</td><td class="mono">/about</td><td>与署名条同一个落点，不做第二个去向</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note bad">
+      <b>微信里 SPA 分享的一个通病，要提前知道。</b>微信（尤其 iOS）抓取的是<b>进入页面时</b>的 URL 与标题，
+      <code>pushState</code> 之后它不会自动更新 —— 而我们要的恰恰是「把某一本册分享给朋友」。
+      <br><br>
+      <b>对策（一期就做）：</b>每次路由渲染完成后同步写 <code>document.title</code>，让分享标题正确 ——
+      这已经解决了「分享出去显示一堆乱码标题」的主要问题。
+      <br><b>二期可选：</b>要精确控制分享卡片的图与描述，需要微信 JS-SDK 的 <code>updateAppMessageShareData</code>，
+      那需要公众号 + 域名校验。<b>一期不做</b>，因为微信内分享本来就不读 <code>og:image</code>，做了一半也是白做。
+    </div>
+  </div>
+
+  <!-- 03 -->
+  <div class="sec">
+    <div class="no">SECTION 03</div>
+    <h2>数据模型</h2>
+    <p class="lead">8 张表。<b>六段叙事用枚举落库，不用自由文本</b> —— 这样前端能固定渲染那 6 枚流程胶囊，同时标题文案仍可由后台覆盖。</p>
+    <hr>
+
+    <table>
+      <thead><tr><th style="width:150px">表</th><th style="width:80px">行数级</th><th>作用与关键字段</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="mono">album</td><td>10 – 50</td>
+          <td>一本册 = 一场婚礼里的一种风格。字段：<code>slug</code> · <code>title_cn/en</code> · <code>style</code>(western/chinese) · <code>category</code>(wedding/engagement/maternity) · <code>ordinal_label</code>（Ⅰ / 壹）· <code>cover_key</code> · <code>cover_len_ratio</code>（4:5）· <code>sort</code> · <code>published</code> · <code>video_key/poster/duration</code>（一期只留字段）</td>
+        </tr>
+        <tr>
+          <td class="mono">album_section</td><td>60 – 300</td>
+          <td><b>六段叙事的载体。</b>字段：<code>album_id</code> · <code>kind</code> <span class="pill jd">枚举</span> · <code>title_cn/en</code> · <code>desc_cn/en</code> · <code>layout</code>(auto/single/duo/grid/strip) · <code>max_visible</code> · <code>sort</code></td>
+        </tr>
+        <tr>
+          <td class="mono">photo</td><td>400+</td>
+          <td>字段：<code>section_id</code> · <code>cos_key</code> · <code>w</code> · <code>h</code> · <code>ratio</code> · <code>orientation</code>(portrait/landscape) · <code>caption_cn/en</code> · <code>sort</code></td>
+        </tr>
+        <tr>
+          <td class="mono">collection</td><td>2</td>
+          <td>两条：西式浪漫、新中式。字段：<code>slug</code> · <code>style</code> · <code>big_cn</code>（封面大字）· <code>tagline_cn/en</code> · <code>vslip_cn</code>（竖排绢签文案）· <code>cover_key</code> · <code>strips_json</code>（右下三张小图）· <code>palette_cn</code> · <code>sort</code></td>
+        </tr>
+        <tr>
+          <td class="mono">gallery / gallery_photo</td><td>2 / n</td>
+          <td>订婚宴、孕亲照两个平铺图集。结构与 album 解耦（它们<b>没有六段</b>），刻意不复用 —— 硬塞进 <code>album</code> 会让六段枚举被迫出现空值</td>
+        </tr>
+        <tr>
+          <td class="mono">site_setting</td><td>单行</td>
+          <td>品牌名 / 副标 / 标语 / 关于页 bio / 三组统计数字 / 流程四步 / 微信号 / 二维码 key / 社交分享图 key。<b>全部配置化</b>，改文案不用碰代码</td>
+        </tr>
+        <tr>
+          <td class="mono">admin_user</td><td>1</td>
+          <td>单账号：<code>username</code> · <code>password_hash</code> · <code>last_login_at</code></td>
+        </tr>
+        <tr>
+          <td class="mono">_migrations</td><td>n</td>
+          <td>迁移 runner 自己的账本：记录已执行的文件名与校验和</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>六段的取值域（唯一权威）</h3>
+<pre><span class="c">-- album_section.kind 枚举。西式与新中式共用同一套 kind，
+-- 差异只在标题文案与呈现皮肤（罗马数字 Ⅰ–Ⅵ / 汉字 壹–陆）</span>
+<span class="y">morning</span>    晨袍造型    Morning Robe
+<span class="y">outdoor</span>    出门造型    Out the Door
+<span class="y">ceremony</span>   仪式主纱    Ceremony        <span class="c">← 注意是「仪式主纱」，不是「礼仪主纱」</span>
+<span class="y">toast</span>      敬酒造型    The Toast
+<span class="y">face</span>       面部细节    Face Detail     <span class="c">← 1–N 张</span>
+<span class="y">headdress</span> 头饰造型    Headdress       <span class="c">← 1–N 张</span>
+</pre>
+
+    <div class="note bad">
+      <b>被删掉的那一段：迎宾造型。</b>现有 demo 的 <code>data/albums.js</code> 里每册有 5 个场景 + 2 个特写，
+      其中包含「<b>迎宾造型</b>」。设计稿 v6 拍板的是六段，<b>没有迎宾</b>。
+      这意味着旧数据里那 9 处 <code>yingbin</code> 记录会被丢弃 ——
+      <b>已确认（2026-10-02）</b>：这是本轮唯一一处<b>删功能</b>，不是改名。
+    </div>
+
+    <h3>与旧数据的对照</h3>
+    <table>
+      <thead><tr><th style="width:150px">维度</th><th style="width:300px">现有 demo · data/albums.js</th><th>新 · DB 模型</th></tr></thead>
+      <tbody>
+        <tr><td>风格位置</td><td>塞在册里面（每册含 <code>styles.cn</code> + <code>styles.we</code>）</td><td><b>提到册的属性上</b>（<code>album.style</code>），西式与新中式各自成列表</td></tr>
+        <tr><td>册的含义</td><td>一场婚礼 = 一册（3 场婚礼 = 3 条记录）</td><td>一场婚礼 × 一种风格 = 一册</td></tr>
+        <tr><td>段</td><td>5 场景 + 2 特写（<code>closeups</code> 与 <code>scenes</code> 两套结构）</td><td><b>统一 6 段</b>，面部细节 / 头饰造型并入同一序列，只是位置在最后</td></tr>
+        <tr><td>多图</td><td>简单数组 <code>imgs[]</code></td><td><code>photo</code> 独立表 + 宽高 / 比例 / 方向字段，前端据此自动选布局</td></tr>
+        <tr><td>文案</td><td>硬编码在 JS 常量里</td><td>落库 + <code>site_setting</code> 配置化</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 04 -->
+  <div class="sec">
+    <div class="no">SECTION 04</div>
+    <h2>接口清单</h2>
+    <p class="lead">前台 6 个只读接口（无鉴权、可被 CDN 缓存），后台 11 个（JWT）。没有 REST 教条，只按页面需要聚合。</p>
+    <hr>
+
+    <h3>前台 · 公开只读</h3>
+    <table>
+      <thead><tr><th style="width:70px">方法</th><th style="width:240px">路径</th><th style="width:150px">服务页面</th><th>返回</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">GET</td><td class="mono">/api/site</td><td>/about · 全局</td><td>品牌、副标、标语、bio、统计、流程、联系方式、分享图</td></tr>
+        <tr><td class="mono">GET</td><td class="mono">/api/home</td><td>/</td><td>hero 图与标签、三类入口、走马灯词、署名条</td></tr>
+        <tr><td class="mono">GET</td><td class="mono">/api/collections</td><td>/collection</td><td>两张封面卡（西式在前）</td></tr>
+        <tr><td class="mono">GET</td><td class="mono">/api/albums<span style="color:var(--muted)">?style=</span></td><td>/style/*</td><td>册列表：slug、序号、封面、标题、meta、首图三连</td></tr>
+        <tr><td class="mono">GET</td><td class="mono">/api/albums/:slug</td><td>/album/*</td><td><b>一次给全</b>：册信息 + 六段 + 每段照片数组（含 w/h/orientation）</td></tr>
+        <tr><td class="mono">GET</td><td class="mono">/api/galleries/:slug</td><td>/gallery/*</td><td>图集的照片数组</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <b>为什么详情页「一次给全」而不是分段懒加载。</b>一本册最多 6 段 × 6 张 = 36 条记录，
+      去掉 blob 只有几 KB JSON。<b>一次请求</b>换来的是：查看器可以直接复用同一份数据（零请求）、
+      切段不闪、返回不白屏。分段加载在这里是纯粹的复杂度。
+    </div>
+
+    <h3>后台 · JWT</h3>
+    <table>
+      <thead><tr><th style="width:70px">方法</th><th style="width:260px">路径</th><th>作用</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">POST</td><td class="mono">/api/admin/login</td><td>单账号密码 → JWT（有效期 7 天）</td></tr>
+        <tr><td class="mono">GET</td><td class="mono">/api/admin/albums</td><td>册列表（含草稿）</td></tr>
+        <tr><td class="mono">POST</td><td class="mono">/api/admin/albums</td><td>新建册（选风格 + 类别 → 自动初始化六段空壳）</td></tr>
+        <tr><td class="mono">PUT</td><td class="mono">/api/admin/albums/:id</td><td>改册信息 / 封面 / 排序 / 发布状态</td></tr>
+        <tr><td class="mono">DELETE</td><td class="mono">/api/admin/albums/:id</td><td>删册（软删，<code>deleted_at</code>）</td></tr>
+        <tr><td class="mono">PUT</td><td class="mono">/api/admin/sections/:id</td><td>改段落文案 / 布局覆盖 / <code>max_visible</code></td></tr>
+        <tr><td class="mono">POST</td><td class="mono">/api/admin/sections/:id/photos</td><td>登记已直传的 COS key（含 w/h），落库</td></tr>
+        <tr><td class="mono">PUT</td><td class="mono">/api/admin/sections/:id/photos/order</td><td>批量重排（一次提交整个顺序数组）</td></tr>
+        <tr><td class="mono">DELETE</td><td class="mono">/api/admin/photos/:id</td><td>删图（同时按 key 删 COS 对象）</td></tr>
+        <tr><td class="mono">POST</td><td class="mono">/api/admin/cos/sts</td><td>签发上传用 STS 临时凭证（最小权限，仅本桶指定前缀）</td></tr>
+        <tr><td class="mono">GET / PUT</td><td class="mono">/api/admin/settings</td><td>站点配置读写</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note good">
+      <b>一个容易被忽略但会省掉很多事的约定：<code>photo</code> 的宽高由前端在上传成功后回传。</b>
+      浏览器在直传前就能用 <code>createImageBitmap</code> 读出 <code>width/height</code>，
+      连同 COS key 一起进 <code>POST .../photos</code>。这样后端<b>完全不需要</b>读取图片元数据 ——
+      不用装 sharp、不用拉 COS SDK 做 HEAD、不用处理 EXIF。多图布局的自动选型全由这两个数字驱动。
+    </div>
+  </div>
+
+  <!-- 05 -->
+  <div class="sec">
+    <div class="no">SECTION 05</div>
+    <h2>工程结构</h2>
+    <p class="lead">一个仓库三块：<code>site/</code> 前台零构建、<code>admin/</code> 后台 Vue、<code>server/</code> API。</p>
+    <hr>
+
+<pre>mua-portfolio/
+├── site/                        <span class="g">H5 前台 · 原生 · 零构建 · 零依赖</span>
+│   ├── index.html               <span class="c">唯一 HTML，含 view 挂载点</span>
+│   ├── app.js                   <span class="c">入口：注册路由 + 挂载应用壳</span>
+│   ├── router.js                <span class="c">history 路由（pushState + popstate + 链接拦截）</span>
+│   ├── api.js                   <span class="c">fetch 封装 + JSDoc 类型</span>
+│   ├── views/
+│   │   ├── home.js              <span class="c">01 首页</span>
+│   │   ├── collection.js        <span class="c">02 系列双封面</span>
+│   │   ├── albumList.js         <span class="c">03/04 西式与新中式共用（读 style 参数换皮肤）</span>
+│   │   ├── album.js             <span class="c">05/06 六段叙事</span>
+│   │   ├── gallery.js           <span class="c">07 平铺图集</span>
+│   │   └── about.js             <span class="c">10 关于 · 预约</span>
+│   ├── components/
+│   │   ├── glass.js             <span class="y">★ 玻璃三档 + X5 降级探测（全站唯一实现）</span>
+│   │   ├── ambient.js           <span class="c">光斑 ×3 + 斜扫光 + 颗粒</span>
+│   │   ├── brandMark.js         <span class="c">内联 SVG 符号 + 字标（继承 currentColor）</span>
+│   │   ├── dock.js              <span class="c">贴底玻璃 Dock</span>
+│   │   ├── chapter.js           <span class="c">章号 + 中文标题 + 英文 + 描述 + 落款印</span>
+│   │   ├── photoGrid.js         <span class="y">★ 六种布局自动选型（第 11 屏）</span>
+│   │   ├── photoViewer.js       <span class="c">暗房玻璃查看器（手势 + 预载相邻）</span>
+│   │   └── marquee.js · seal.js · cue.js · byline.js
+│   ├── styles/
+│   │   ├── tokens.css           <span class="c">双主题变量（.twe / .tcn）</span>
+│   │   ├── base.css             <span class="c">重置 / 纸纹 / 页面转场 / 降级动效</span>
+│   │   ├── glass.css            <span class="c">三档玻璃 + 五条红线</span>
+│   │   └── views.css            <span class="c">各页版式</span>
+│   └── img/                     <span class="c">占位图（M2 起图片地址由 API 提供）</span>
+│
+├── admin/                       <span class="g">管理后台 · Vue 3 + Vite + TS + Element Plus</span>
+│   ├── index.html
+│   ├── vite.config.ts
+│   └── src/
+│       ├── views/               <span class="c">Login / AlbumList / AlbumEdit / Settings</span>
+│       ├── components/          <span class="c">SectionEditor · PhotoUploader · DragSort</span>
+│       └── api.ts               <span class="c">import type 复用 server 的契约</span>
+│
+└── server/                      <span class="g">Node 22 + Fastify 5 + TypeScript</span>
+    ├── src/
+    │   ├── index.ts             <span class="c">启动 + 插件注册</span>
+    │   ├── routes/              <span class="c">public.ts · admin.ts</span>
+    │   ├── db/                  <span class="c">连接池 + 迁移 runner</span>
+    │   ├── services/            <span class="c">cos.ts（STS 签发 / 删对象）</span>
+    │   └── types.ts             <span class="y">★ API 契约（admin 直接 import type）</span>
+    ├── migrations/              <span class="c">001_init.sql · 002_seed.sql</span>
+    └── Dockerfile               <span class="c">多阶段：build → node:22-alpine 运行</span>
+</pre>
+
+    <div class="note">
+      <b>前台为什么用「多文件 ES modules」而不是把逻辑塞进一个 <code>main.js</code>。</b>
+      现有 demo 的 <code>main.js</code> 是 322 行，靠「helper 函数 + <code>map().join()</code>」把 6 个页面拼得挺清楚。
+      但 v6 要加：双主题皮肤、六种多图布局、六段条件渲染 —— 再往一个文件里堆就会开始难受。
+      <b>拆文件不影响零构建</b>，<code>&lt;script type="module"&gt;</code> 浏览器原生支持（前提见第 01 节那个待实测项）。
+    </div>
+
+    <h3>组件与设计稿的对应</h3>
+    <table>
+      <thead><tr><th style="width:180px">组件</th><th style="width:190px">设计稿来源</th><th>要点</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">glass.js</td><td>§玻璃分层配方 ①–⑥</td><td><b>全站唯一的玻璃实现</b>。高光 / 折射 / 模糊 / 底色 / 色散边 / 投影六层全在这一个文件；<code>tier</code> 决定真/轻/假</td></tr>
+        <tr><td class="mono">ambient.js</td><td>01 / 03 / 04 屏背景</td><td>三团光斑 30–36s 漂移 + 11s 扫光 + 颗粒。<code>prefers-reduced-motion</code> 时全部静止</td></tr>
+        <tr><td class="mono">photoGrid.js</td><td><b>第 11 屏</b></td><td>按 <code>n</code> 与方向自动选：1 单幅 / 2 双联 / 3 主图+双叠 / 4 宫格 / 5+ 横滑 / 含横图整行独占。含 <code>domBudget=6</code> 红线</td></tr>
+        <tr><td class="mono">photoViewer.js</td><td>09 屏</td><td>底栏真玻璃 28px；左右滑切 / 双击放大 / 下拉关闭；<b>关闭动画结束即卸载</b>，不常驻合成层</td></tr>
+        <tr><td class="mono">albumList.js</td><td>03 / 04 屏</td><td><b>一个文件两套皮肤</b>：西式 <code>border-radius:170px 170px 20px 20px</code> 拱形；新中式 <code>.dframe</code> 双线金框。差异全在 CSS，JS 只负责填数据</td></tr>
+      </tbody>
+    </table>
+
+    <h3>双主题令牌</h3>
+    <table>
+      <thead><tr><th style="width:170px">变量</th><th style="width:220px">.twe 西式浪漫</th><th>.tcn 新中式</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">--paper</td><td class="mono">#FBF6F5　奶白</td><td class="mono">#F8F5F1　绢白</td></tr>
+        <tr><td class="mono">--ink</td><td class="mono">#241E1B</td><td class="mono">#201B17</td></tr>
+        <tr><td class="mono">--accent</td><td class="mono">#C08994　玫瑰</td><td class="mono">#9E4E55　绛</td></tr>
+        <tr><td class="mono">--gold</td><td class="mono">#C8AE84　香槟</td><td class="mono">#C0A46F　描金</td></tr>
+        <tr><td class="mono">--jade</td><td class="mono">—（不用）</td><td class="mono">#6E7C76　黛青</td></tr>
+        <tr><td class="mono">--r 圆角</td><td class="mono">20px　大圆角</td><td class="mono">3px　直角</td></tr>
+        <tr><td>序号体系</td><td>Cormorant 斜体 <b>Ⅰ Ⅱ Ⅲ</b></td><td>细宋 <b>壹 貳 叁</b></td></tr>
+        <tr><td>色散边</td><td class="mono">暖粉 / 暖金</td><td class="mono">描金 / 黛青</td></tr>
+        <tr><td>切换方式</td><td colspan="2">两套共用<b>同一份 DOM</b>，换根 class + 一组变量。JS 里不写任何主题判断分支</td></tr>
+      </tbody>
+    </table>
+
+    <h3>玻璃三档 · 与五条红线</h3>
+    <table>
+      <thead><tr><th style="width:120px">档位</th><th style="width:190px">参数</th><th>用在哪</th></tr></thead>
+      <tbody>
+        <tr><td><b>真玻璃</b></td><td class="mono">blur 22–28 · saturate 180%</td><td>固定层：贴底 Dock、封面绢签、hero 标签、查看器底栏、二维码卡、CTA。<b>同屏 ≤ 3 处</b></td></tr>
+        <tr><td><b>轻玻璃</b></td><td class="mono">blur 11–14 · saturate 150%</td><td>滚动区：栏目卡、章节说明标签、统计条、流程胶囊、署名条</td></tr>
+        <tr><td><b>假玻璃</b></td><td class="mono">零 GPU（无 backdrop-filter）</td><td>Android 微信 X5。<b>降级靠 UA + 特性实测判断，不能靠 <code>@supports</code></b>（旧 WebKit 会返回 true 却不生效）</td></tr>
+      </tbody>
+    </table>
+    <table style="margin-top:12px">
+      <thead><tr><th style="width:200px">红线</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>禁 <code>overflow</code> + <code>radius</code> 同现</td><td>玻璃元素同时写 <code>overflow:hidden</code> 与 <code>border-radius</code> → Safari 直接放弃模糊。裁切一律交给 <code>::before</code> 的 <code>border-radius:inherit</code></td></tr>
+        <tr><td>禁 <code>will-change</code> 叠加</td><td>与 backdrop-filter 叠加会炸层、掉帧</td></tr>
+        <tr><td>文字一律墨色</td><td>玻璃上禁用白字（客片大面积白纱会糊）；统一压 8–12% 暖色 scrim</td></tr>
+        <tr><td>横图不裁人物</td><td>检测到宽 &gt; 高时该图整行独占、按原比例展示</td></tr>
+        <tr><td><code>domBudget = 6</code></td><td>单段最多直接渲染 6 张 <code>&lt;img&gt;</code>，其余进横滑按需挂载</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 06 -->
+  <div class="sec">
+    <div class="no">SECTION 06</div>
+    <h2>部署形态</h2>
+    <p class="lead">比上一版技术方案简化一层：去掉了 mua-web 容器。组件越少，能出错的地方越少。</p>
+    <hr>
+
+    <div class="flow">
+      <div class="row"><div class="node"><div class="t">用户 · 微信内置浏览器</div><div class="s">分享链接 / 扫码，全站 https</div></div></div>
+      <div class="row" style="justify-content:center"><span class="arw">↓</span></div>
+      <div class="row">
+        <div class="node new"><div class="t">宿主机 Nginx · 监听 443</div><div class="s">唯一新增的系统级组件 · TLS 终止 + 按域名分流</div></div>
+      </div>
+      <div class="row" style="justify-content:center"><span class="arw">↓</span></div>
+      <div class="row">
+        <div class="node new"><div class="t">mua.域名 / → <code>/opt/mua/site</code></div><div class="s">前台静态 · 零构建产物</div></div>
+        <div class="node new"><div class="t">mua.域名/admin → <code>/opt/mua/admin</code></div><div class="s">后台静态 · Vue 产物</div></div>
+        <div class="node keep"><div class="t">sanhe.域名 → 127.0.0.1:80</div><div class="s">sanhe-web 原样不动</div></div>
+      </div>
+      <div class="row" style="justify-content:center"><span class="arw">↓</span></div>
+      <div class="row">
+        <div class="node new"><div class="t">mua-api · Node 容器</div><div class="s">127.0.0.1:8082 · mem_limit 256m</div></div>
+        <div class="node keep"><div class="t">sanhe-mysql · MySQL 8.0</div><div class="s">复用同一实例 · 独立库 mua_portfolio</div></div>
+      </div>
+      <div class="row" style="justify-content:center"><span class="arw">↓</span></div>
+      <div class="row">
+        <div class="node opt"><div class="t">COS + CDN + 数据万象</div><div class="s">照片与视频不落服务器磁盘 —— 直传，不经本机</div></div>
+      </div>
+    </div>
+
+    <table>
+      <thead><tr><th style="width:170px">资源账</th><th style="width:180px">增量</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>内存</td><td class="mono">≈ +90 MB</td><td>mua-api 80 MB + 宿主机 Nginx 约 10 MB。此前关 fwupd 已回收 <b>176 MB</b>，净赚</td></tr>
+        <tr><td>端口</td><td class="mono">443（已放行）+ 8082（仅本机）</td><td>80 仍归 sanhe-web，<b>sanhe 一行不改</b></td></tr>
+        <tr><td>磁盘</td><td class="mono">≈ +40 MB</td><td>只有代码与静态产物。<b>图片全部在 COS</b>，本机盘不涨</td></tr>
+        <tr><td>证书</td><td class="mono">腾讯云免费 DV（DNS 验证）</td><td>80 被占 → Let's Encrypt 的 HTTP-01 走不通。代价：一年手动换一次</td></tr>
+      </tbody>
+    </table>
+
+    <h3>/opt/mua 结构</h3>
+<pre>/opt/mua/
+├── docker-compose.yml      <span class="c">只有 mua-api 一个 service</span>
+├── .env                    <span class="c">DB / JWT / COS 凭据，权限 600，不进 git</span>
+├── site/                   <span class="c">前台静态产物（rsync 上来，无构建步骤）</span>
+├── admin/                  <span class="c">后台静态产物（本地 build 后 rsync）</span>
+├── server/                 <span class="c">后端源码</span>
+└── update.sh               <span class="c">备份 → 拉代码 → compose up → 健康检查 → 失败回滚</span>
+</pre>
+
+    <h3>两个必须提前处理的接口细节</h3>
+    <div class="note bad">
+      <b>① 复用 sanhe-mysql 不能靠宿主端口。</b>我们不确定 sanhe 的 compose 有没有把 3306 映射到宿主。
+      <b>正确做法：</b>把 mua-api 挂进 sanhe 已有的 Docker 网络（<code>docker network ls</code> 查出名字，
+      compose 里写 <code>networks: { sanhe_default: { external: true } }</code>），然后用容器名 <code>sanhe-mysql:3306</code> 连接。
+      这样既不依赖端口映射，也不占宿主端口。<b>M2 建库前第一件事就是核这个名字。</b>
+      <br><br>
+      <b>② 容器日志上限要一起设上。</b>新容器直接在 compose 里写
+      <code>logging.options.max-size: 20m / max-file: 3</code>，避免将来这台的 json-file 无限增长。
+      这条<b>只影响 mua-api 自己，不需要重启 docker daemon</b> —— 与 sanhe 那两个待办（全局 log-opts、live-restore）分开处理，不制造任何中断。
+    </div>
+
+    <h3>发布流程</h3>
+    <table>
+      <thead><tr><th style="width:130px">部位</th><th style="width:320px">动作</th><th>成本</th></tr></thead>
+      <tbody>
+        <tr><td>前台</td><td class="mono">改完直接 rsync site/ → /opt/mua/site</td><td><span class="pill ok">零构建 · 零中断</span>改完刷新即见</td></tr>
+        <tr><td>后台</td><td class="mono">本地 npm run build → rsync dist</td><td><span class="pill ok">零中断</span></td></tr>
+        <tr><td>后端</td><td class="mono">update.sh：备份 → compose up -d --build → 健康检查 → 失败回滚</td><td><span class="pill warn">约 5 秒</span></td></tr>
+        <tr><td>数据库</td><td class="mono">迁移在容器启动时自动跑（幂等，已执行的跳过）</td><td><span class="pill ok">按需</span></td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <b>前台没有构建步骤，是这套技术栈最实在的一个好处。</b>
+      改一行 CSS、加一段文案，保存即生效；上服务器就是一次 <code>rsync</code>，没有「构建失败」「产物 OOM」「node_modules 与 lock 不一致」这些中间环节。
+      后台的构建复杂度被隔离在 <code>admin/</code> 里，坏也坏不到前台。
+    </div>
+  </div>
+
+  <!-- 07 -->
+  <div class="sec">
+    <div class="no">SECTION 07</div>
+    <h2>施工步骤</h2>
+    <p class="lead">M0 是现在，M1 起我可以一气呵成往下推。<b>M1–M6 每一步都能在本机跑起来验收</b>，不依赖域名、不依赖 COS。</p>
+    <hr>
+    <div class="tl">
+      <div class="it">
+        <div class="t">M0 · 方案确认 <em>✅ 2026-10-02</em></div>
+        <div class="d">三个问题已拍板（见第 09 节），数据模型口径冻结。</div>
+      </div>
+      <div class="it now">
+        <div class="t">M1 · 双骨架 <em>✅ 已完成 · 待真机</em></div>
+        <div class="d">前台：路由 + 首页壳 + 玻璃 Dock + 令牌；后端：Fastify 起服务 + <code>GET /api/health</code>。
+        <b>验收：</b>① 本地打开看到品牌名与玻璃 Dock，站内跳转正常；② <b>真机微信打开一次</b>，跑通第 01 节那四项兼容性实测。
+        <br><b>进度（2026-10-02）：</b>① 已过 —— 无头浏览器实测首页/双封面/西式列表三路由，
+        <code>.twe</code> 主题切换生效、console 零错误、<code>/api/health</code> 200；② 待你在真机微信里过一遍。</div>
+      </div>
+      <div class="it">
+        <div class="t">M2 · 数据层 <em>✅ 已完成 2026-10-02</em></div>
+        <div class="d">先核 sanhe 的 Docker 网络名 → 写 <code>001_init.sql</code> 建 8 张表；<code>002_seed.sql</code> 灌入
+        <b>用现有 10 张占位图铺满的整套演示数据</b>（西式 3 册 + 新中式 3 册 + 2 个图集），六段齐全，
+        面部与头饰段故意做成 1/2/3/4/6 张各一册，用来验收多图布局。
+        <b>验收：</b>迁移 runner 连跑两次，第二次输出「无待执行」，幂等成立。
+        <br><b>进度（2026-10-02）：</b>网络名 <code>sanhe_default</code> 已核实（mysql 容器 172.18.0.2，<b>无宿主端口映射</b>）；
+        库 <code>mua_portfolio</code> + 专用账号已建于 sanhe-mysql；6 册 36 段 93 照 + 2 图集 16 张已灌入；
+        face/headdress 张数矩阵实测 1/2/3/4/5/6 全覆盖；runner 两连跑幂等成立。本地凭据 <code>server/.env.mua</code>
+        （已 gitignore），开发走 ssh 隧道 <code>33061 → 172.18.0.2:3306</code>。</div>
+      </div>
+      <div class="it">
+        <div class="t">M3 · 前台接口 <em>6 个只读</em></div>
+        <div class="d">按第 04 节实现并自测。<b>验收：</b>6 条 curl 全部 200，<code>/api/albums/:slug</code> 一次返回完整的六段结构。
+        <br><b>进度（2026-10-02）：</b><code>routes/public.ts</code> 落地全部 6 条（snake_case → camelCase 在接口层归一，
+        只暴露 published=1）；新增迁移 <code>003_home_fields.sql</code>（site_setting 补 hero_key / hero_tag_cn / marquee_json，
+        首页文案全配置化）；<code>types.ts</code> 补 <code>AlbumCard / HomePayload</code> 契约；健康检查带 <code>db:true</code>。
+        实测：6 条 200 + 400（style 非法）+ 404（slug 不存在）分支全对；六册张数 14/14/17/14/18/16 与种子一致；
+        dev.js 代理链路 200。API 已自动加载 <code>.env.mua</code>（db/index.ts 建池前调用）。</div>
+      </div>
+      <div class="it">
+        <div class="t">M4 · 前台页面 <em>11 屏 → 7 路由</em></div>
+        <div class="d">先做「首页 → 双封面 → 册页 → 详情」这条主链，再做图集与关于页。
+        <b>验收：</b>真机上从首页点到某册第六段，全程无 404、无布局跳动。
+        <br><b>进度（2026-10-02）：</b>7 路由全部接真数据（首页 /collection /style/:style /album/:slug
+        /gallery/:slug /about）；<code>router.js</code> 支持 <code>ViewOverride</code>（册详情主题由 album.style
+        异步切换、title 覆盖成册名）；多图布局按 v6 第 11 屏规则自动选型（1 one · 2 two · 3/4+横图 mix · ≥5 mstrip），
+        前四段 shot 体系（1 full · 2 duo · ≥3 full+duo）；Dock 在 /album/* 自动隐藏；关于页 CTA=复制微信号。
+        <b>无头实测：</b>主链全通、twe/tcn 主题切换、6 chapters、mstrip 6 张+指示点、图集 8 图含 1 横图整行、
+        关于页统计/流程/字标全 API 驱动、404 分支正常、console 全程零错误。<b>真机微信验收待你</b>。</div>
+      </div>
+      <div class="it">
+        <div class="t">M5 · 质感层 <em>玻璃三档 + 多图 + 查看器</em></div>
+        <div class="d">玻璃三档与 X5 降级、<code>photoGrid</code> 六种布局、暗房查看器、滚动入场、光影跟随。
+        <b>验收：</b>① 切到「X5 降级预览」画面不塌；② 1/2/3/4/6 张与横图混排各自成立；③ 中低端安卓上滚动不掉帧。
+        <br><b>进度（2026-10-02）：</b>新增 <code>components/viewer.js</code>（暗房查看器：照片组注册 +
+        全局点击委托、滑动换张 / 双击放大 / Esc·方向键 / 金色进度条 / 邻图预载，route:start 自动复位）、
+        <code>components/ink.js</code>（墨晕转场：route:start 铺墨 → route:change 保证 420ms 覆盖后收墨，
+        首屏不铺、异常 2.5s 兜底）、<code>components/reveal.js</code>（IO 滚动入场 + 图片淡入 +
+        指针光影跟随 --mx/--my）与 <code>styles/quality.css</code>；六个视图补 reveal / data-vgroup；
+        <code>app.js</code> 接管锚点小签为自绘 rAF 缓动滚动（原生锚点对动态渲染不可靠且
+        scrollIntoView smooth 长距离会被截断，780ms easeInOutCubic 每帧重算落点，wheel/touch 可打断）。
+        <b>无头实测：</b>暗房开图 1/3、1/6 与键盘换张正常；墨晕 50–300ms 覆盖 / 500ms 收净、SPA 无刷新；
+        ?noblur=1 页面不塌；reveal 直开即亮、锚点跳段后已越过的章节立即点亮（top&lt;0 直亮 + 阈值 0）、
+        跳最远的 #sec-headdress 落点 9px；console 全程零错误。<b>真机微信验收待你</b>。</div>
+      </div>
+      <div class="it">
+        <div class="t">M6 · 管理后台 <em>Vue · 登录 + CRUD + 上传</em></div>
+        <div class="d">单账号登录、册 CRUD、六段文案编辑、多图拖拽排序。
+        <b>验收：</b>在后台新建一册 → 传 3 张图到面部细节 → 前台刷新立刻变成「主图 + 双叠」布局。</div>
+      </div>
+      <div class="it">
+        <div class="t">M7 · 上线 <em>需要域名</em></div>
+        <div class="d">COS 建桶 + 数据万象样式 + STS 子账号 → 图片从占位图切到 COS（<b>改一个 base URL</b>）→
+        宿主机装 Nginx → 签免费 DV 证书 → 指域名 → 分享图生效。</div>
+      </div>
+    </div>
+    <div class="note good">
+      <b>M1–M6 全部与域名解耦。</b>这也是你说「域名不急」的底气：
+      只有在 M7 那一步，域名才真正成为前置条件。而现在它可以在后台慢慢备案。
+    </div>
+  </div>
+
+  <!-- 08 -->
+  <div class="sec">
+    <div class="no">SECTION 08</div>
+    <h2>现有 demo 的处置</h2>
+    <p class="lead">先说清一件事：<code>index.html</code> / <code>styles/</code> / <code>scripts/</code> / <code>data/</code> 是<b>原型 demo</b>，不是生产代码。上一版文档里「生产代码未改动」的说法是我用词错了。</p>
+    <hr>
+    <p style="font-size:13px;color:var(--ink2);margin:0 0 16px">
+      选原生路线有个副作用：这份 demo <b>不是被丢弃，而是被继承</b>。它的骨架逻辑可以直接搬，UI 与数据层才需要重做。
+    </p>
+    <table>
+      <thead><tr><th style="width:180px">现有 demo 资产</th><th style="width:120px">处置</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">scripts/main.js</td><td><span class="pill ok">逻辑可搬</span></td><td>查看器手势、墨晕转场 <code>withInk()</code>、IntersectionObserver 入场、<code>esc()</code>、<code>prefers-reduced-motion</code> 分支 —— 搬进 <code>site/components/</code>，其余重写</td></tr>
+        <tr><td class="mono">styles/tokens.css</td><td><span class="pill ok">可扩</span></td><td>单主题令牌 → 扩成双主题变量（<code>.twe</code> / <code>.tcn</code>）</td></tr>
+        <tr><td class="mono">styles/components.css</td><td><span class="pill warn">参考</span></td><td>印章 / 册页 / 签牌 / 团扇的版式思路可参考，但 v6 的玻璃体系与双皮肤要重做</td></tr>
+        <tr><td class="mono">styles/base.css</td><td><span class="pill ok">可搬</span></td><td>重置与纸纹基础可直接用</td></tr>
+        <tr><td class="mono">index.html</td><td><span class="pill warn">重建</span></td><td>拆掉硬编码的 <code>#viewer</code> 与 <code>#ink</code>，改由组件挂载</td></tr>
+        <tr><td class="mono">data/albums.js</td><td><span class="pill bad">重排</span></td><td>作为 <code>002_seed.sql</code> 的素材，<b>六段结构需重写</b>（含删「迎宾」）</td></tr>
+        <tr><td class="mono">assets/img/ (10 张)</td><td><span class="pill ok">复用</span></td><td>继续用作占位图，拷进 <code>site/img/</code>。M2 的种子数据就靠它们铺满</td></tr>
+        <tr><td class="mono">assets/logo/ · assets/share/</td><td><span class="pill ok">复用</span></td><td>SVG 内联进 <code>brandMark.js</code>；分享图 M7 接入</td></tr>
+        <tr><td class="mono">design-*.html · *-board.html</td><td><span class="pill ok">保留</span></td><td>设计交付物，长期留档。<b>v6 是唯一权威视觉来源</b></td></tr>
+      </tbody>
+    </table>
+    <div class="note bad">
+      <b>原先那张「改 6 处旧品牌名」的施工单，正式作废。</b>
+      它列的是 <code>index.html:7/8</code>、<code>data/albums.js:2/9/11</code>、<code>scripts/main.js:2</code>、
+      <code>styles/tokens.css:2</code>、<code>README.md:1</code> —— 前提是「在 demo 上原地继续」。
+      既然 UI 与数据层要重做，就<b>不存在逐处改名的必要</b>。
+      <br><br>
+      新名字只在一个地方落地：<code>site/styles/tokens.css</code> 与 <code>site_setting</code> 表。
+      <b>唯一要保留的旧文案是化妆师本人的名字「甜茉」</b>—— 那不是品牌名，不能改。
+    </div>
+  </div>
+
+  <!-- 09 -->
+  <div class="sec">
+    <div class="no">SECTION 09</div>
+    <h2>已拍板（2026-10-02）</h2>
+    <p class="lead">三个问题已全部落定 —— <b>M1 可以开了</b>。</p>
+    <hr>
+    <div class="ask">
+      <div class="q">
+        <span class="n">1</span>
+        <div class="b">
+          <div class="t">首页三类 vs 双封面层级 —— <b>按推断执行</b></div>
+          <div class="d">只有「婚庆跟妆」进双封面（<code>/collection</code>）；
+          「订婚宴跟妆」与「孕妇照·亲子照」<b>直接进平铺图集</b>，不做风格分层。
+          → <b>路由共 7 条</b>（不是 9 条）。</div>
+        </div>
+      </div>
+      <div class="q">
+        <span class="n">2</span>
+        <div class="b">
+          <div class="t">「迎宾造型」段 —— <b>确认删除</b></div>
+          <div class="d">按 v6 六段执行：晨袍 → 出门 → 仪式主纱 → 敬酒 → 面部细节 → 头饰造型。
+          旧 demo 里每册都有的「迎宾造型」正式移除 —— 这是本轮<b>唯一一处删功能</b>，已获确认。</div>
+        </div>
+      </div>
+      <div class="q">
+        <span class="n">3</span>
+        <div class="b">
+          <div class="t">字标「予」1.045× 光学修正 —— <b>取消，全站三字等大</b></div>
+          <div class="d">canvas 实测三字墨迹高度本来就一致（予 90.1 / 时 89.9 / 妍 93.4 per 100px）。
+          已回改三份交付物：<code>brand-identity.html</code> · <code>design-v6.html</code> · <code>logo-board.html</code>；
+          字距统一由 <code>letter-spacing</code> 控制。</div>
+        </div>
+      </div>
+    </div>
+    <div class="note">
+      <b>另外一条按下面执行：</b>
+      「关于 · 预约」的 CTA 一期就是<b>展示微信号 + 二维码</b>，不做在线预约表单 —— 个人工作室的真实转化路径就是加微信。
+    </div>
+  </div>
+
+  <div class="ft">予时妍 · YUÉ ATELIER · 实施方案 v2 · 前台原生 / 后台 Vue · 现有 demo 零改动 · 2026-10-02</div>
+</div>
+</body>
+</html>

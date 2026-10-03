@@ -1,0 +1,1880 @@
+/* ============================================================
+   予时妍 · views.css — 各页版式（M1：首页壳 + Dock + 占位页）
+   版式数值取自 design-v6 第 01 屏，M4 做全 7 路由时在此扩展
+   ============================================================ */
+
+/* ---------- 顶部导航（v6 .nav :176-181 + .brandlock :413-416） ---------- */
+.topnav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 22px 0;
+}
+.topnav .brandlock {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--ink);
+}
+.topnav .brandlock svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+  display: block;
+}
+.topnav .brandlock .cn {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+}
+.topnav .brandlock .ac {
+  color: var(--accent);
+}
+.topnav .right {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.topnav .whoami {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.topnav .whoami .pt {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex: none;
+  box-shadow:
+    0 0 0 0.5px rgba(29, 25, 22, 0.18),
+    0 3px 9px rgba(30, 22, 18, 0.12);
+}
+.topnav .whoami .pt img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.topnav .whoami .n {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+.topnav .menu {
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 6px 0;
+}
+.topnav .menu span {
+  display: block;
+  height: 1px;
+  background: var(--ink);
+  width: 18px;
+  opacity: 0.65;
+}
+.topnav .menu span:nth-child(2) {
+  width: 12px;
+}
+
+/* ---------- Hero 字标区（v6 .hero :183-197） ---------- */
+.hero {
+  padding: 26px 22px 0;
+}
+.hero .lead {
+  font-size: 35px;
+  letter-spacing: 0.26em;
+  text-indent: 0.26em;
+  margin: 2px 0 0;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 200;
+  line-height: 1.25;
+}
+.hero .lead .rose {
+  color: var(--accent);
+}
+.hero .sub {
+  display: flex;
+  align-items: center;
+  margin: 14px 0 4px;
+}
+.hero .sub .cn {
+  font-size: 11.5px;
+  letter-spacing: 0.2em;
+  color: #4a423b;
+}
+.hero .enline {
+  margin: 4px 0 18px;
+}
+
+/* hero 双玻璃签：右上 Nº 01（.dtag 既有）+ 左下季节签（v6 :603） */
+.hero-shot .hero-tag {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 5;
+  --r: 999px;
+  --gb: 20px;
+  padding: 7px 13px;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: #221d19;
+}
+
+/* ---------- 个人署名条（v6 :424-435，整条可点 → /collection 作品系列；
+   顶栏 .whoami 同口径，用户 2026-10-03 拍板：署名卡进作品页而非关于页） ---------- */
+.byline {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 2px 0 0;
+  padding: 11px 13px;
+  --r: 16px;
+  --gb: 12px;
+  color: var(--ink);
+}
+.byline .pt {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex: none;
+  box-shadow:
+    0 0 0 0.5px rgba(29, 25, 22, 0.2),
+    0 6px 16px rgba(30, 22, 18, 0.14);
+}
+.byline .pt img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.byline .tx {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.byline .tx .n {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+}
+.byline .tx .en {
+  font-family: "Jost", sans-serif;
+  font-weight: 300;
+  font-size: 7.5px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.byline .seal-mini {
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+  flex: none;
+  border-color: var(--accent);
+}
+
+/* ---------- 作品系列 sec-head + row（v6 :199-208） ---------- */
+.sec-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 26px 22px 14px;
+}
+.sec-head .cd {
+  font-size: 21px;
+  display: block;
+}
+.sec-head .en {
+  display: block;
+}
+.sec-head .cnt {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.18em;
+}
+.secs {
+  padding: 0 22px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  transition: 0.5s var(--ease);
+}
+.row:hover {
+  transform: translateY(-3px);
+}
+.row img {
+  width: 52px;
+  height: 66px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex: none;
+}
+.row .m {
+  flex: 1;
+  min-width: 0;
+}
+.row .m .cd {
+  font-size: 15px;
+  letter-spacing: 0.16em;
+  display: block;
+}
+.row .m .en {
+  display: block;
+  margin-top: 2px;
+}
+.row .arw {
+  color: var(--gold);
+  font-size: 17px;
+  transition: 0.5s var(--ease);
+}
+.row:hover .arw {
+  transform: translateX(6px);
+}
+
+/* ---------- 下滑提示（v6 .cue :194-197；span=中文文案，em=内页英文沿用） ---------- */
+.cue {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 18px 22px 26px;
+  color: var(--muted);
+}
+.hero .cue {
+  margin: 18px 0 26px;
+}
+.cue i {
+  display: block;
+  width: 1px;
+  height: 26px;
+  background: var(--gold);
+  transform-origin: top;
+  animation: cuey 2.4s var(--ease-io) infinite;
+}
+@keyframes cuey {
+  0% {
+    transform: scaleY(0);
+  }
+  45% {
+    transform: scaleY(1);
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+.cue em {
+  font-style: normal;
+  font-size: 9px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
+.cue span {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+}
+
+/* ---------- 贴底玻璃 Dock（全路由常驻，H5 App 风格） ---------- */
+/* 通透度专属覆写（2026-10-02 拍板：液态玻璃不妥协，底色更透）：blur/saturate
+   反向加强补回液态感，高光层(::before)与色散描边(::after)全保留 */
+.dock {
+  position: fixed;
+  left: 14px;
+  right: 14px;
+  bottom: calc(10px + env(safe-area-inset-bottom));
+  z-index: 60;
+  --r: 22px;
+  padding: 10px 6px;
+  --gb: 28px;
+  --gs: 210%;
+  --gt: linear-gradient(
+    158deg,
+    rgba(255, 255, 255, 0.15),
+    rgba(255, 255, 255, 0.045) 54%,
+    rgba(255, 255, 255, 0.085)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+    inset 0.5px 0 0 rgba(255, 255, 255, 0.26),
+    inset -0.5px 0 0 rgba(255, 255, 255, 0.18),
+    0 16px 40px rgba(30, 22, 18, 0.1);
+}
+.dock ul {
+  display: flex;
+  list-style: none;
+}
+.dock li {
+  flex: 1;
+  text-align: center;
+}
+.dock a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  transition: opacity 0.25s var(--ease);
+}
+.dock svg {
+  width: 17px;
+  height: 17px;
+  opacity: 0.75;
+}
+.dock b {
+  font-weight: 300;
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  font-family: "Noto Serif SC", serif;
+  opacity: 0.8;
+}
+.dock a[aria-current="page"] svg {
+  opacity: 1;
+  color: var(--accent);
+}
+.dock a[aria-current="page"] b {
+  opacity: 1;
+  color: var(--accent);
+}
+
+/* 给 Dock 留出滚动余量 */
+.page {
+  padding-bottom: 96px;
+}
+
+/* ---------- 占位页（M1 → M4 期间的未实施路由） ---------- */
+.stub {
+  min-height: 72dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px 30px;
+  gap: 10px;
+}
+.stub .no {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 40px;
+  font-weight: 300;
+  color: var(--accent);
+}
+.stub h1 {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 20px;
+  letter-spacing: 0.22em;
+}
+.stub p {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+.stub .back {
+  margin-top: 14px;
+  font-size: 10.5px;
+  letter-spacing: 0.26em;
+  color: var(--accent);
+  border-bottom: 1px solid rgba(176, 112, 123, 0.4);
+  padding-bottom: 3px;
+}
+
+/* ============================================================
+   M4 · 各页版式（v6 逐行搬运；主题差异由根 class 承载）
+   ============================================================ */
+
+/* ---------- 通用小件 ---------- */
+.shot {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r);
+}
+.shot img {
+  width: 100%;
+  height: auto;           /* 比例由图片自身决定；有 width/height 属性时必须显式 auto，
+                            否则会按属性高度渲染，配合 object-fit:cover 出现裁切偏差 */
+  display: block;
+  object-fit: cover;
+}
+/* .shot 系列：容器高度由 img 自身的 aspect-ratio 撑开（full/off/moon 都靠它），
+   所以包裹层必须让高度跟着 img 走，不能 height:100%（否则父高 auto 时循环依赖） */
+.shot .rv-fig {
+  height: auto;
+}
+.hero-shot {
+  height: 318px;
+  box-shadow: 0 30px 64px rgba(30, 26, 23, 0.2);
+}
+.hero-shot img {
+  height: 100%;
+  transform: scale(1.05);
+}
+.shot .dtag {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--ink);
+  padding: 5px 11px;
+  --r: 999px;
+  --gb: 16px;
+  z-index: 5;
+}
+/* 亮图上的玻璃：加强白底，保证墨色字可读 */
+.shot .glass {
+  --gt: linear-gradient(
+    158deg,
+    rgba(255, 255, 255, 0.82),
+    rgba(255, 255, 255, 0.58) 58%,
+    rgba(255, 255, 255, 0.7)
+  );
+}
+.shot .glass::before {
+  opacity: 0.45;
+}
+
+/* ---------- 首页：走马灯 ---------- */
+.marquee {
+  overflow: hidden;
+  margin: 24px 0 0;
+  padding: 12px 0;
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+.marquee div {
+  display: flex;
+  gap: 30px;
+  white-space: nowrap;
+  animation: marq 26s linear infinite;
+}
+.marquee span {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  color: #7b7369;
+}
+.marquee span i {
+  font-style: normal;
+  color: var(--accent);
+  margin-right: 10px;
+}
+@keyframes marq {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- 内页头（02/07/10） ---------- */
+.ihead {
+  padding: 8px 22px 20px;
+}
+.ihead .back {
+  font-size: 19px;
+  color: var(--muted);
+  display: inline-block;
+}
+.ihead .cd {
+  font-size: 28px;
+  margin-top: 10px;
+  letter-spacing: 0.24em;
+}
+.ihead .cnsub {
+  font-size: 11.5px;
+  color: var(--muted);
+  letter-spacing: 0.18em;
+  margin-top: 8px;
+}
+
+/* ---------- 02 系列双封面 ---------- */
+.cover {
+  position: relative;
+  height: 284px;
+  margin: 0 22px 14px;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 26px 58px rgba(30, 26, 23, 0.2);
+  transition: 0.65s var(--ease);
+  display: block;
+}
+.cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.94);
+}
+.cover .tint {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: multiply;
+  background: rgba(120, 100, 96, 0.16);
+  transition: 0.65s var(--ease);
+}
+.cover:hover {
+  transform: translateY(-5px);
+}
+.cover .big {
+  position: absolute;
+  left: 20px;
+  top: 16px;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 200;
+  font-size: 31px;
+  color: #fff;
+  letter-spacing: 0.28em;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45);
+  z-index: 5;
+}
+.cover .vslip {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  writing-mode: vertical-rl;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.34em;
+  color: #221d19;
+  padding: 10px 7px;
+  --r: 3px;
+  --gb: 24px;
+  z-index: 5;
+}
+.cover .foot {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 16px;
+  color: #fff;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  z-index: 5;
+}
+.cover .foot .cd {
+  font-size: 15px;
+  letter-spacing: 0.2em;
+  text-shadow: 0 1px 16px rgba(0, 0, 0, 0.4);
+}
+.cover .go {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #221d19;
+  --r: 50%;
+  --gb: 18px;
+  transition: 0.55s var(--ease);
+  font-size: 15px;
+}
+.cover:hover .go {
+  transform: rotate(45deg) scale(1.06);
+}
+.cover .strips {
+  position: absolute;
+  right: 14px;
+  bottom: 62px;
+  display: flex;
+  gap: 5px;
+  z-index: 5;
+}
+.cover .strips i {
+  width: 24px;
+  height: 32px;
+  border-radius: 3px;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  opacity: 0.92;
+}
+.cmeta {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 24px;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  margin-bottom: 20px;
+}
+.cover .glass,
+.cover .glass .scrim {
+  --gt: linear-gradient(
+    158deg,
+    rgba(255, 255, 255, 0.62),
+    rgba(255, 255, 255, 0.34) 58%,
+    rgba(255, 255, 255, 0.46)
+  );
+}
+.cover .glass::before {
+  opacity: 0.35;
+}
+
+/* ---------- 03/04 册页列表 ---------- */
+.the-head {
+  padding: 6px 22px 20px;
+  position: relative;
+  z-index: 2;
+}
+.the-head .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.the-head .cd {
+  font-size: 33px;
+  margin-top: 8px;
+  letter-spacing: 0.3em;
+}
+.the-head .cd em {
+  font-style: normal;
+  color: var(--accent);
+}
+.twe .the-head .cd {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 200;
+  font-size: 34px;
+  color: var(--accent);
+}
+.twe .the-head .cd em {
+  color: var(--ink);
+}
+.seal-mini {
+  width: 32px;
+  height: 32px;
+  border-radius: 3px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 400;
+  font-size: 14px;
+  transform: rotate(-2deg);
+}
+.hrjade {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.hrjade i {
+  height: 1px;
+  background: var(--jade, var(--gold));
+  opacity: 0.7;
+  width: 26px;
+}
+.hrjade i.gold {
+  background: var(--gold);
+  width: 34px;
+  opacity: 0.9;
+}
+
+.book {
+  margin: 0 22px 28px;
+  position: relative;
+  z-index: 2;
+  display: block;
+}
+/* H5 单列下不做左右交错（桌面交错口径已废弃），所有卡片统一 22px 边距 */
+.book .ph {
+  position: relative;
+  aspect-ratio: 4/5;
+  height: auto;
+  overflow: hidden;
+  border-radius: 3px;
+}
+.book .ph img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.book .ph .veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 52%, rgba(32, 27, 23, 0.34));
+}
+.book .num {
+  position: absolute;
+  left: -4px;
+  top: -16px;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 200;
+  font-size: 44px;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: 0;
+  text-shadow: 0 2px 0 var(--paper);
+}
+.book .bmeta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+.book .bmeta .cd {
+  font-size: 13px;
+  letter-spacing: 0.2em;
+}
+.book .bmeta .en {
+  font-size: 8.5px;
+}
+.book .hair {
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  margin-top: 12px;
+  opacity: 0.8;
+}
+/* 西式主题：拱形封面 + 罗马斜体序号 */
+.twe .book .ph {
+  aspect-ratio: 4/5;
+  height: auto;
+  border-radius: 170px 170px 20px 20px;
+  box-shadow: 0 26px 58px rgba(120, 80, 88, 0.18);
+}
+.twe .book .num {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--accent);
+  font-size: 46px;
+  left: 8px;
+  top: -18px;
+}
+/* 新中式主题：双线金框 */
+.dframe {
+  border: 1px solid var(--gold);
+  box-shadow:
+    inset 0 0 0 5px var(--paper),
+    inset 0 0 0 6px rgba(192, 164, 111, 0.55),
+    0 26px 56px rgba(32, 27, 23, 0.2);
+}
+
+/* ---------- 05/06 册详情 ---------- */
+.ab-hero {
+  position: relative;
+  height: 396px;
+  overflow: hidden;
+}
+.ab-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ab-hero .fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.22),
+    transparent 42%,
+    rgba(0, 0, 0, 0.58)
+  );
+}
+.ab-hero .t {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 22px;
+  color: #fff;
+}
+.ab-hero .t .cd {
+  font-size: 23px;
+  letter-spacing: 0.26em;
+}
+.ab-hero .t .en {
+  color: rgba(255, 255, 255, 0.82);
+  margin-top: 6px;
+}
+.ab-hero .t .fl {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.ab-hero .t .fl a {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 5px 9px;
+  --r: 999px;
+  --gb: 16px;
+  color: #231e1a;
+}
+.ab-hero .glass {
+  --gt: linear-gradient(
+    158deg,
+    rgba(255, 255, 255, 0.82),
+    rgba(255, 255, 255, 0.58) 58%,
+    rgba(255, 255, 255, 0.7)
+  );
+}
+.ab-hero .glass::before {
+  opacity: 0.45;
+}
+
+.chapter {
+  padding: 26px 22px 30px;
+  position: relative;
+  z-index: 2;
+}
+.chapter .crow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.chapter .cnum {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+}
+.twe .chapter .cnum {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--accent);
+}
+.chapter .crow .bar {
+  height: 1px;
+  width: 22px;
+  background: var(--jade, var(--gold));
+  opacity: 0.75;
+}
+.twe .chapter .crow .bar {
+  background: var(--gold);
+  opacity: 0.9;
+}
+.chapter .crow .en {
+  font-size: 8.5px;
+}
+.chapter .cd {
+  font-size: 22px;
+  /* margin-bottom 6→22：头→desc 的实测间距 = margin-bottom − 4（desc 的
+     line-height:1.9 吃掉上半部留白）。6px 时实测仅 2px，几乎与 desc 贴死。
+     22px ⇒ 实测 18px，与 secmark 段对齐（见.secmark）。 */
+  margin: 8px 0 22px;
+  letter-spacing: 0.24em;
+}
+.chapter .desc {
+  font-size: 11.5px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  line-height: 1.9;
+  margin-bottom: 15px;
+  max-width: 24em;
+}
+.chapter [id] {
+  scroll-margin-top: 16px;
+}
+
+.shot.full img {
+  aspect-ratio: 3/4;
+  height: auto;
+}
+.shot.duo {
+  display: flex;
+  gap: 11px;
+}
+/* 同一章节内多图平铺（full + duo 行）时的垂直节奏，与 duo 横向 gap 同拍 */
+.chapter .shot + .shot {
+  margin-top: 11px;
+}
+/* duo 行：flex 分配 / 圆角 / 阴影都改由 .rv-img 承担 ——
+   图已包进 .rv-fig（clip-path 会连 img 的 box-shadow 一起裁掉，留在 img 上就看不见了） */
+.shot.duo > .rv-fig {
+  flex: 1;
+  min-width: 0;
+  aspect-ratio: 3/4;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(32, 27, 23, 0.16);
+}
+.shot.duo > .rv-fig > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.shot.off {
+  width: 66%;
+  margin-left: 16%;
+}
+.shot.off img {
+  aspect-ratio: 3/4;
+  height: auto;
+}
+.shot.moon {
+  border-radius: 50% 50% 4px 4px/32% 32% 4px 4px;
+  width: 80%;
+  margin: 0 auto;
+  box-shadow: 0 24px 58px rgba(32, 27, 23, 0.22);
+}
+.shot.moon img {
+  aspect-ratio: 4/5;
+  height: auto;
+}
+.twe .shot.moon {
+  border-radius: 50%;
+  width: 74%;
+  margin: 0 auto;
+  box-shadow: 0 26px 62px rgba(192, 137, 148, 0.26);
+}
+.shot .cap {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  font-size: 9px;
+  letter-spacing: 0.26em;
+  color: #221d19;
+  padding: 5px 11px;
+  --r: 999px;
+  --gb: 16px;
+  z-index: 5;
+}
+
+.ab-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 22px;
+  padding: 20px 0;
+  border-top: 1px solid rgba(32, 27, 23, 0.1);
+}
+.ab-foot .cd {
+  font-size: 16px;
+  letter-spacing: 0.22em;
+}
+.ab-foot .arw {
+  color: var(--accent);
+  font-size: 18px;
+}
+
+/* ---------- 多图布局（face / headdress 1–N 张，v6 第 11 屏） ---------- */
+/* 章节落款头（v6 :470-479）：大序号 + 段名 + 右端竖排三字印（全站唯一繁体） */
+.secmark {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  /* margin-bottom 14→0：段头→desc 的实测间距同样是「margin-bottom + 18」，
+     14px 时实测 32px，明显比 cd 段松散。归 0 后实测 18px，与 .cd 段对齐。
+     那多出来的 18px 来自 align-items:flex-end —— 右侧竖排落款 .sealv
+     （高 74px）比左侧 .tx（高 43px）高，把块盒撑到 93px，.t 底下本就空18px。
+     所以 margin-bottom:0 时「距视觉锚点 .t」正好 18px，语义正确；
+     负值会破坏「落款与段名底部对齐」这一既有设计，不要动。 */
+  margin: 30px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid rgba(29, 25, 22, 0.1);
+}
+.secmark .l {
+  display: flex;
+  align-items: baseline;
+  gap: 11px;
+}
+.secmark .tx {
+  display: flex;
+  flex-direction: column;
+}
+.secmark .no {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 200;
+  font-size: 26px;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+}
+.secmark .t {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 16px;
+  letter-spacing: 0.22em;
+}
+.secmark .en {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 0.32em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-top: 5px;
+}
+.secmark .sealv {
+  flex: none;
+}
+/* mg 体系：行填充拼版（竖图两两一行、横图独占一行；不满行只在末尾，尾行可留白） */
+.mg {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 0 22px;
+}
+.mg figure {
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #ebe4de;
+  aspect-ratio: 3/4;
+}
+.mg figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* aspect-ratio 容器：包裹层需填满固定比例的框（比例由 figure 提供，不由图片决定） */
+.mg figure > .rv-fig {
+  height: 100%;
+}
+.mrow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+.mrow.land {
+  grid-template-columns: 1fr;
+}
+.mrow.land figure {
+  aspect-ratio: 3/2;
+}
+.mrow.tail {
+  grid-template-columns: 1fr;
+}
+.mrow.tail figure {
+  width: 50%;
+}
+.mstrip {
+  display: flex;
+  gap: 9px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 0 22px 8px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.mstrip::-webkit-scrollbar {
+  height: 0;
+}
+.mstrip figure {
+  margin: 0;
+  flex: 0 0 74%;
+  aspect-ratio: 3/4;
+  border-radius: 10px;
+  overflow: hidden;
+  scroll-snap-align: start;
+  background: #ebe4de;
+}
+.mstrip figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* 同 .mg：固定比例框，包裹层填满 */
+.mstrip figure > .rv-fig {
+  height: 100%;
+}
+.mstrip figure:last-child {
+  flex: 0 0 46%;
+}
+.mstrip .morecap {
+  flex: 0 0 74%;
+  aspect-ratio: 3/4;
+  border-radius: 10px;
+  border: 1px dashed rgba(29, 25, 22, 0.22);
+  display: grid;
+  place-items: center;
+  scroll-snap-align: start;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-align: center;
+}
+.mhint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px 22px 0;
+}
+.mhint .d {
+  display: flex;
+  gap: 4px;
+}
+.mhint .d i {
+  width: 12px;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(29, 25, 22, 0.16);
+}
+.mhint .d i.on {
+  background: var(--accent);
+  width: 20px;
+}
+.mhint .n {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 8.5px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+/* ---------- 07 平铺图集 ---------- */
+.ggrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 11px;
+  padding: 0 22px;
+}
+.ggrid figure {
+  position: relative;
+  margin: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 16px 34px rgba(30, 26, 23, 0.13);
+}
+.ggrid figure.wide {
+  grid-column: 1/-1;
+}
+.r34 {
+  aspect-ratio: 3/4;
+}
+.r45 {
+  aspect-ratio: 4/5;
+}
+.r32 {
+  aspect-ratio: 3/2;
+}
+.fit {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* .fit 撑满固定比例框（r32/r34/r45），包裹层需填满 */
+.ggrid figure > .rv-fig {
+  height: 100%;
+}
+
+/* ---------- 10 关于 ---------- */
+.ab {
+  padding: 0 22px;
+  position: relative;
+  z-index: 2;
+}
+.ab .portrait {
+  width: 172px;
+  height: 172px;
+  margin: 4px auto 0;
+  border-radius: 50%;
+  position: relative;
+}
+.ab .portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 26px 56px rgba(30, 26, 23, 0.22);
+}
+.ab .portrait::after {
+  content: "";
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  border: 1px solid rgba(194, 168, 116, 0.5);
+  animation: spin 22s linear infinite;
+}
+.ab .portrait::before {
+  content: "";
+  position: absolute;
+  inset: -27px;
+  border-radius: 50%;
+  border: 1px dashed rgba(194, 168, 116, 0.3);
+  animation: spin 34s linear infinite reverse;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.ab .name {
+  text-align: center;
+  font-size: 23px;
+  margin-top: 20px;
+  letter-spacing: 0.3em;
+}
+.ab .role {
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  color: var(--muted);
+  margin-top: 8px;
+}
+.ab .bio {
+  text-align: center;
+  font-size: 12px;
+  color: #4b423a;
+  max-width: 23em;
+  margin: 16px auto 0;
+  line-height: 2.1;
+  letter-spacing: 0.04em;
+}
+.stats {
+  display: flex;
+  justify-content: space-between;
+  margin: 22px 0;
+  padding: 16px 4px;
+  --r: 16px;
+  --gb: 14px;
+}
+.stats div {
+  text-align: center;
+  flex: 1;
+}
+.stats b {
+  display: block;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 200;
+  font-size: 23px;
+  letter-spacing: 0.06em;
+}
+.stats span {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+}
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.steps span {
+  padding: 7px 15px;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: #3c342d;
+  --r: 999px;
+  --gb: 12px;
+}
+.brandblk {
+  text-align: center;
+  margin: 0 0 22px;
+}
+.brandblk .lgmark {
+  display: block;
+  color: var(--ink);
+}
+.brandblk .lgmark svg {
+  display: block;
+  width: 206px;
+  height: auto;
+  margin: 0 auto;
+}
+.brandblk .sub2 {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  margin-top: 14px;
+}
+.brandblk .sub2en {
+  font-family: "Jost", sans-serif;
+  font-weight: 300;
+  font-size: 7.5px;
+  letter-spacing: 0.36em;
+  text-indent: 0.36em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.brandblk .hairline {
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.85;
+  margin: 0 auto 11px;
+}
+.sealv {
+  width: 30px;
+  height: 74px;
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.06;
+  color: var(--accent);
+}
+.qrb {
+  padding: 20px;
+  text-align: center;
+  --r: 18px;
+  --gb: 18px;
+}
+.qrb .qb {
+  width: 126px;
+  height: 126px;
+  margin: 0 auto 14px;
+  border: 1px dashed rgba(194, 168, 116, 0.7);
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: #8a6c2f;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+}
+.qrb .qc {
+  width: 126px;
+  height: 126px;
+  margin: 0 auto 14px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+.qrb p {
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+}
+.cta {
+  margin-top: 16px;
+  width: 100%;
+  height: 52px;
+  --r: 16px;
+  --gb: 16px;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.34em;
+  text-indent: 0.34em;
+  color: #221d19;
+}
+.cta em {
+  font-style: normal;
+  font-size: 8.5px;
+  letter-spacing: 0.3em;
+  color: rgba(34, 29, 25, 0.5);
+  margin-left: 8px;
+  font-family: "Jost", sans-serif;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+ * V7 —— 更多时刻系列（design-v7 屏1/2/3/4）
+ *   屏1 collection「更多时刻」row 加册数徽标
+ *   屏2 styleList 热度行
+ *   屏3 flat 册：矮 hero + 热度条 + 2 列瀑布流
+ *   屏4 互动：悬浮 dock + 分享降级面板
+ * ============================================================ */
+
+/* 屏1 · 更多时刻 row：描述行（稿 mcard .n「N 册 · 轻纱与微醺的光」式） */
+.row .m .n {
+  display: block;
+  margin-top: 5px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+/* 屏2 · 列表卡热度行：线性 SVG + mono 数字（稿 stat-line 口径） */
+.book .heat {
+  display: flex;
+  gap: 14px;
+  margin-top: 8px;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.book .heat span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.book .heat svg {
+  width: 12px;
+  height: 12px;
+  opacity: 0.75;
+}
+
+/* 屏2 · ms 主题封面：稿「圆角矩形（不沿用西式拱形/中式金框）」——
+   圆角 16px；overflow 放开让序号骑边完整可见（西式/中式不受影响） */
+.ms .book .ph {
+  overflow: visible;
+  border-radius: 16px;
+}
+.ms .book .ph img,
+.ms .book .ph .veil {
+  border-radius: 16px;
+}
+.ms .book .num {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 44px;
+  color: #c08994;
+  left: 10px;
+  top: -14px;
+  text-shadow: none;
+}
+
+/* 屏3 · flat 册 */
+.ab-hero.short {
+  height: 250px;
+}
+/* 顶部热度行已退役（数据并入文末互动卡）：hero 与图墙间保留一段呼吸位 */
+.ab-hero.short + .wfall,
+.ab-hero.short + .wland {
+  margin-top: 12px;
+}
+
+/* 瀑布流（2026-10-03 重做）：JS 贪心双列 + 横图全宽行，消除 columns 断流留白 */
+.wfall {
+  display: flex;
+  gap: 9px;
+  padding: 0 22px;
+}
+.wfall .col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.wfall figure,
+.wland figure {
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #ebe4de;
+}
+.wland {
+  padding: 0 22px;
+  margin: 9px 0;
+}
+.wfall figure img,
+.wland figure img {
+  width: 100%;
+  height: auto;          /* 比例必须由图片自身决定，绝不锁高 */
+  object-fit: cover;      /* ⛔ 默认 fill 会强行拉伸变形；这里显式兜住 */
+  display: block;
+}
+/* 无 aspect-ratio 的容器：包裹层不定高，靠 img 的 width 属性 + height:auto 撑开。
+   配width/height 属性做解码前占位 —— 占位比例来自后端 w/h，不影响实际渲染比例。 */
+.wfall figure > .rv-fig,
+.wland figure > .rv-fig {
+  height: auto;
+}
+/* 图说胶囊（稿 .masonry .cap：深玻璃底白字，左下角） */
+.wfall .cap {
+  position: absolute;
+  left: 9px;
+  bottom: 9px;
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+  color: #fff;
+  background: rgba(22, 18, 15, 0.34);
+  padding: 4px 9px;
+  border-radius: 999px;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+/* 屏4 · 文末互动区（方案一拍板 2026-10-03：素字互动行，去卡去玻璃——
+ * Dock 是全站唯一的 Bar，互动以编辑排版页脚收尾，与 ab-foot 同语言。
+ * 同日修订：转发退役，单行排布 —— 浏览居左、点赞居右） */
+.actrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 26px 22px 0;
+  padding: 12px 0 14px;
+  border-top: 1px solid rgba(42, 35, 23, 0.1);
+}
+.actrow .vrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+.actrow .vrow svg {
+  width: 13px;
+  height: 13px;
+  opacity: 0.6;
+  flex: none;
+}
+.actrow .vrow b {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 500;
+  font-size: 13px;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+}
+.actrow .op {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+}
+.actrow .op svg {
+  width: 15px;
+  height: 15px;
+  opacity: 0.7;
+  transition: 0.3s var(--ease);
+}
+.actrow .op .n {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+}
+.actrow .op.like.on svg {
+  opacity: 1;
+  fill: #d96d5b;
+  stroke: #d96d5b;
+}
+.actrow .op.pop svg {
+  animation: likepop 0.45s var(--ease-io);
+}
+@keyframes likepop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/* 「+1」上浮气泡（点赞成功一次性播放，播完自摘；落在点赞文字右侧） */
+.actrow .plusone {
+  position: absolute;
+  left: calc(100% + 4px);
+  top: -6px;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 10px;
+  color: #d96d5b;
+  pointer-events: none;
+  animation: popup 0.9s var(--ease) forwards;
+}
+@keyframes popup {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+
+/* ============================================================
+   首页改版（2026-10-03）：精选瀑布流（A 静观）+ 视频画框（A 式）
+   ============================================================ */
+
+/* ---------- 精选瀑布流：2 列错落，纯图零文字 ----------
+   列分配由 home.js 按累计高度贪心完成；rv-fig 复用册页揭示动效。 */
+.wf {
+  display: flex;
+  gap: 10px;
+  padding: 0 22px;
+}
+.wf-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wf-it {
+  margin: 0;
+}
+.wf-it .rv-fig {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px -16px rgba(70, 54, 40, 0.42);
+}
+.wf-it .rv-fig > img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ---------- 视频画框（美术馆挂展式）----------
+   纸底衬垫 + 外道淡金描边 + 内道金线 + 四角饰；竖幅 9:16。 */
+.vsec {
+  padding: 0 0 36px;
+}
+.vframe {
+  position: relative;
+  margin: 0 30px;
+  padding: 12px;
+  background: linear-gradient(180deg, #fffdf9, #faf4ec);
+  border: 1px solid rgba(192, 174, 132, 0.55);
+  border-radius: 4px;
+  box-shadow: 0 18px 44px -24px rgba(70, 54, 40, 0.5);
+}
+.vframe::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(192, 174, 132, 0.7);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 3;
+}
+.corner {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  z-index: 4;
+}
+.corner.tl { top: -5px; left: -5px; border-top: 2px solid var(--gold); border-left: 2px solid var(--gold); }
+.corner.tr { top: -5px; right: -5px; border-top: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+.corner.bl { bottom: -5px; left: -5px; border-bottom: 2px solid var(--gold); border-left: 2px solid var(--gold); }
+.corner.br { bottom: -5px; right: -5px; border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+.vinner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+  /* 默认竖幅 9:16；loadedmetadata 后由 home.js 按视频真实比例覆写（clamp 9:16～16:9） */
+  aspect-ratio: 9 / 16;
+  background: #17130f;
+}
+.vinner video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 播放环（玻璃圆环 + 金色描边三角）；播放中淡出，画面收边呼吸 */
+.vplay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 246, 228, 0.55);
+  background: rgba(23, 19, 15, 0.38);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: #fff6e4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.45s var(--ease), transform 0.45s var(--ease);
+  z-index: 2;
+}
+.vplay svg {
+  width: 14px;
+  height: 14px;
+  margin-left: 2px;
+}
+.vframe.playing .vplay {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(1.18);
+}
+
+/* 控制行：时间码居中 + 全屏钮（左侧 30px 占位与全屏钮等宽，保时间码光学居中） */
+.vctl {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 38px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+.vspacer {
+  flex: none;
+  width: 30px;
+  height: 30px;
+}
+.vskip {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 246, 228, 0.4);
+  background: rgba(23, 19, 15, 0.34);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #fff6e4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+.vskip svg {
+  width: 13px;
+  height: 13px;
+  opacity: 0.9;
+}
+.vtime {
+  flex: 1;
+  text-align: center;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: rgba(255, 246, 228, 0.78);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+  white-space: nowrap;
+}
+
+/* 金色进度线：2px 视觉线 + 24px 透明命中区（可点可拖，touch-action 关掉浏览器手势） */
+.vbar {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 10px;
+  height: 24px;
+  cursor: pointer;
+  touch-action: none;
+  z-index: 2;
+}
+.vbar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(255, 246, 228, 0.22);
+}
+.vbar .vfill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* 全屏态（安卓/桌面容器 Fullscreen API）：撑满屏幕、解除比例 clamp，
+ * 视频改 contain 完整呈现不裁切；自绘控制行/进度线随容器进入全屏照常可用。
+ * iPhone Safari 走原生播放器（webkitEnterFullscreen），不经过这里。 */
+.vinner:fullscreen,
+.vinner:-webkit-full-screen {
+  border-radius: 0;
+  aspect-ratio: auto;
+  width: 100%;
+  height: 100%;
+}
+.vinner:fullscreen video,
+.vinner:-webkit-full-screen video {
+  object-fit: contain;
+}
+
+/* 占位态：深墨底 + 金色符号 + COMING SOON */
+.vph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(194, 168, 116, 0.14), rgba(194, 168, 116, 0) 55%),
+    linear-gradient(180deg, #221c16, #17130f);
+}
+.vph svg {
+  width: 34px;
+  height: 34px;
+  color: var(--gold);
+  opacity: 0.9;
+}
+.vph .ph-cn {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.4em;
+  text-indent: 0.4em;
+  color: #f3e9d8;
+}
+.vph .ph-en {
+  font-size: 9px;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  color: rgba(243, 233, 216, 0.45);
+}

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>予时妍 · V7 设计稿 —— 新系列与互动体系</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400&family=Noto+Serif+SC:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+/* ============ 文档外壳（同 v6） ============ */
+:root{
+  --shell-bg:#EFEDE9; --shell-panel:#FFFFFF; --shell-ink:#161412;
+  --shell-muted:#8B857C; --shell-line:rgba(22,20,18,.10);
+  --ease:cubic-bezier(.22,1,.28,1);
+  --ease-io:cubic-bezier(.66,0,.24,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--shell-bg);color:var(--shell-ink);
+  font-family:"Jost","Helvetica Neue",Arial,sans-serif;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1720px;margin:0 auto;padding:32px 24px 72px}
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  padding-bottom:20px;border-bottom:1px solid var(--shell-line)}
+.top h1{font-family:"Noto Serif SC",serif;font-weight:300;font-size:27px;letter-spacing:.16em}
+.top .sub{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--shell-muted)}
+.legend{font-size:12.5px;color:var(--shell-muted);max-width:64em;margin:16px 0 0;letter-spacing:.03em}
+.legend b{color:var(--shell-ink);font-weight:500}
+
+/* ============ 手机外壳（同 v6） ============ */
+.grid{display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap;margin-top:30px}
+.cell{display:flex;flex-direction:column;gap:12px}
+.cell .cap{font-size:11px;letter-spacing:.2em;color:var(--shell-muted);text-align:center}
+.cell .cap b{display:block;color:var(--shell-ink);font-family:"Noto Serif SC",serif;font-weight:300;
+  font-size:14px;letter-spacing:.14em;margin-bottom:2px}
+.phone{width:390px;height:844px;flex:none;border-radius:48px;background:#12100E;padding:12px;
+  box-shadow:0 30px 80px rgba(22,20,18,.28),0 0 0 1px rgba(255,255,255,.32) inset;position:relative}
+.screen{width:100%;height:100%;border-radius:38px;overflow:hidden auto;position:relative;background:#F7F4F1;isolation:isolate;scrollbar-width:none}
+.screen::-webkit-scrollbar{width:0;height:0}
+.notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:104px;height:26px;
+  background:#12100E;border-radius:0 0 14px 14px;z-index:70}
+.home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:118px;height:5px;
+  border-radius:3px;background:rgba(0,0,0,.16);z-index:80}
+.page-body{padding:52px 0 26px;position:relative;z-index:2}
+
+/* ============ 玻璃系统（同 v6 三档） ============ */
+.glass{
+  --gb:22px;--gs:180%;
+  --gt:linear-gradient(158deg,rgba(255,255,255,.30),rgba(255,255,255,.10) 54%,rgba(255,255,255,.16));
+  position:relative;isolation:isolate;border-radius:var(--r,18px);
+  background:var(--gt);
+  -webkit-backdrop-filter:blur(var(--gb)) saturate(var(--gs)) brightness(1.04);
+  backdrop-filter:blur(var(--gb)) saturate(var(--gs)) brightness(1.04);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72),inset 0 -1px 0 rgba(255,255,255,.14),
+    inset .5px 0 0 rgba(255,255,255,.30),inset -.5px 0 0 rgba(255,255,255,.22),
+    0 16px 40px rgba(30,22,18,.13);
+}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:2;
+  background:radial-gradient(240px 200px at var(--mx,42%) var(--my,26%),rgba(255,255,255,.46),transparent 68%),
+    linear-gradient(118deg,rgba(255,255,255,.48),rgba(255,255,255,.05) 36%,transparent 60%);
+  mix-blend-mode:screen;opacity:.92}
+.glass::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:3;
+  box-shadow:inset 1px 0 0 rgba(255,205,225,.42),inset -1px 0 0 rgba(190,225,255,.34),inset 0 -1px 0 rgba(255,255,255,.20)}
+.glass.light{--gb:11px;--gs:150%;
+  --gt:linear-gradient(158deg,rgba(255,255,255,.22),rgba(255,255,255,.08) 60%,rgba(255,255,255,.12))}
+.glass>*{position:relative;z-index:4}
+
+/* ============ 通用 tokens（页面内容） ============ */
+.phone{--paper:#F7F4F1;--ink:#231E1A;--muted:#8B857C;--gold:#B99A62;--rose:#C08994;--coral:#C96F6F}
+.cd{font-family:"Noto Serif SC",serif;font-weight:300}
+.en{font-family:"Jost",sans-serif;letter-spacing:.3em;text-transform:uppercase;font-size:9px;color:var(--muted)}
+a{text-decoration:none;color:inherit}
+
+/* ---------- 屏头 ihead ---------- */
+.ihead{padding:16px 22px 20px}
+.ihead .row{display:flex;align-items:center;justify-content:space-between}
+.ihead .back{font-size:19px;color:var(--muted)}
+.ihead .cd{font-size:24px;letter-spacing:.26em;margin-top:10px}
+.ihead .cnsub{font-size:11px;letter-spacing:.2em;color:var(--muted);margin-top:6px}
+.ihead .hr{display:flex;align-items:center;gap:8px;margin-top:12px}
+.ihead .hr i{height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+.ihead .hr i:first-child{width:26px;background:var(--gold)}
+.ihead .hr i:last-child{flex:1;opacity:.5}
+
+/* ---------- 屏 1 · 作品系列 V7 ---------- */
+.duo2{display:flex;gap:12px;padding:0 22px}
+.mini-cover{flex:1;position:relative;border-radius:14px;overflow:hidden;aspect-ratio:3/4.6;
+  box-shadow:0 22px 48px rgba(32,27,23,.18)}
+.mini-cover img{width:100%;height:100%;object-fit:cover}
+.mini-cover .veil{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(32,27,23,.42))}
+.mini-cover .big{position:absolute;left:14px;bottom:14px;color:#fff;font-family:"Noto Serif SC",serif;
+  font-weight:300;font-size:17px;letter-spacing:.22em}
+.mini-cover .cnt{position:absolute;left:14px;bottom:-2px;transform:translateY(100%);}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;padding:30px 22px 12px}
+.sec-head .t{font-family:"Noto Serif SC",serif;font-weight:300;font-size:15px;letter-spacing:.24em}
+.sec-head .e{font-size:8.5px}
+.mrow2{display:flex;flex-direction:column;gap:11px;padding:0 22px}
+.mcard{display:flex;align-items:center;gap:13px;padding:12px 14px;border-radius:18px}
+.mcard .th{width:56px;height:70px;border-radius:10px;overflow:hidden;flex:none;
+  box-shadow:0 10px 22px rgba(32,27,23,.16)}
+.mcard .th img{width:100%;height:100%;object-fit:cover}
+.mcard .tx{flex:1;min-width:0}
+.mcard .tx .t{font-family:"Noto Serif SC",serif;font-weight:300;font-size:16.5px;letter-spacing:.18em}
+.mcard .tx .e{display:block;margin-top:3px;font-size:8px}
+.mcard .tx .n{display:block;margin-top:5px;font-size:10px;letter-spacing:.14em;color:var(--muted)}
+.mcard .arw{color:var(--muted);font-size:15px}
+
+/* ---------- 屏 2 · 新系列列表页 ---------- */
+.book2{margin:0 22px 26px;display:block}
+.book2 .ph{position:relative;aspect-ratio:4/5;border-radius:16px;overflow:hidden;
+  box-shadow:0 26px 56px rgba(32,27,23,.18)}
+.book2 .ph img{width:100%;height:100%;object-fit:cover}
+.book2 .ph .veil{position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(32,27,23,.36))}
+.book2 .ph .num{position:absolute;left:10px;top:-14px;font-family:"Cormorant Garamond",serif;font-style:italic;
+  font-weight:300;font-size:44px;color:var(--rose);line-height:1}
+.book2 .bmeta{display:flex;align-items:baseline;justify-content:space-between;margin-top:13px}
+.book2 .bmeta .cd{font-size:13px;letter-spacing:.18em}
+.stat-line{display:flex;gap:14px;margin-top:8px;align-items:center}
+.stat-line span{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--muted);letter-spacing:.08em;
+  font-family:ui-monospace,Menlo,monospace}
+.stat-line svg{width:12px;height:12px;opacity:.75}
+
+/* ---------- 屏 3/4 · 瀑布流详情 ---------- */
+.fhero{position:relative;height:250px;overflow:hidden}
+.fhero img{width:100%;height:100%;object-fit:cover}
+.fhero .fade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.20),transparent 44%,rgba(0,0,0,.52))}
+.fhero .t{position:absolute;left:22px;right:22px;bottom:18px;color:#fff}
+.fhero .t .cd{font-size:22px;letter-spacing:.24em}
+.fhero .t .e{color:rgba(255,255,255,.85);margin-top:4px;display:block}
+.statbar{margin:14px 22px 0;border-radius:16px;padding:11px 16px;display:flex;align-items:center;justify-content:space-between}
+.statbar .s{display:flex;align-items:center;gap:7px;font-family:ui-monospace,Menlo,monospace;font-size:11px;
+  color:var(--ink);letter-spacing:.05em}
+.statbar .s svg{width:14px;height:14px;opacity:.62}
+.statbar .s em{font-style:normal;font-size:8.5px;letter-spacing:.22em;color:var(--muted);font-family:"Jost",sans-serif}
+.masonry{columns:2;column-gap:9px;padding:14px 22px 90px}
+.masonry figure{break-inside:avoid;margin:0 0 9px;border-radius:11px;overflow:hidden;position:relative;
+  box-shadow:0 14px 30px rgba(32,27,23,.13)}
+.masonry figure img{width:100%;display:block}
+.masonry figure.wide{column-span:all;border-radius:12px}
+.masonry .cap{position:absolute;left:9px;bottom:9px;font-size:8.5px;letter-spacing:.2em;color:#fff;
+  background:rgba(22,18,15,.34);padding:4px 9px;border-radius:999px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+
+/* 悬浮互动 dock */
+.fdock{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:60;
+  display:flex;align-items:center;gap:6px;border-radius:999px;padding:8px}
+.fdock .btn{display:flex;align-items:center;gap:7px;border-radius:999px;padding:9px 16px;
+  font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--ink);transition:.3s}
+.fdock .btn svg{width:15px;height:15px;opacity:.7}
+.fdock .btn.liked{color:var(--coral);font-weight:600}
+.fdock .btn.liked svg{opacity:1;fill:var(--coral)}
+.fdock .pop{position:absolute;right:-6px;top:-30px;font-size:10px;color:var(--coral);
+  font-family:ui-monospace,Menlo,monospace;animation:popup 1.4s var(--ease) infinite}
+@keyframes popup{0%{opacity:0;transform:translateY(6px)}30%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-10px)}}
+
+/* 分享弹层 */
+.sheet-mask{position:absolute;inset:0;background:rgba(22,18,15,.36);z-index:75;
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.sheet{position:absolute;left:10px;right:10px;bottom:14px;z-index:76;border-radius:24px;padding:18px 18px 20px}
+.sheet .hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
+.sheet .hd .cd{font-size:15px;letter-spacing:.2em}
+.sheet .opts{display:flex;gap:10px}
+.sheet .opt{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;
+  border-radius:14px;padding:13px 6px 11px}
+.sheet .opt .ic{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(185,154,98,.14);color:var(--gold);font-size:16px}
+.sheet .opt .ic.wx{background:rgba(96,168,123,.16);color:#5FA77B}
+.sheet .opt span.lb{font-size:10px;letter-spacing:.14em;color:var(--ink)}
+
+/* 标注旗 */
+.flag{position:absolute;z-index:90;display:flex;align-items:flex-start;gap:6px;max-width:170px}
+.flag .pin{width:16px;height:16px;flex:none;border-radius:50%;background:#0B6BD8;color:#fff;
+  font-size:9.5px;display:grid;place-items:center;font-family:ui-monospace,Menlo,monospace;margin-top:2px}
+.flag .tx{background:#0B6BD8;color:#fff;font-size:10.5px;line-height:1.45;padding:5px 9px;border-radius:8px;
+  letter-spacing:.04em;box-shadow:0 6px 18px rgba(11,107,216,.35)}
+.flag .tx b{font-weight:600}
+
+/* ---------- 页尾工程说明 ---------- */
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:18px;margin-top:44px}
+.note{background:#fff;border-radius:16px;padding:22px 24px;box-shadow:0 10px 30px rgba(22,20,18,.07)}
+.note h3{font-family:"Noto Serif SC",serif;font-weight:400;font-size:15px;letter-spacing:.18em;margin-bottom:12px;
+  padding-bottom:10px;border-bottom:1px solid var(--shell-line)}
+.note h3 i{font-style:normal;font-size:9px;letter-spacing:.28em;color:var(--shell-muted);display:block;margin-top:3px}
+.note ul{list-style:none}
+.note li{font-size:12.5px;color:#3A352F;padding:5px 0 5px 16px;position:relative;line-height:1.55}
+.note li::before{content:"";position:absolute;left:0;top:12px;width:6px;height:1.5px;background:var(--gold)}
+.note li b{font-weight:500}
+.note code{font-family:ui-monospace,Menlo,monospace;font-size:11px;background:rgba(185,154,98,.12);
+  padding:1px 6px;border-radius:5px;color:#7A5F2E}
+.note .ask{margin-top:10px;padding:10px 12px;border-radius:10px;background:rgba(192,111,111,.08);
+  border-left:3px solid var(--coral);font-size:12px;color:#7A4A4A;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>予时妍 · V7 —— 新系列与互动体系</h1>
+      <div class="sub">YUÉ ATELIER · DESIGN V7 · FOR REVIEW ONLY</div>
+    </div>
+    <div class="legend">
+      本稿只做设计，未动任何工程代码。覆盖四件事：<b>① 订婚宴跟妆 / 孕妈照 / 亲子照三个新系列</b>（不走六段结构，相册详情即瀑布流）；
+      <b>② 作品系列页 1+3 扩展</b>；<b>③ 全站相册浏览 / 点赞 / 转发计数</b>；<b>④ 点赞与分享互动</b>。
+      婚礼双封面体系、六段叙事、暗房查看器均<b>保持现状</b>。
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- ============ 屏 1 · 作品系列 V7 ============ -->
+    <div class="cell">
+      <div class="phone">
+        <div class="notch"></div><div class="home-ind"></div>
+        <div class="screen">
+          <div class="page-body">
+            <header class="ihead">
+              <div class="row"><a class="back" href="#">←</a><span class="en">Collections</span></div>
+              <div class="cd">选择你的美</div>
+              <div class="cnsub">每种时刻 · 各成一册</div>
+              <div class="hr"><i></i><i></i></div>
+              <div class="en" style="margin-top:8px;font-size:8.5px">Five Languages of Beauty</div>
+            </header>
+
+            <!-- 婚礼双封面：原样保留，压缩示意 -->
+            <div class="duo2">
+              <div class="mini-cover">
+                <img src="site/img/w-a.png" alt="" />
+                <span class="veil"></span>
+                <span class="big">西式浪漫</span>
+              </div>
+              <div class="mini-cover">
+                <img src="site/img/nc-b.png" alt="" />
+                <span class="veil"></span>
+                <span class="big">新中式</span>
+              </div>
+            </div>
+            <div class="cmeta2" style="display:flex;justify-content:space-between;padding:8px 26px 0">
+              <span class="en" style="font-size:8px">Wedding · 6 Albums</span>
+              <span class="en" style="font-size:8px">共 6 册</span>
+            </div>
+
+            <div class="sec-head">
+              <span class="t">更多时刻</span>
+              <span class="e">MORE MOMENTS</span>
+            </div>
+            <div class="mrow2">
+              <a class="mcard glass light" href="#">
+                <span class="th"><img src="site/img/w-b.png" alt="" /></span>
+                <span class="tx">
+                  <span class="t">订婚宴跟妆</span>
+                  <span class="e">Engagement Rouge</span>
+                  <span class="n">2 册 · 轻纱与微醺的光</span>
+                </span>
+                <span class="arw">→</span>
+              </a>
+              <a class="mcard glass light" href="#">
+                <span class="th"><img src="site/img/portrait.png" alt="" /></span>
+                <span class="tx">
+                  <span class="t">孕妈照</span>
+                  <span class="e">Maternity Soft</span>
+                  <span class="n">2 册 · 柔光里的期待</span>
+                </span>
+                <span class="arw">→</span>
+              </a>
+              <a class="mcard glass light" href="#">
+                <span class="th"><img src="site/img/family.png" alt="" /></span>
+                <span class="tx">
+                  <span class="t">亲子照</span>
+                  <span class="e">Family Warm</span>
+                  <span class="n">2 册 · 一起长大的证据</span>
+                </span>
+                <span class="arw">→</span>
+              </a>
+            </div>
+            <div class="cue" style="display:flex;align-items:center;gap:9px;margin:24px 22px 10px;color:var(--muted)">
+              <i style="width:1px;height:22px;background:var(--gold)"></i><em style="font-style:normal;font-size:8.5px;letter-spacing:.32em">SCROLL</em>
+            </div>
+          </div>
+        </div>
+        <!-- 标注 -->
+        <div class="flag" style="left:-8px;top:300px">
+          <span class="pin">1</span>
+          <span class="tx"><b>双封面保留</b>：婚礼两条线不动，仅副文案改为「每种时刻 · 各成一册」</span>
+        </div>
+        <div class="flag" style="left:-8px;top:520px">
+          <span class="pin">2</span>
+          <span class="tx"><b>新增「更多时刻」</b>：三条玻璃卡（缩略图+名+册数），落位首页 entries 同款语言</span>
+        </div>
+      </div>
+      <div class="cap"><b>作品系列 · 1+3 扩展</b>collection —— 双封面不动，下方加三系列入口</div>
+    </div>
+
+    <!-- ============ 屏 2 · 新系列列表页 ============ -->
+    <div class="cell">
+      <div class="phone">
+        <div class="notch"></div><div class="home-ind"></div>
+        <div class="screen">
+          <div class="page-body">
+            <header class="ihead">
+              <div class="row"><a class="back" href="#">←</a><span class="en">Albums</span></div>
+              <div class="cd"><em style="font-style:normal;color:var(--rose)">订婚宴</em>跟妆</div>
+              <div class="cnsub">每场订婚 · 一册</div>
+              <div class="hr"><i></i><i></i></div>
+              <div class="en" style="margin-top:8px;font-size:8.5px">Engagement Rouge</div>
+            </header>
+
+            <a class="book2" href="#">
+              <div class="ph">
+                <img src="site/img/w-b.png" alt="" />
+                <span class="veil"></span>
+                <span class="num">Ⅰ</span>
+              </div>
+              <div class="bmeta">
+                <span class="cd">微醺烛光 · 低马尾</span>
+                <span class="en">Engagement No.1</span>
+              </div>
+              <div class="stat-line">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>1,284</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>86</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/></svg>23</span>
+              </div>
+              <div class="hair" style="height:1px;background:linear-gradient(90deg,var(--rose),transparent);margin-top:12px;opacity:.75"></div>
+            </a>
+
+            <a class="book2" href="#">
+              <div class="ph">
+                <img src="site/img/nc-a.png" alt="" />
+                <span class="veil"></span>
+                <span class="num">Ⅱ</span>
+              </div>
+              <div class="bmeta">
+                <span class="cd">香槟纱 · 玫瑰盘发</span>
+                <span class="en">Engagement No.2</span>
+              </div>
+              <div class="stat-line">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>962</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>54</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/></svg>17</span>
+              </div>
+              <div class="hair" style="height:1px;background:linear-gradient(90deg,var(--rose),transparent);margin-top:12px;opacity:.75"></div>
+            </a>
+
+            <a class="ab-foot" href="#" style="display:flex;justify-content:space-between;align-items:center;margin:6px 22px 0;padding:18px 4px 0;border-top:1px solid rgba(32,27,23,.10)">
+              <span><span class="cd" style="font-size:14px;letter-spacing:.2em">回到系列</span><br/><span class="en">Collections</span></span>
+              <span style="color:var(--muted)">→</span>
+            </a>
+          </div>
+        </div>
+        <div class="flag" style="right:-6px;top:250px">
+          <span class="pin">3</span>
+          <span class="tx"><b>新系列列表页</b>：复用册列表模板，中性暖纸底（ms 主题），封面换圆角矩形（不沿用西式拱形 / 中式金框）</span>
+        </div>
+        <div class="flag" style="right:-6px;top:560px">
+          <span class="pin">4</span>
+          <span class="tx"><b>列表卡带热度行</b>：浏览 / 点赞 / 转发三计数直接外露，光标色随主题</span>
+        </div>
+      </div>
+      <div class="cap"><b>订婚宴跟妆 · 列表页</b>/style/engagement —— 新系列共用此模板</div>
+    </div>
+
+    <!-- ============ 屏 3 · 瀑布流详情 ============ -->
+    <div class="cell">
+      <div class="phone">
+        <div class="notch"></div><div class="home-ind"></div>
+        <div class="screen">
+          <div class="page-body" style="padding-top:0">
+            <div class="fhero" style="margin:-52px 0 0">
+              <img src="site/img/w-b.png" alt="" />
+              <span class="fade"></span>
+              <div class="t">
+                <div class="cd">订婚宴 · 其一</div>
+                <span class="e">ENGAGEMENT NO.1</span>
+              </div>
+            </div>
+
+            <div class="statbar glass light">
+              <span class="s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>1,284 <em>浏览</em></span>
+              <span class="s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>86 <em>点赞</em></span>
+              <span class="s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/></svg>23 <em>转发</em></span>
+            </div>
+
+            <div class="masonry">
+              <figure><img src="site/img/w-b.png" alt="" /><span class="cap">迎宾 · 烛光</span></figure>
+              <figure><img src="site/img/portrait.png" alt="" /></figure>
+              <figure><img src="site/img/closeup-face.png" alt="" /></figure>
+              <figure><img src="site/img/nc-a.png" alt="" /><span class="cap">敬酒 · 香槟纱</span></figure>
+              <figure class="wide"><img src="site/img/family.png" alt="" style="aspect-ratio:3/2;object-fit:cover" /></figure>
+              <figure><img src="site/img/nc-c.png" alt="" /></figure>
+              <figure><img src="site/img/closeup-head.png" alt="" /></figure>
+            </div>
+          </div>
+
+          <!-- 悬浮互动 dock -->
+          <div class="fdock glass">
+            <span class="btn" id="likeBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+              86
+            </span>
+            <span class="btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/></svg>
+              分享
+            </span>
+          </div>
+        </div>
+        <div class="flag" style="left:-8px;top:170px">
+          <span class="pin">5</span>
+          <span class="tx"><b>矮 hero + 热度条</b>：不铺六段章节，直接进图；热度条随滚动常驻吸顶（可选）</span>
+        </div>
+        <div class="flag" style="left:-8px;top:430px">
+          <span class="pin">6</span>
+          <span class="tx"><b>瀑布流</b>：2 列错落（CSS columns），横图可跨双列；点图进暗房（复用现有查看器）</span>
+        </div>
+        <div class="flag" style="left:50%;bottom:120px;transform:translateX(-50%)">
+          <span class="pin">7</span>
+          <span class="tx"><b>悬浮互动 dock</b>：点赞 / 分享两键，玻璃胶囊贴底悬浮</span>
+        </div>
+      </div>
+      <div class="cap"><b>相册详情 · 瀑布流</b>/album/:slug（flat 型）—— 无六段，即点即看</div>
+    </div>
+
+    <!-- ============ 屏 4 · 互动态 ============ -->
+    <div class="cell">
+      <div class="phone">
+        <div class="notch"></div><div class="home-ind"></div>
+        <div class="screen">
+          <div class="page-body" style="padding-top:0">
+            <div class="fhero" style="margin:-52px 0 0;filter:brightness(.9)">
+              <img src="site/img/w-b.png" alt="" />
+              <span class="fade"></span>
+            </div>
+            <div class="masonry" style="filter:brightness(.9);padding-bottom:40px">
+              <figure><img src="site/img/portrait.png" alt="" /></figure>
+              <figure><img src="site/img/closeup-face.png" alt="" /></figure>
+              <figure><img src="site/img/nc-a.png" alt="" /></figure>
+              <figure><img src="site/img/nc-c.png" alt="" /></figure>
+            </div>
+          </div>
+
+          <div class="sheet-mask"></div>
+          <div class="sheet glass">
+            <div class="hd">
+              <span class="cd">分享这一册</span>
+              <span class="en" style="font-size:8px">Share · 转发即计数</span>
+            </div>
+            <div class="opts">
+              <div class="opt glass light">
+                <span class="ic wx">微</span>
+                <span class="lb">微信好友</span>
+              </div>
+              <div class="opt glass light">
+                <span class="ic">链</span>
+                <span class="lb">复制链接</span>
+              </div>
+              <div class="opt glass light">
+                <span class="ic">⋯</span>
+                <span class="lb">更多</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 点亮态 dock -->
+          <div class="fdock glass" style="bottom:210px">
+            <span class="btn liked">
+              <svg viewBox="0 0 24 24" stroke="none"><path d="M12 21l-7.8-7.6-1-1a5.5 5.5 0 0 1 7.8-7.8l1 1.1 1-1.1a5.5 5.5 0 0 1 7.8 7.8l-1 1z"/></svg>
+              87
+            </span>
+            <span class="pop">+1</span>
+          </div>
+        </div>
+        <div class="flag" style="left:-8px;top:200px">
+          <span class="pin">8</span>
+          <span class="tx"><b>点赞态</b>：珊瑚红填充 + 微弹动画 +「+1」上浮气泡；本地记录已赞，重复点击回退并 -1（口径待确认）</span>
+        </div>
+        <div class="flag" style="left:-8px;top:560px">
+          <span class="pin">9</span>
+          <span class="tx"><b>分享面板</b>：优先系统 navigator.share；微信内降级为玻璃面板（好友 / 复制链接 / 更多），成功回调计 1 次转发</span>
+        </div>
+      </div>
+      <div class="cap"><b>互动态</b>点赞点亮 + 分享面板 —— 转发 = 分享，成功即计数</div>
+    </div>
+  </div>
+
+  <!-- ============ 页尾工程说明 ============ -->
+  <div class="notes">
+    <div class="note">
+      <h3>信息架构<i>IA CHANGES</i></h3>
+      <ul>
+        <li>作品系列页 <code>/collection</code>：副文案改「每种时刻 · 各成一册」，双封面下方新增「更多时刻」三入口（订婚宴跟妆 / 孕妈照 / 亲子照）。</li>
+        <li>新系列路由：<code>/style/engagement</code> <code>/style/maternity</code> <code>/style/family</code>，共用现有 styleList 模板（中性 ms 主题、圆角矩形封面、卡上带热度行）。</li>
+        <li>新系列相册详情：<code>/album/:slug</code> 按 album.layout=<code>flat</code> 渲染<b>瀑布流视图</b>——矮 hero + 热度条 + 2 列错落图墙 + 悬浮互动 dock。</li>
+        <li>婚礼跟妆（western / chinese）<b>完全不动</b>：六段叙事、secmark、暗房、双封面全部保持。</li>
+        <li>命名口径：孕妈照（不叫孕妇照）、亲子照，作品系列即分成两个独立入口。</li>
+      </ul>
+    </div>
+    <div class="note">
+      <h3>数据模型<i>DATA MODEL</i></h3>
+      <ul>
+        <li>新表 <code>album_stats</code>：<code>album_id</code> PK · <code>views</code> · <code>likes</code> · <code>shares</code> · <code>updated_at</code>。与 album 1:1，计数不进主表（热度可单独缓存/重置）。</li>
+        <li><code>collection</code> 表加 3 行：<code>engagement</code> / <code>maternity</code> / <code>family</code>（cover_key、tagline 等填新文案，双封面专用字段可空）。</li>
+        <li><code>album</code> 表加 <code>layout</code> 列（<code>sectioned</code> | <code>flat</code>，默认 sectioned）——显式字段而非按系列名推断，配置驱动。</li>
+        <li>seed：订婚宴 2 册 / 孕妈 2 册 / 亲子 2 册，复用现有 demo 图片资产，无 sections 数据。</li>
+        <li>公开接口 <code>GET /api/albums*</code> 响应内嵌 stats 三计数（含列表页）。</li>
+      </ul>
+    </div>
+    <div class="note">
+      <h3>接口与互动口径<i>API & INTERACTION</i></h3>
+      <ul>
+        <li><code>POST /api/albums/:slug/stats</code>，body <code>{type:"view"|"like"|"share"}</code>，服务端原子 +1，返回最新三计数。</li>
+        <li><b>浏览量</b>：进入详情页即上报（前端 sessionStorage 按 slug 防同会话重复刷，同会话多次进入只计 1）。</li>
+        <li><b>点赞</b>：localStorage 记录已赞 slug（demo 无账号体系）；已赞再点 = 取消并 -1；红心点亮 + 微弹 + 「+1」气泡。</li>
+        <li><b>分享（转发）</b>：优先 <code>navigator.share</code>；微信内置浏览器降级为玻璃面板（复制链接 / 提示截图分享），复制或系统分享<b>成功回调后</b>计 1。</li>
+        <li>热度行在列表卡、详情热度条两处外露；后台 M6 可看全量并可清零。</li>
+      </ul>
+    </div>
+    <div class="note">
+      <h3>待你拍板<i>OPEN QUESTIONS</i></h3>
+      <ul>
+        <li>① 双封面下方三入口的<b>形态</b>：本稿用「玻璃横卡列」，也可以做成小封面双列卡（更图墙感）。</li>
+        <li>② 瀑布流详情的<b>hero 高度</b>：本稿 250px 矮 hero（进图快），也可以做无 hero 直接图墙。</li>
+        <li>③ 点赞<b>能否取消</b>：本稿口径可点第二次取消 -1；若要「只能赞不能取消」请明示。</li>
+        <li>④ 浏览量<b>防刷口径</b>：同会话只计 1（本稿）；要不要按 24h 去重（需多一张记录表或 Redis，demo 阶段建议先 session）。</li>
+        <li>⑤ 中式尾部「下一册」是否同步改「新中式 NO.2」格式（上轮遗留问题）。</li>
+      </ul>
+      <div class="ask">确认设计后动工顺序建议：数据模型迁移 → stats 接口 → 三个新系列 seed → 瀑布流详情视图 → 系列页 1+3 → 互动 dock/分享面板 → 双端回归。</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

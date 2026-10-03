@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#F7F4F1" />
+  <title>予时妍 YUÉ ATELIER · 为重要时刻，留一份美</title>
+  <meta name="description" content="婚礼跟妆 · 订婚宴 · 孕亲照 · 日常妆 —— 为重要时刻，留一份美。" />
+
+  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon-180.png" />
+
+  <!-- 字体：M1 沿用 demo 的 Google Fonts 引入；M7 上线前评估自托管/国内镜像 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300&family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Jost:wght@300;400&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/styles/tokens.css" />
+  <link rel="stylesheet" href="/styles/base.css" />
+  <link rel="stylesheet" href="/styles/ambient.css" />
+  <link rel="stylesheet" href="/styles/glass.css" />
+  <link rel="stylesheet" href="/styles/views.css" />
+  <link rel="stylesheet" href="/styles/quality.css" />
+
+  <!-- 零构建入口：浏览器原生 ES modules。X5 兼容性四项在 M1 验收时真机实测 -->
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <div id="app" class="page">
+    <main id="view" class="view" aria-live="polite"></main>
+    <div id="dock"></div>
+  </div>
+  <noscript>
+    <p style="padding:40px 24px;font-family:'Noto Serif SC',serif;letter-spacing:.1em">
+      予时妍需要启用 JavaScript 才能浏览。
+    </p>
+  </noscript>
+</body>
+</html>

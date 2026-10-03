@@ -1,0 +1,86 @@
+/* theme.css —— 予时妍管理后台 · 全局主题（2026-10-03）
+ * 品牌令牌与登录页 Login.vue 同源：暖纸 / 墨 / 玫瑰 / 金。
+ * 只做令牌与 Element Plus 变量覆盖，不改组件结构；各视图 scoped 样式继续生效。
+ */
+
+:root {
+  /* ---- 品牌令牌（与 Login.vue 同值） ---- */
+  --mua-paper: #FAF7F2;      /* 纸面 */
+  --mua-paper-deep: #F5EFE6; /* 纸面深一档（侧栏 / 表头） */
+  --mua-ink: #241E1B;        /* 墨 */
+  --mua-muted: #9A8F84;      /* 弱化 */
+  --mua-gold: #C2A874;       /* 金（结构色） */
+  --mua-rose: #B0707B;       /* 玫瑰（唯一强调色） */
+  --mua-serif: "Noto Serif SC", "Songti SC", serif;
+
+  /* ---- Element Plus 变量覆盖 ---- */
+  /* 主色 → 玫瑰（EP 会派生 light-3/5/7/8/9 与 dark-2） */
+  --el-color-primary: #B0707B;
+  --el-color-primary-light-3: #c4929b;
+  --el-color-primary-light-5: #d3afb5;
+  --el-color-primary-light-7: #e3cdd1;
+  --el-color-primary-light-8: #ecdee1;
+  --el-color-primary-light-9: #f5eff0;
+  --el-color-primary-dark-2: #8f5962;
+
+  /* 圆角收敛到 2px（印章直线感） */
+  --el-border-radius-base: 2px;
+  --el-border-radius-small: 2px;
+
+  /* 文字与边框走暖墨 */
+  --el-text-color-primary: #241E1B;
+  --el-text-color-regular: #4A403A;
+  --el-border-color: #E4D9CB;
+  --el-border-color-light: #EBE1D4;
+  --el-border-color-lighter: #F0E8DC;
+
+  /* 页面底色与卡片 */
+  --el-bg-color-page: #FAF7F2;
+  --el-fill-color-blank: #FFFFFF;
+}
+
+body {
+  background: var(--mua-paper);
+  color: var(--mua-ink);
+}
+
+/* ---- 页头标题：serif + 疏排（.bar h2 / 裸 h2 全部接管） ---- */
+.el-main h1, .el-main h2 {
+  font-family: var(--mua-serif);
+  font-weight: 300;
+  letter-spacing: .18em;
+}
+
+/* ---- 表格：纸感表头 + 去冷灰斑马 ---- */
+.el-table {
+  --el-table-border-color: #EBE1D4;
+  --el-table-header-bg-color: var(--mua-paper-deep);
+  --el-table-header-text-color: #6B6157;
+  --el-table-row-hover-bg-color: #F7F1E8;
+  --el-table-tr-bg-color: #FFFFFF;
+}
+.el-table th.el-table__cell {
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: .08em;
+}
+
+/* ---- 卡片：去大圆角 + 暖阴影 ---- */
+.el-card {
+  --el-card-border-radius: 3px;
+  border-color: #EBE1D4;
+  box-shadow: 0 2px 14px rgba(74, 64, 58, .06);
+}
+
+/* ---- 对话框：纸面标题 serif ---- */
+.el-dialog__title {
+  font-family: var(--mua-serif);
+  font-weight: 300;
+  letter-spacing: .14em;
+}
+
+/* ---- 标签（tag）：直角 ---- */
+.el-tag { border-radius: 2px; }
+
+/* ---- 消息弹层：细边暖色 ---- */
+.el-message { border-color: #EBE1D4; }

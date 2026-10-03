@@ -1,0 +1,61 @@
+/* ============================================================
+   予时妍 · ambient.css — 动态背景层（v6 :154–174 / :256–283 逐行搬运）
+   ------------------------------------------------------------
+   结构由 ambient.js 一次性注入（.ambient 骨架，DOM 常驻）；
+   显隐与配色完全由根主题 class（html.ms / .twe / .tcn）驱动，
+   主题切换零 JS 参与 —— 配置驱动，不做散点特判。
+   层级：.ambient fixed z0 < .view z2 < dock z60。
+   ============================================================ */
+
+/* ---------- 通用形态（v6 :155-165） ---------- */
+.ambient .blob{position:absolute;border-radius:50%;filter:blur(52px);z-index:0}
+.ambient .sweep{position:absolute;top:-10%;bottom:-10%;width:150px;z-index:1;
+  background:linear-gradient(102deg,transparent,rgba(255,255,255,.52),transparent);
+  animation:sweep 11s var(--ease-io) infinite}
+.ambient .silk{position:absolute;inset:0;opacity:.30;
+  background-image:repeating-linear-gradient(90deg,transparent 0 47px,rgba(32,27,23,.055) 47px 48px)}
+.ambient .grain{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.05;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* 默认全隐，按主题点亮 —— 避免跨主题串色 */
+.ambient .b1,.ambient .b2,.ambient .b3,
+.ambient .w1,.ambient .w2,.ambient .w3,
+.ambient .g1,.ambient .g2,.ambient .g3,
+.ambient .silk,.ambient .sweep{display:none}
+
+/* ---------- 漂移 / 斜扫关键帧（v6 :156-159） ---------- */
+@keyframes d1{to{transform:translate(54px,46px) scale(1.16)}}
+@keyframes d2{to{transform:translate(-60px,38px) scale(1.12)}}
+@keyframes d3{to{transform:translate(46px,-54px) scale(1.14)}}
+@keyframes sweep{from{transform:translateX(-260px)}to{transform:translateX(480px)}}
+
+/* ---------- .ms 暖白（v6 :172-174）：三团光斑 + 斜扫 + 颗粒 ---------- */
+html.ms .ambient .b1{display:block;width:300px;height:300px;left:-90px;top:-70px;
+  background:#F1E1E1;opacity:.62;animation:d1 30s var(--ease-io) infinite alternate}
+html.ms .ambient .b2{display:block;width:270px;height:270px;right:-90px;top:150px;
+  background:#F1E8D8;opacity:.6;animation:d2 36s var(--ease-io) infinite alternate}
+html.ms .ambient .b3{display:block;width:330px;height:330px;left:-50px;bottom:-100px;
+  background:#E9E8E0;opacity:.55;animation:d3 32s var(--ease-io) infinite alternate}
+html.ms .ambient .sweep{display:block}
+
+/* ---------- .twe 西式婚礼（v6 :256-261）：三团光斑（双光环已按口径移除） ---------- */
+html.twe .ambient .w1{display:block;width:300px;height:300px;left:-90px;top:-80px;
+  background:#F6E3E4;opacity:.68;animation:d1 30s var(--ease-io) infinite alternate}
+html.twe .ambient .w2{display:block;width:280px;height:280px;right:-80px;top:220px;
+  background:#F4E9DC;opacity:.65;animation:d2 36s var(--ease-io) infinite alternate}
+html.twe .ambient .w3{display:block;width:340px;height:340px;left:10px;bottom:-130px;
+  background:#F8ECEA;opacity:.62;animation:d3 34s var(--ease-io) infinite alternate}
+
+/* ---------- .tcn 新中式婚礼（v6 :279-283）：绢纹 + 三团光斑 ---------- */
+html.tcn .ambient .silk{display:block}
+html.tcn .ambient .g1{display:block;width:290px;height:290px;left:-80px;top:-60px;
+  background:#EEDDDB;opacity:.64;animation:d1 28s var(--ease-io) infinite alternate}
+html.tcn .ambient .g2{display:block;width:310px;height:310px;right:-100px;bottom:-70px;
+  background:#F0E5D3;opacity:.6;animation:d2 34s var(--ease-io) infinite alternate}
+html.tcn .ambient .g3{display:block;width:240px;height:240px;left:60px;top:340px;
+  background:#E4E6E0;opacity:.5;animation:d3 38s var(--ease-io) infinite alternate}
+
+/* ---------- 降级：reduced 动效已由 base.css 全局冻结（光斑静止仍在，氛围不塌）；
+   X5 弱机（noblur）丢掉高斯模糊与斜扫，保静色斑 ---------- */
+html.noblur .ambient .blob{filter:none}
+html.noblur .ambient .sweep{display:none !important}

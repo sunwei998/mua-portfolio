@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>予时妍 · YUÉ ATELIER | Logo 资产与应用规范</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400&family=Jost:wght@300;400&family=Bodoni+Moda:ital,wght@0,400;0,500&display=swap" rel="stylesheet" />
+<link rel="icon" href="assets/logo/favicon.svg" />
+<link rel="apple-touch-icon" href="assets/logo/apple-touch-icon-180.png" />
+<style>
+:root{
+  --shell-bg:#EFEDE9;--shell-ink:#161412;--shell-muted:#8B857C;--shell-line:rgba(22,20,18,.10);
+  --accent:#B0707B;--gold:#C0A46F;--jade:#6E7C76;--ease:cubic-bezier(.22,1,.28,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--shell-bg);color:var(--shell-ink);
+  font-family:"Jost","Helvetica Neue",Arial,sans-serif;font-size:14px;line-height:1.62;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:34px 24px 96px}
+.serif{font-family:"Noto Serif SC",serif}
+.lat{font-family:"Bodoni Moda","Didot",Georgia,serif}
+
+/* 外壳 */
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  padding-bottom:20px;border-bottom:1px solid var(--shell-line)}
+.top h1{font-family:"Noto Serif SC",serif;font-weight:300;font-size:26px;letter-spacing:.14em}
+.top .sub{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--shell-muted);margin-top:6px}
+.legend{font-size:12.5px;color:var(--shell-muted);max-width:62em;margin:16px 0 0;letter-spacing:.03em}
+.legend b{color:var(--shell-ink);font-weight:500}
+.legend code,td code,th code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;
+  background:rgba(22,20,18,.055);padding:1px 5px;border-radius:3px;color:#6B4F1E}
+
+.sec{margin-top:52px}
+.sec-h{display:flex;align-items:baseline;gap:14px;padding-bottom:12px;margin-bottom:20px;
+  border-bottom:1px solid var(--shell-line);flex-wrap:wrap}
+.sec-h .no{font-size:10px;letter-spacing:.26em;color:var(--gold);font-family:ui-monospace,Menlo,monospace}
+.sec-h h2{font-family:"Noto Serif SC",serif;font-weight:300;font-size:19px;letter-spacing:.14em}
+.sec-h .note{font-size:11.5px;color:var(--shell-muted);letter-spacing:.08em}
+.lead{font-size:12.5px;color:var(--shell-muted);margin:-6px 0 18px;letter-spacing:.04em;max-width:66em}
+.lead b{color:var(--shell-ink);font-weight:500}
+
+/* 展示底材 */
+.board{--paper:#FBF6F5;--ink:#241F1D;--muted:#8E817A;--acc:#C08994;--gd:#C8AE84;--hair:rgba(36,31,29,.14);
+  --glow:radial-gradient(430px 340px at 8% -12%,rgba(224,160,175,.30),transparent 70%),
+         radial-gradient(400px 330px at 94% 112%,rgba(200,174,132,.28),transparent 72%);
+  position:relative;overflow:hidden;background:var(--paper);color:var(--ink);border-radius:4px;
+  padding:32px 30px;box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 10px 30px rgba(22,20,18,.06)}
+.board::before{content:"";position:absolute;inset:0;background:var(--glow);pointer-events:none}
+.board>*{position:relative;z-index:2}
+.board.dark{--paper:#17130F;--ink:#F2EBE3;--muted:#9A9089;--acc:#E3ABB5;--gd:#D8C098;--hair:rgba(242,235,227,.18);
+  --glow:radial-gradient(430px 340px at 8% -12%,rgba(227,171,181,.18),transparent 70%),
+         radial-gradient(400px 330px at 94% 112%,rgba(216,192,152,.13),transparent 72%)}
+.board.cn{--paper:#F8F5F1;--ink:#22201C;--muted:#8B8378;--acc:#9E4E55;--gd:#C0A46F;--hair:rgba(34,32,28,.14);
+  --glow:radial-gradient(430px 340px at 8% -12%,rgba(158,78,85,.18),transparent 70%),
+         radial-gradient(400px 330px at 94% 112%,rgba(192,164,111,.24),transparent 72%)}
+.board.photo{background:#2A2320;color:#F6F1EB;--hair:rgba(255,255,255,.2)}
+.board+.board{margin-top:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:920px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+.cell{border:1px dashed var(--hair);border-radius:3px;padding:22px 18px;position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:150px;text-align:center}
+.cell .cap{position:absolute;left:10px;top:8px;font-size:9px;letter-spacing:.2em;color:var(--muted);
+  font-family:ui-monospace,Menlo,monospace;text-transform:uppercase}
+.cell .cnote{font-size:10.5px;color:var(--muted);margin-top:16px;letter-spacing:.06em;line-height:1.55}
+.cell.left{align-items:flex-start;text-align:left}
+
+/* SVG 容器统一颜色 */
+.lg{color:var(--ink);display:block}
+.lg.acc{color:var(--acc)}
+.lg.small{width:120px;height:auto}
+.lg svg{display:block;width:100%;height:auto}
+
+/* 艺术化拆解 */
+.anat{display:flex;gap:12px;align-items:center;font-size:12.5px;padding:12px 0;
+  border-bottom:1px solid var(--shell-line);flex-wrap:wrap}
+.anat .k{font-family:"Noto Serif SC",serif;font-weight:400;flex:none;width:112px;letter-spacing:.06em}
+.anat .v{color:var(--shell-muted);flex:1;min-width:240px}
+.anat .v b{color:var(--shell-ink);font-weight:500}
+.anat .tg2{font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#6B4F1E;
+  background:rgba(185,154,98,.14);border-radius:3px;padding:2px 7px;flex:none}
+
+/* 应用小样 */
+.mockslot{position:relative;border-radius:3px;overflow:hidden;height:170px;display:grid;place-items:center}
+.mockslot img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mockslot .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,11,9,.30),rgba(15,11,9,.62))}
+.navmini{width:100%;background:var(--paper);border-bottom:1px solid var(--hair);
+  display:flex;align-items:center;justify-content:space-between;padding:12px 14px}
+.avatarbox{width:86px;height:86px;border-radius:50%;overflow:hidden;flex:none;
+  box-shadow:0 10px 26px rgba(22,20,18,.18)}
+.avatarbox img{width:100%;height:100%;display:block}
+
+/* 表格 */
+table.spec{width:100%;border-collapse:collapse;margin-top:16px;font-size:12.5px}
+table.spec th,table.spec td{border-bottom:1px solid var(--shell-line);padding:10px 12px;text-align:left;vertical-align:top}
+table.spec th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--shell-muted);
+  font-weight:400;border-bottom-color:rgba(22,20,18,.18)}
+table.spec td:first-child{font-family:"Noto Serif SC",serif;font-weight:300;white-space:nowrap}
+table.spec .ok{color:#3E7A4E}table.spec .no{color:#A8464C}table.spec .hl{color:#8A6C2F;font-weight:500}
+.pill{display:inline-block;font-size:9.5px;letter-spacing:.14em;padding:2px 8px;border-radius:999px;
+  border:1px solid currentColor;font-family:"Noto Serif SC",serif}
+.pill.new{color:#3E7A4E}.pill.keep{color:#6E7C76}.pill.todo{color:#8A6C2F}
+
+.note-band{margin-top:18px;padding:14px 16px;border-left:2px solid var(--gold);background:rgba(185,154,98,.07);
+  font-size:12.5px;color:#6B5A38;line-height:1.68;border-radius:0 4px 4px 0}
+.note-band b{color:#4A3E24}
+.foot{margin-top:64px;padding-top:18px;border-top:1px solid var(--shell-line);font-size:11px;
+  color:var(--shell-muted);letter-spacing:.14em;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <h1>予时妍 · Logo 资产与应用规范</h1>
+      <div class="sub">YUÉ ATELIER · Logo Assets &amp; Usage · v1.0</div>
+    </div>
+    <div style="text-align:right">
+      <div class="sub">2026-10-02</div>
+      <div class="sub" style="letter-spacing:.2em;color:#8A6C2F">原型 demo 未改动</div>
+    </div>
+  </header>
+
+  <p class="legend">
+    六个资产文件已落盘在 <code>assets/logo/</code>，可直接进 H5：
+    <code>symbol.svg</code>（图形符号）· <code>wordmark-h.svg</code>（横版主标）· <code>wordmark-v.svg</code>（竖版）·
+    <code>emblem.svg</code>（圆形徽章）· <code>seal.svg</code>（繁体朱文印）· <code>favicon.svg</code> +
+    <code>favicon-32.png</code> / <code>apple-touch-icon-180.png</code> / <code>icon-512.png</code>。<br/>
+    <b>本页所有 SVG 都是内联渲染（所见即文件内容）</b>；唯一要注意的是第 04 节那个「以 <code>&lt;img&gt;</code> 加载」的对照格——
+    那是字体未转曲时的真实表现。
+  </p>
+
+  <!-- ============ 00 概念 ============ -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">00</span><h2>符号从哪来</h2><span class="note">一个开口环 + 一个光点</span></div>
+    <p class="lead">
+      符号只用两个元素：<b>一个左下开口的环</b>，<b>一个居中的实心点</b>。三个字义各占一半——
+      「时」是那轮日（环），「妍」是那点妆（点），「予」是<b>没有合拢</b>这件事本身：环还开着，所以还在给予。<br/>
+      它是纯路径画的，<b>不依赖任何字体</b>——所以能缩到 16px 当 favicon，也能放到 6 米当门头，
+      不会因为客户机上没装字体而变形。这是整个 logo 系统里唯一 100% 自主的部分。
+    </p>
+    <div class="board">
+      <div class="grid4" style="align-items:center">
+        <div class="cell" style="border:none">
+          <span class="cap">Symbol · 原始比例</span>
+          <div class="lg" style="width:110px;margin-top:18px">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+              <circle cx="32" cy="32" r="5.1" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="cnote">环 = 时（日）· 点 = 妍</div>
+        </div>
+        <div class="cell" style="border:none">
+          <span class="cap">拆解 · 去点</span>
+          <div class="lg" style="width:110px;margin-top:18px;opacity:.5">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+            </svg>
+          </div>
+          <div class="cnote">只有环 → 会读成字母 C，太普通</div>
+        </div>
+        <div class="cell" style="border:none">
+          <span class="cap">拆解 · 去环</span>
+          <div class="lg" style="width:110px;margin-top:18px;opacity:.5">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="32" cy="32" r="5.1" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="cnote">只有点 → 只是个点，没有识别度</div>
+        </div>
+        <div class="cell" style="border:none">
+          <span class="cap">合起来 · 缺口在左下</span>
+          <div class="lg acc" style="width:110px;margin-top:18px">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+              <circle cx="32" cy="32" r="5.1" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="cnote">缺口位置是设计，不是渲染错误</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 01 五个组合 ============ -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">01</span><h2>五个组合</h2><span class="note">资产文件 + 用途 + 尺寸</span></div>
+    <p class="lead">
+      一个品牌不能只有一个 logo。下面五个是 <b>H5 实际会用到的最小集合</b>——每一个都有明确的出场位置，
+      不重叠、不互相替代。
+    </p>
+
+    <div class="board">
+      <div class="cell" style="border:none;align-items:flex-start;min-height:0;padding:6px 0">
+        <span class="cap">A · 横版主标 · wordmark-h.svg</span>
+        <div class="lg" style="width:330px;margin-top:26px">
+          <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(4,26) scale(0.75)">
+              <circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+              <circle cx="32" cy="32" r="5.1" fill="currentColor"/>
+            </g>
+            <line x1="63" y1="26" x2="63" y2="74" stroke="currentColor" stroke-width="0.7" opacity="0.22"/>
+            <text font-family="Noto Serif SC,serif" font-weight="200" fill="currentColor" font-size="33">
+              <tspan x="76" y="59.6" font-size="34.5">予</tspan>
+              <tspan x="119.4" y="58">时</tspan>
+              <tspan x="165.6" y="61.4" fill="#B0707B">妍</tspan>
+            </text>
+            <circle cx="85" cy="68.6" r="1.7" fill="#C0A46F"/>
+            <line x1="90" y1="68.6" x2="199" y2="68.6" stroke="#C0A46F" stroke-width="0.9" stroke-linecap="round"/>
+            <text x="85" y="86" font-size="8.6" letter-spacing="3.5" fill="currentColor" opacity="0.74"
+                  font-family="Bodoni Moda,Georgia,serif">YUÉ ATELIER</text>
+          </svg>
+        </div>
+        <div class="cnote" style="text-align:left">首页 Hero / 关于页 / 名片正 / 印刷。最小宽度 <b>120px</b></div>
+      </div>
+    </div>
+
+    <div class="board">
+      <div class="grid3" style="align-items:end">
+        <div class="cell" style="border:none">
+          <span class="cap">B · 竖版 · wordmark-v.svg</span>
+          <div class="lg" style="width:74px;margin-top:18px">
+            <svg viewBox="0 0 120 300" xmlns="http://www.w3.org/2000/svg">
+              <g transform="translate(36.9,22) scale(0.72)">
+                <circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+                <circle cx="32" cy="32" r="5.1" fill="currentColor"/>
+              </g>
+              <text font-family="Noto Serif SC,serif" font-weight="200" text-anchor="middle" fill="currentColor">
+                <tspan x="60" y="104" font-size="31">予</tspan>
+                <tspan x="60" y="148" font-size="29.5">时</tspan>
+                <tspan x="60" y="194" font-size="29.5" fill="#B0707B">妍</tspan>
+              </text>
+              <line x1="60" y1="216" x2="60" y2="246" stroke="#C0A46F" stroke-width="0.9" stroke-linecap="round"/>
+              <text x="60" y="274" font-size="7.6" letter-spacing="3.2" fill="currentColor" opacity="0.74"
+                    text-anchor="middle" font-family="Bodoni Moda,Georgia,serif">YUÉ ATELIER</text>
+            </svg>
+          </div>
+          <div class="cnote">相册封面烫印 / 腰封 / 绢签</div>
+        </div>
+        <div class="cell" style="border:none">
+          <span class="cap">C · 徽章 · emblem.svg</span>
+          <div class="lg" style="width:132px;margin-top:18px">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" stroke-width="1.1"/>
+              <circle cx="100" cy="100" r="86" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.42"/>
+              <text font-family="Noto Serif SC,serif" font-weight="300" x="100" y="57" font-size="13" letter-spacing="5.4" fill="currentColor" text-anchor="middle">予时妍</text>
+              <g transform="translate(66,66) scale(1.0625)">
+                <circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+                <circle cx="32" cy="32" r="5.1" fill="currentColor"/>
+              </g>
+              <line x1="78" y1="146" x2="122" y2="146" stroke="#C0A46F" stroke-width="0.7" opacity="0.85"/>
+              <text x="100" y="161" font-size="7.4" letter-spacing="3" fill="currentColor" opacity="0.74" text-anchor="middle" font-family="Bodoni Moda,Georgia,serif">YUÉ ATELIER</text>
+            </svg>
+          </div>
+          <div class="cnote">微信头像 / 开屏 / Loading / 二维码卡</div>
+        </div>
+        <div class="cell" style="border:none">
+          <span class="cap">D · 印章（繁体）· seal.svg</span>
+          <div class="lg acc" style="width:64px;margin-top:18px">
+            <svg viewBox="0 0 76 172" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="70" height="166" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+              <rect x="9.5" y="9.5" width="57" height="153" rx="1.5" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.38"/>
+              <text font-family="Noto Serif SC,serif" font-weight="400" fill="currentColor" text-anchor="middle">
+                <tspan x="38" y="60" font-size="36">予</tspan>
+                <tspan x="38" y="104" font-size="36">時</tspan>
+                <tspan x="38" y="148" font-size="36">妍</tspan>
+              </text>
+            </svg>
+          </div>
+          <div class="cnote">作品落款 / 相册封底 / 礼盒烫印</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="board">
+      <div class="grid2" style="align-items:center">
+        <div class="cell" style="border:none">
+          <span class="cap">E · 图标 / Favicon · favicon.svg + 三档 PNG</span>
+          <div style="margin-top:18px;display:flex;gap:20px;align-items:flex-end">
+            <div>
+              <img src="assets/logo/favicon-32.png" width="32" height="32" style="border-radius:7px;display:block" alt="32" />
+              <div class="cnote" style="margin-top:6px">32</div>
+            </div>
+            <div>
+              <img src="assets/logo/apple-touch-icon-180.png" width="72" height="72" style="border-radius:16px;display:block" alt="180" />
+              <div class="cnote" style="margin-top:6px">180</div>
+            </div>
+            <div>
+              <img src="assets/logo/icon-512.png" width="112" height="112" style="border-radius:24px;display:block" alt="512" />
+              <div class="cnote" style="margin-top:6px">512</div>
+            </div>
+          </div>
+        </div>
+        <div class="cell left" style="border:none">
+          <span class="cap">为什么小尺寸要单独画一个</span>
+          <div style="margin-top:20px;display:flex;gap:26px;align-items:flex-end">
+            <div style="text-align:center">
+              <div style="color:#9E4E55;width:44px">
+                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="display:block;width:44px">
+                  <circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+                  <circle cx="32" cy="32" r="5.1" fill="currentColor"/>
+                </svg>
+              </div>
+              <div class="cnote">symbol 原版<br/>描边 1.8 / 64</div>
+            </div>
+            <div style="text-align:center">
+              <div style="color:#9E4E55;width:44px">
+                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="display:block;width:44px">
+                  <circle cx="32" cy="32" r="17" fill="none" stroke="currentColor" stroke-width="4.4" stroke-linecap="round" stroke-dasharray="91.8 15" transform="rotate(155.5 32 32)"/>
+                  <circle cx="32" cy="32" r="5.2" fill="currentColor"/>
+                </svg>
+              </div>
+              <div class="cnote">favicon 版<br/>描边 4.4 / 64</div>
+            </div>
+          </div>
+          <div class="cnote" style="text-align:left">
+            1.8/64 缩到 16px 只剩 <b>0.45 物理像素</b>——环会消失。所以 favicon 版把描边加到 <b>4.4/64</b>（16px 时 ≈1.1px），
+            半径收到 17，环与点都还立得住。这是所有 logo 系统的通用做法，不是可选项。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 02 艺术化拆解 ============ -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">02</span><h2>「不要太单调」——拆成 7 条</h2><span class="note">每一条都能在资产文件里找到</span></div>
+    <p class="lead">
+      三字直排是最单调的做法。下面 7 条是<b>逐条叠加</b>上去的，从「能看」到「有设计」差的就是这些。
+      第 4 条和第 5 条是我这次新加的——它们让字标从「排得整齐」变成「有笔意」。
+    </p>
+
+    <div class="board">
+      <div class="anat">
+        <span class="tg2">①</span><span class="k">不等高节奏</span>
+        <span class="v">予 上提 <b>1.6px</b>、妍 下沉 <b>3.4px</b>（相对「时」）。三字不再压在同一条基线上，
+        整组产生<b>呼吸节奏</b>——这是书法里「错落」的现代版。</span>
+      </div>
+      <div class="anat">
+        <span class="tg2">②</span><span class="k">不等距呼吸</span>
+        <span class="v">予↔时 <b>9.9px</b>（紧），时↔妍 <b>13.2px</b>（松）。等距会让三字变成「一个字块」，
+        不等距才有词组的语气。</span>
+      </div>
+      <div class="anat">
+        <span class="tg2">③</span><span class="k">三字等大（已回改）</span>
+        <span class="v">曾按「予 4 画 / 时·妍各 7 画」把「予」放大到 <b>1.045×</b>。但 canvas 实测
+        三字墨迹高度本来就一致（予 90.1 · 时 89.9 · 妍 93.4 per 100px）→ 缩放已取消，<b>三字等大</b>。</span>
+      </div>
+      <div class="anat">
+        <span class="tg2">④</span><span class="k">起笔点 + 金线</span>
+        <span class="v"><b>本次新增。</b>字标左下方一枚 <b>1.7px 金点</b>起笔，向右拉出一条 <b>109px 金线</b>，
+        与英文注脚左右对齐。三字有了「地基」，也把中文与拉丁缝合成了一个整体，而不是两行字摞在一起。</span>
+      </div>
+      <div class="anat">
+        <span class="tg2">⑤</span><span class="k">符号入标 + 竖线分隔</span>
+        <span class="v"><b>本次新增。</b>符号不是贴在图旁边，而是用一条 <b>0.7px / 22% 透明度</b>的竖线分隔成「标记 + 字标」两栏。
+        这条竖线让符号成为字标的一部分，而不是装饰图标。</span>
+      </div>
+      <div class="anat">
+        <span class="tg2">⑥</span><span class="k">唯一彩色点</span>
+        <span class="v">只有「妍」上强调色（西式 <b>#B0707B</b> / 新中式 <b>#9E4E55</b>）。金线属结构色，
+        不算第二种强调色——这条边界要守住，否则整组会散。</span>
+      </div>
+      <div class="anat">
+        <span class="tg2">⑦</span><span class="k">É 的排印补偿</span>
+        <span class="v">Bodoni 的重音符在疏排里会显得挤。处理：<b>É 的字距比两侧字母松 0.06em</b>，
+        并把整行降到 <b>74% 不透明度</b>——拉丁注脚永远只是注脚，不能和中文抢主位。</span>
+      </div>
+    </div>
+
+    <div class="board">
+      <span class="cap" style="display:block;font-size:9px;color:var(--muted);letter-spacing:.2em;font-family:ui-monospace,Menlo,monospace;margin-bottom:22px">同一组字，三种处理——差别在这 7 条</span>
+      <div class="grid3" style="align-items:end">
+        <div class="cell" style="border:none">
+          <span class="cap">裸排 · 等距等高</span>
+          <div class="lg" style="margin-top:16px;font-family:'Noto Serif SC',serif;font-weight:300;font-size:26px;letter-spacing:.24em;text-indent:.24em">予时妍</div>
+          <div class="cnote">整齐，但像 PPT 标题</div>
+        </div>
+        <div class="cell" style="border:none">
+          <span class="cap">加疏排 + 强调色</span>
+          <div class="lg" style="margin-top:16px;font-family:'Noto Serif SC',serif;font-weight:200;font-size:26px;letter-spacing:.32em;text-indent:.32em">予时<span style="color:var(--acc)">妍</span></div>
+          <div class="cnote">有调性了，但还是「一行字」</div>
+        </div>
+        <div class="cell" style="border:none">
+          <span class="cap">完整字标（本方案）</span>
+          <div class="lg" style="width:230px;margin-top:16px">
+            <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%">
+              <g transform="translate(4,26) scale(0.75)">
+                <circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+                <circle cx="32" cy="32" r="5.1" fill="currentColor"/>
+              </g>
+              <line x1="63" y1="26" x2="63" y2="74" stroke="currentColor" stroke-width="0.7" opacity="0.22"/>
+              <text font-family="Noto Serif SC,serif" font-weight="200" fill="currentColor">
+                <tspan x="76" y="59.6" font-size="34.5">予</tspan>
+                <tspan x="119.4" y="58" font-size="33">时</tspan>
+                <tspan x="165.6" y="61.4" font-size="33" fill="#B0707B">妍</tspan>
+              </text>
+              <circle cx="85" cy="68.6" r="1.7" fill="#C0A46F"/>
+              <line x1="90" y1="68.6" x2="199" y2="68.6" stroke="#C0A46F" stroke-width="0.9" stroke-linecap="round"/>
+              <text x="85" y="86" font-size="8.6" letter-spacing="3.5" fill="currentColor" opacity="0.74" font-family="Bodoni Moda,Georgia,serif">YUÉ ATELIER</text>
+            </svg>
+          </div>
+          <div class="cnote">错落 + 金线 + 符号 + 注脚 = 一个「标记」</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 应用 ============ -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">03</span><h2>四种底材 + 三个尺寸</h2><span class="note">logo 只要有一种底材上站不住，就是不合格</span></div>
+    <p class="lead">
+      字标最容易死在两个地方：<b>深色底</b>（细笔画消失）和<b>照片上</b>（背景吃掉对比度）。
+      下面是四套底材的真实表现，第 4 格是唯一的例外规则。
+    </p>
+
+    <div class="board">
+      <div class="grid4" style="align-items:center">
+        <div class="cell" style="border:none;min-height:190px">
+          <span class="cap">西式纸 #FBF6F5</span>
+          <div class="lg" style="width:170px;margin-top:16px">
+            <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%">
+              <g transform="translate(4,26) scale(0.75)"><circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/><circle cx="32" cy="32" r="5.1" fill="currentColor"/></g>
+              <line x1="63" y1="26" x2="63" y2="74" stroke="currentColor" stroke-width="0.7" opacity="0.22"/>
+              <text font-family="Noto Serif SC,serif" font-weight="200" fill="currentColor"><tspan x="76" y="59.6" font-size="34.5">予</tspan><tspan x="119.4" y="58" font-size="33">时</tspan><tspan x="165.6" y="61.4" font-size="33" fill="#C08994">妍</tspan></text>
+              <circle cx="85" cy="68.6" r="1.7" fill="#C8AE84"/><line x1="90" y1="68.6" x2="199" y2="68.6" stroke="#C8AE84" stroke-width="0.9" stroke-linecap="round"/>
+              <text x="85" y="86" font-size="8.6" letter-spacing="3.5" fill="currentColor" opacity="0.74" font-family="Bodoni Moda,Georgia,serif">YUÉ ATELIER</text>
+            </svg>
+          </div>
+        </div>
+        <div class="cell" style="border:none;min-height:190px">
+          <span class="cap">新中式绢白 #F8F5F1</span>
+          <div class="lg" style="width:170px;margin-top:16px">
+            <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%">
+              <g transform="translate(4,26) scale(0.75)"><circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/><circle cx="32" cy="32" r="5.1" fill="currentColor"/></g>
+              <line x1="63" y1="26" x2="63" y2="74" stroke="currentColor" stroke-width="0.7" opacity="0.22"/>
+              <text font-family="Noto Serif SC,serif" font-weight="200" fill="currentColor"><tspan x="76" y="59.6" font-size="34.5">予</tspan><tspan x="119.4" y="58" font-size="33">时</tspan><tspan x="165.6" y="61.4" font-size="33" fill="#9E4E55">妍</tspan></text>
+              <circle cx="85" cy="68.6" r="1.7" fill="#C0A46F"/><line x1="90" y1="68.6" x2="199" y2="68.6" stroke="#C0A46F" stroke-width="0.9" stroke-linecap="round"/>
+              <text x="85" y="86" font-size="8.6" letter-spacing="3.5" fill="currentColor" opacity="0.74" font-family="Bodoni Moda,Georgia,serif">YUÉ ATELIER</text>
+            </svg>
+          </div>
+        </div>
+        <div class="cell" style="border:none;min-height:190px">
+          <span class="cap" style="color:#D8C098">反白暖黑 #17130F</span>
+          <div class="lg" style="width:170px;margin-top:16px;color:#F2EBE3">
+            <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%">
+              <g transform="translate(4,26) scale(0.75)"><circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/><circle cx="32" cy="32" r="5.1" fill="currentColor"/></g>
+              <line x1="63" y1="26" x2="63" y2="74" stroke="currentColor" stroke-width="0.7" opacity="0.3"/>
+              <text font-family="Noto Serif SC,serif" font-weight="200" fill="currentColor"><tspan x="76" y="59.6" font-size="34.5">予</tspan><tspan x="119.4" y="58" font-size="33">时</tspan><tspan x="165.6" y="61.4" font-size="33" fill="#E3ABB5">妍</tspan></text>
+              <circle cx="85" cy="68.6" r="1.7" fill="#D8C098"/><line x1="90" y1="68.6" x2="199" y2="68.6" stroke="#D8C098" stroke-width="0.9" stroke-linecap="round"/>
+              <text x="85" y="86" font-size="8.6" letter-spacing="3.5" fill="currentColor" opacity="0.8" font-family="Bodoni Moda,Georgia,serif">YUÉ ATELIER</text>
+            </svg>
+          </div>
+        </div>
+        <div class="cell" style="border:none;min-height:190px">
+          <span class="cap">照片上（唯一例外）</span>
+          <div style="position:relative;width:170px;height:112px;border-radius:3px;overflow:hidden;margin-top:16px">
+            <img src="assets/img/w-a.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" alt="" />
+            <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,9,7,.10),rgba(12,9,7,.70))"></span>
+            <span class="lg" style="position:absolute;left:12px;bottom:10px;width:128px;color:#FFF9F4">
+              <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%">
+                <g transform="translate(4,26) scale(0.75)"><circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/><circle cx="32" cy="32" r="5.4" fill="currentColor"/></g>
+                <text font-family="Noto Serif SC,serif" font-weight="300" fill="currentColor"><tspan x="76" y="58" font-size="34">予</tspan><tspan x="119" y="58" font-size="34">时</tspan><tspan x="162" y="58" font-size="34">妍</tspan></text>
+              </svg>
+            </span>
+          </div>
+          <div class="cnote" style="text-align:left">
+            <b>规则：照片上必须压 scrim（≥60% 深色渐变），字标转为纯白、去掉金线与强调色、笔画加粗 15%。</b>
+            白纱照片上任何细线都会消失——这是唯一允许打破「唯一彩色点」的场合，因为可读性优先。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table class="spec">
+      <thead><tr><th style="width:160px">场景</th><th style="width:150px">最小尺寸</th><th>约束</th></tr></thead>
+      <tbody>
+        <tr><td>横版主标 A</td><td>宽 ≥ 120px</td><td>低于 120px 时去掉金线与符号，只用三字 + 拉丁</td></tr>
+        <tr><td>竖版 B</td><td>宽 ≥ 44px</td><td>「时」「妍」为左右结构，签牌窄于 44px 会挤字</td></tr>
+        <tr><td>徽章 C</td><td>直径 ≥ 56px</td><td>低于 56px 时删掉环内文字，只留符号</td></tr>
+        <tr><td>印章 D</td><td>高 ≥ 64px</td><td>低于 64px 攻单字「妍」印</td></tr>
+        <tr><td>图标 E</td><td>16px 起</td><td>必须用 <b>favicon.svg</b>（粗笔画版），不得用 symbol.svg 缩</td></tr>
+        <tr><td>安全留白</td><td>字高的 0.8×</td><td>范围内不放任何其他元素</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note-band">
+      <b>必读：上线前必须把 SVG 转曲（转成路径）。</b>
+      现在的 <code>wordmark-h/v.svg</code> 与 <code>emblem.svg</code> 里的汉字与拉丁是用 <code>&lt;text&gt;</code> + 网络字体渲染的
+      （<code>symbol.svg</code> 和 <code>favicon.svg</code> 已经是纯路径，不受影响）。
+      这么做的好处是<b>参数可改、方便你继续调</b>；代价是客户机上字体一旦不可用，字就会回退变形。
+      <br/>第 04 节那个「以 <code>&lt;img&gt;</code> 加载」的对照格就是字体没加载时的样子——现在看是好的，因为它读了 Google Fonts；
+      正式上线前用 Illustrator 或 FontForge「转换为轮廓」一次即可，之后它就是纯图形，任何环境都不会变。
+    </div>
+  </section>
+
+  <!-- ============ 04 加载方式对照 ============ -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">04</span><h2>加载方式对照</h2><span class="note">内联 / img / 转曲后</span></div>
+    <div class="board">
+      <div class="grid3" style="align-items:center">
+        <div class="cell" style="border:none">
+          <span class="cap">① 内联 SVG（推荐）</span>
+          <div class="lg" style="width:180px;margin-top:18px">
+            <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%">
+              <g transform="translate(4,26) scale(0.75)"><circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/><circle cx="32" cy="32" r="5.1" fill="currentColor"/></g>
+              <line x1="63" y1="26" x2="63" y2="74" stroke="currentColor" stroke-width="0.7" opacity="0.22"/>
+              <text font-family="Noto Serif SC,serif" font-weight="200" fill="currentColor"><tspan x="76" y="59.6" font-size="34.5">予</tspan><tspan x="119.4" y="58" font-size="33">时</tspan><tspan x="165.6" y="61.4" font-size="33" fill="#B0707B">妍</tspan></text>
+              <circle cx="85" cy="68.6" r="1.7" fill="#C0A46F"/><line x1="90" y1="68.6" x2="199" y2="68.6" stroke="#C0A46F" stroke-width="0.9" stroke-linecap="round"/>
+              <text x="85" y="86" font-size="8.6" letter-spacing="3.5" fill="currentColor" opacity="0.74" font-family="Bodoni Moda,Georgia,serif">YUÉ ATELIER</text>
+            </svg>
+          </div>
+          <div class="cnote">可继承 <code>currentColor</code>（深色模式零成本）· 无额外请求 · 可单独给某个元素改色</div>
+        </div>
+        <div class="cell" style="border:none">
+          <span class="cap">② &lt;img src=".svg"&gt;</span>
+          <img src="assets/logo/wordmark-h.svg" alt="wordmark" style="width:180px;display:block;margin-top:18px" />
+          <div class="cnote">外部字体<b>会被浏览器拦截</b>（img 里的 SVG 不能拉外部资源）。这里看着正常，是因为本机已缓存该字体——<b>客户机上不保证</b></div>
+        </div>
+        <div class="cell" style="border:none">
+          <span class="cap">③ 转曲后（上线形态）</span>
+          <div class="lg" style="width:180px;margin-top:18px;opacity:.55">
+            <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%">
+              <g transform="translate(4,26) scale(0.75)"><circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/><circle cx="32" cy="32" r="5.1" fill="currentColor"/></g>
+              <text font-family="serif" font-weight="200" fill="currentColor" font-size="33" letter-spacing="10">
+                <tspan x="76" y="59.6">予时妍</tspan>
+              </text>
+            </svg>
+          </div>
+          <div class="cnote">（示意）字形变成 path 后，任何设备完全一致 —— 这是唯一可以放心用 <code>&lt;img&gt;</code> 的形态</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 05 副标与印章更新 ============ -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">05</span><h2>副标与印章 · 本轮拍板</h2><span class="note">你问「哪种更高级」——答案是再砍一个词</span></div>
+    <p class="lead">
+      上次我给的是 <b>A 妆造 · 婚礼与日常</b> / <b>B 婚礼跟妆 · 订婚宴 · 孕亲照 · 日常妆</b>。你说要更高级的——
+      更高级的做法不是换词，是<b>再砍一个词</b>：「妆造」本身是行业词，一出现就把品牌往「店」上拉。
+      砍掉它，副标变成纯场景词，气质立刻不一样。
+    </p>
+
+    <div class="board">
+      <div class="grid3" style="align-items:center">
+        <div class="cell" style="border:none">
+          <span class="cap">旧 · 上一版 A</span>
+          <div class="serif" style="font-size:12px;letter-spacing:.24em;color:var(--muted);margin-top:14px">妆造 · 婚礼与日常</div>
+          <div class="cnote">还行，但「妆造」是行业词</div>
+        </div>
+        <div class="cell" style="border:none;background:rgba(192,164,111,.07)">
+          <span class="cap" style="color:#8A6C2F">✔ 新 · 短版（推荐，进字标）</span>
+          <div class="serif" style="font-size:16px;letter-spacing:.3em;text-indent:.3em;margin-top:14px">婚礼 与 日常</div>
+          <div class="lat" style="font-size:9px;letter-spacing:.4em;text-indent:.4em;color:var(--muted);margin-top:10px">BRIDAL &amp; DAILY</div>
+          <div class="cnote">纯场景词，不含行业词 —— 更高级</div>
+        </div>
+        <div class="cell" style="border:none">
+          <span class="cap">长版（只进 meta 与关于页）</span>
+          <div class="serif" style="font-size:11.5px;letter-spacing:.14em;color:var(--muted);margin-top:14px">婚礼跟妆 · 订婚宴 · 孕亲照 · 日常妆</div>
+          <div class="cnote">SEO 与「关于」页用，不进字标</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="board">
+      <div class="grid2" style="align-items:center">
+        <div class="cell" style="border:none">
+          <span class="cap">印章 · 繁体「予時妍」（按你的选择）</span>
+          <div class="lg acc" style="width:82px;margin-top:18px">
+            <svg viewBox="0 0 76 172" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="70" height="166" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+              <rect x="9.5" y="9.5" width="57" height="153" rx="1.5" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.38"/>
+              <text font-family="Noto Serif SC,serif" font-weight="400" fill="currentColor" text-anchor="middle">
+                <tspan x="38" y="60" font-size="36">予</tspan><tspan x="38" y="104" font-size="36">時</tspan><tspan x="38" y="148" font-size="36">妍</tspan>
+              </text>
+            </svg>
+          </div>
+        </div>
+        <div class="cell left" style="border:none">
+          <span class="cap">为什么繁体只用在印章</span>
+          <div style="font-size:12.5px;color:var(--muted);margin-top:16px;line-height:1.8">
+            「時」比「时」多一层金石气，刻在朱文印里是对的。但<b>正文、字标、导航一律用简体</b>——
+            繁简混排如果超出印章这一处，就会变成「书法作品」而不是「品牌」。<br/>
+            边界：<b>只有 seal.svg 用繁体</b>，其余全部简体。这条要写进规范，不然后面做物料的人会自己发挥。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 06 落地清单 ============ -->
+  <section class="sec">
+    <div class="sec-h"><span class="no">06</span><h2>H5 接入清单</h2><span class="note">文件已就位，改 index.html 时照做</span></div>
+    <table class="spec">
+      <thead><tr><th style="width:210px">项</th><th style="width:250px">写法</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>favicon</td><td><code>&lt;link rel="icon" href="assets/logo/favicon.svg"&gt;</code></td><td>现代浏览器走 SVG</td></tr>
+        <tr><td>favicon 兜底</td><td><code>&lt;link rel="icon" sizes="32x32" href="assets/logo/favicon-32.png"&gt;</code></td><td>iOS Safari 不认 SVG favicon，必须给 PNG</td></tr>
+        <tr><td>iOS 主屏图标</td><td><code>&lt;link rel="apple-touch-icon" href="assets/logo/apple-touch-icon-180.png"&gt;</code></td><td>180×180，必须不透明背景（已满足）</td></tr>
+        <tr><td>站点主标</td><td>内联 <code>wordmark-h.svg</code></td><td>导航 / Hero。内联才能吃 <code>currentColor</code> 与深色模式</td></tr>
+        <tr><td>水印 / 落款</td><td>内联 <code>symbol.svg</code> 或 <code>seal.svg</code></td><td>查看器水印用 symbol（无字，不干扰看图）</td></tr>
+        <tr><td>社交分享图</td><td><code>&lt;meta property="og:image"&gt;</code> → 1200×630</td><td class="hl">待生成（用 emblem 居中 + 标语，我可以出）</td></tr>
+        <tr><td>分享标题</td><td><code>予时妍 YUÉ ATELIER · 化妆师甜茉个人作品集</code></td><td>微信分享卡片用</td></tr>
+      </tbody>
+    </table>
+    <div class="note-band">
+      <b>关于 É 的统一（按你的决定：全站都展示 É）：</b>
+      站内所有展示位置——<code>&lt;title&gt;</code>、Hero、关于页、分享文案、图注、水印——<b>一律用 YUÉ</b>，这一条我完全照办。
+      但有一个物理限制必须让你知道：<b>域名与微信/小红书 ID 不允许非 ASCII 字符</b>，
+      所以那些地方只能写 <code>YUE</code>（这不是设计取舍，是平台的字符集限制）。
+      换句话说：<b>能展示的地方全用 É，能输入的地方全用 YUE</b>——两者不是两套写法，是同一个名字的两种媒介形态。
+    </div>
+  </section>
+
+  <div class="foot">
+    <span>予时妍 · YUÉ ATELIER · Logo 资产与应用规范 v1.0 · 6 个 SVG + 3 档 PNG 已落盘 assets/logo/</span>
+    <span>2026-10</span>
+  </div>
+</div>
+</body>
+</html>

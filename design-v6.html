@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>予时妍 YUÉ ATELIER · 设计稿 v6（Logo 落地 + 个人署名 + 多图布局）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400&family=Jost:wght@300;400&family=Cormorant+Garamond:ital,wght@1,300&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   予时妍 · YUÉ ATELIER —— 设计稿 v6 · Logo / 署名 / 多图
+   定调：中文为主 · 英文点缀 · 精致浪漫 · 高级感
+   玻璃：三档（真 / 轻 / 假），可一键切到 X5 降级预览
+   顺序：西式浪漫 在前，新中式 在后
+   叙事：晨袍 → 出门 → 仪式主纱 → 敬酒 → 面部细节 → 头饰造型
+   本文件为设计交付物，原型 demo 一行未动
+   ============================================================ */
+
+/* ---------- 文档外壳（非设计内容） ---------- */
+:root{
+  --shell-bg:#EFEDE9; --shell-panel:#FFFFFF; --shell-ink:#161412;
+  --shell-muted:#8B857C; --shell-line:rgba(22,20,18,.10);
+  --ease:cubic-bezier(.22,1,.28,1);
+  --ease-io:cubic-bezier(.66,0,.24,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--shell-bg);color:var(--shell-ink);
+  font-family:"Jost","Helvetica Neue",Arial,sans-serif;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1300px;margin:0 auto;padding:32px 24px 72px}
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  padding-bottom:20px;border-bottom:1px solid var(--shell-line)}
+.top h1{font-family:"Noto Serif SC",serif;font-weight:300;font-size:27px;letter-spacing:.16em}
+.top .sub{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--shell-muted)}
+.legend{font-size:12.5px;color:var(--shell-muted);max-width:52em;margin:16px 0 0;letter-spacing:.03em}
+.legend b{color:var(--shell-ink);font-weight:500}
+
+.toggles{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 0}
+.tg{font-size:11px;letter-spacing:.16em;border:1px solid var(--shell-line);background:#fff;
+  border-radius:999px;padding:8px 15px;cursor:pointer;color:var(--shell-ink);transition:.25s;
+  font-family:"Noto Serif SC",serif;font-weight:300}
+.tg:hover{border-color:#B99A62;color:#8A6C2F}
+.tg.on{background:#1D1916;border-color:#1D1916;color:#F7F4F1}
+.tg.warn.on{background:#9E4E55;border-color:#9E4E55;color:#fff}
+
+.grid{display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap}
+.rail{width:206px;flex:none}
+.rail-title{font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--shell-muted);margin-bottom:12px}
+.tab{display:block;width:100%;text-align:left;border:0;background:none;cursor:pointer;
+  padding:9px 12px;border-radius:10px;margin-bottom:3px;transition:.25s;border-left:2px solid transparent}
+.tab:hover{background:rgba(255,255,255,.7)}
+.tab.on{background:#fff;border-left-color:#B99A62;box-shadow:0 2px 12px rgba(22,20,18,.06)}
+.tab i{display:block;font-style:normal;font-size:9px;letter-spacing:.24em;color:var(--shell-muted)}
+.tab b{display:block;font-weight:300;font-size:13px;letter-spacing:.06em;font-family:"Noto Serif SC",serif}
+.tab em{font-style:normal;font-size:11px;color:var(--shell-muted)}
+
+/* ---------- 手机外壳 ---------- */
+.phone{width:390px;height:844px;flex:none;border-radius:48px;background:#12100E;padding:12px;
+  box-shadow:0 30px 80px rgba(22,20,18,.28),0 0 0 1px rgba(255,255,255,.32) inset;position:relative}
+.screen{width:100%;height:100%;border-radius:38px;overflow:hidden auto;position:relative;background:#F7F4F1;isolation:isolate;scrollbar-width:none}
+.screen::-webkit-scrollbar{width:0;height:0}
+.notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:104px;height:26px;
+  background:#12100E;border-radius:0 0 14px 14px;z-index:70}
+.bar{position:absolute;top:0;left:0;right:0;height:44px;z-index:65;display:flex;align-items:center;
+  justify-content:space-between;padding:14px 26px 0;font-size:11px;letter-spacing:.08em;pointer-events:none}
+.home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:118px;height:5px;
+  border-radius:3px;background:rgba(0,0,0,.16);z-index:80}
+.page-body{padding:52px 0 26px;position:relative;z-index:2}
+.stage{display:none}
+.stage.on{display:block}
+
+/* ============================================================
+   液态玻璃系统 · 三档
+   ============================================================ */
+.glass{
+  --gb:22px;                       /* blur 半径 */
+  --gs:180%;                       /* saturate */
+  --gt:linear-gradient(158deg,rgba(255,255,255,.30),rgba(255,255,255,.10) 54%,rgba(255,255,255,.16));
+  position:relative;isolation:isolate;
+  border-radius:var(--r,18px);
+  background:var(--gt);
+  -webkit-backdrop-filter:blur(var(--gb)) saturate(var(--gs)) brightness(1.04);
+  backdrop-filter:blur(var(--gb)) saturate(var(--gs)) brightness(1.04);
+  /* 关键：玻璃元素本身禁止同时出现 overflow:hidden + border-radius（Safari 会放弃模糊），
+     光晕裁切一律交给 ::before 的 border-radius:inherit */
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.72),
+    inset 0 -1px 0 rgba(255,255,255,.14),
+    inset .5px 0 0 rgba(255,255,255,.30),
+    inset -.5px 0 0 rgba(255,255,255,.22),
+    0 16px 40px rgba(30,22,18,.13);
+}
+/* ① 高光层：静态斜向光泽 + 跟随指针/陀螺仪的液态光斑 */
+.glass::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:2;
+  background:
+    radial-gradient(240px 200px at var(--mx,42%) var(--my,26%),rgba(255,255,255,.46),transparent 68%),
+    linear-gradient(118deg,rgba(255,255,255,.48),rgba(255,255,255,.05) 36%,transparent 60%);
+  mix-blend-mode:screen;opacity:.92;
+  transition:background .45s var(--ease);
+}
+/* ② 色散描边（折射的边缘彩边） */
+.glass::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:3;
+  box-shadow:
+    inset 1px 0 0 rgba(255,205,225,.42),
+    inset -1px 0 0 rgba(190,225,255,.34),
+    inset 0 -1px 0 rgba(255,255,255,.20);
+}
+/* 轻玻璃：滚动区内的少数强调卡 */
+.glass.light{--gb:11px;--gs:150%;
+  --gt:linear-gradient(158deg,rgba(255,255,255,.22),rgba(255,255,255,.08) 60%,rgba(255,255,255,.12))}
+/* 假玻璃：零 GPU，Android 微信 X5 走这一档 */
+.glass.fake{--gb:0px;
+  --gt:linear-gradient(158deg,rgba(255,255,255,.78),rgba(255,255,255,.56) 60%,rgba(255,255,255,.64));
+  -webkit-backdrop-filter:none;backdrop-filter:none}
+.glass.fake::before{opacity:.42}
+/* 真折射层（feDisplacementMap）：仅固定层使用，每帧 4–8ms */
+.lens{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
+  background:radial-gradient(130% 120% at 32% 18%,rgba(255,255,255,.42),transparent 62%),
+             radial-gradient(90% 90% at 78% 88%,rgba(255,236,246,.34),transparent 60%);
+  filter:url(#lgRefract) blur(7px);opacity:.9}
+/* 玻璃上的文字一律墨色 + 8–12% 暖色 scrim：客片大面积白纱，白字会糊 */
+.glass .scrim{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;
+  background:rgba(255,246,240,.10)}
+.glass>*{position:relative;z-index:4}
+
+/* 降级预览（模拟 Android 微信 X5：backdrop-filter 被静默忽略） */
+html.noblur .glass{-webkit-backdrop-filter:none;backdrop-filter:none;
+  --gt:linear-gradient(158deg,rgba(255,255,255,.78),rgba(255,255,255,.54) 58%,rgba(255,255,255,.62));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.92),inset 0 -1px 0 rgba(0,0,0,.045),0 14px 30px rgba(30,22,18,.10)}
+html.noblur .glass::before{opacity:.40}
+html.noblur .glass::after{box-shadow:inset 0 0 0 .5px rgba(255,255,255,.7)}
+html.noblur .lens{display:none}
+
+/* 玻璃分层标注 */
+.gtag{display:none;position:absolute;top:-8px;right:-6px;z-index:9;font-size:8px;letter-spacing:.14em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#0B6BD8;color:#fff;
+  padding:2px 5px;border-radius:4px;line-height:1.3}
+.gtag.li{background:#8A6C2F}.gtag.fk{background:#6B6B6B}
+html.annotate .gtag{display:block}
+html.annotate [data-g]{outline:1px dashed rgba(11,107,216,.85);outline-offset:3px}
+html.annotate [data-g="light"]{outline-color:rgba(138,108,47,.9)}
+html.annotate [data-g="fake"]{outline-color:rgba(107,107,107,.9)}
+
+/* ---------- 通用类型 ---------- */
+.cd{font-family:"Noto Serif SC",serif;font-weight:300;letter-spacing:.22em;line-height:1.35}
+.cn{font-family:"Noto Serif SC",serif;font-weight:300}
+.en{font-size:9px;letter-spacing:.38em;text-transform:uppercase;color:var(--muted);font-weight:300}
+.en-i{font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:300;letter-spacing:.04em}
+.grain{position:absolute;inset:0;z-index:60;pointer-events:none;opacity:.05;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- 背景动效 ---------- */
+.blob{position:absolute;border-radius:50%;filter:blur(52px);z-index:0}
+@keyframes d1{to{transform:translate(54px,46px) scale(1.16)}}
+@keyframes d2{to{transform:translate(-60px,38px) scale(1.12)}}
+@keyframes d3{to{transform:translate(46px,-54px) scale(1.14)}}
+@keyframes sweep{from{transform:translateX(-260px)}to{transform:translateX(480px)}}
+.sweep{position:absolute;top:-10%;bottom:-10%;width:150px;z-index:1;pointer-events:none;
+  background:linear-gradient(102deg,transparent,rgba(255,255,255,.52),transparent);animation:sweep 11s var(--ease-io) infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes breathe{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:.8;transform:scale(1.06)}}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* ============================================================
+   基础主题（首页 / 图集 / 关于）—— 暖白 + 玫瑰褐 + 香槟
+   ============================================================ */
+.ms{--paper:#F7F4F1;--ink:#1D1916;--muted:#8B8378;--accent:#B0707B;--gold:#C2A874;--r:18px;
+  background:var(--paper);color:var(--ink);min-height:100%;position:relative;overflow:hidden}
+.ms .b1{width:300px;height:300px;left:-90px;top:-70px;background:#F1E1E1;opacity:.62;animation:d1 30s var(--ease-io) infinite alternate}
+.ms .b2{width:270px;height:270px;right:-90px;top:150px;background:#F1E8D8;opacity:.6;animation:d2 36s var(--ease-io) infinite alternate}
+.ms .b3{width:330px;height:330px;left:-50px;bottom:-100px;background:#E9E8E0;opacity:.55;animation:d3 32s var(--ease-io) infinite alternate}
+
+.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 22px 0}
+.nav .wm{font-size:12px;letter-spacing:.42em;color:var(--ink)}
+.nav .wm .cn{font-size:10px;letter-spacing:.3em;color:var(--muted);margin-left:8px}
+.nav .menu{display:flex;gap:5px;flex-direction:column;align-items:flex-end}
+.nav .menu span{display:block;height:1px;background:var(--ink);width:18px;opacity:.65}
+.nav .menu span:nth-child(2){width:12px}
+
+.hero{padding:26px 22px 0}
+.hero .lead{font-size:35px;letter-spacing:.26em;margin:2px 0 0}
+.hero .lead .rose{color:var(--accent)}
+/* 字标：三字等大 —— 原「予 ×1.045」缩放修正已被 canvas 实测推翻（见 brand-identity.html 第 01 节） */
+.hero .sub{display:flex;align-items:center;margin:14px 0 4px}
+.hero .sub .cn{font-size:11.5px;letter-spacing:.2em;color:#4A423B}
+.hero .enline{margin:4px 0 18px}
+.shot{position:relative;overflow:hidden;border-radius:var(--r)}
+.shot img{width:100%;display:block;object-fit:cover}
+.hero-shot{height:318px;box-shadow:0 30px 64px rgba(30,26,23,.20)}
+.hero-shot img{height:100%;transform:scale(1.05)}
+.cue{display:flex;align-items:center;gap:9px;margin:18px 0 26px}
+.cue i{display:block;width:1px;height:26px;background:var(--gold);transform-origin:top;animation:cuey 2.4s var(--ease-io) infinite}
+@keyframes cuey{0%{transform:scaleY(0)}45%{transform:scaleY(1)}100%{transform:scaleY(0);transform-origin:bottom}}
+.cue span{font-size:10px;letter-spacing:.3em;color:var(--muted)}
+
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;padding:0 22px 14px}
+.sec-head .cd{font-size:21px}
+.secs{padding:0 22px}
+.row{display:flex;align-items:center;gap:14px;padding:14px 16px;margin-bottom:10px;transition:.5s var(--ease)}
+.row:hover{transform:translateY(-3px)}
+.row img{width:52px;height:66px;border-radius:8px;object-fit:cover;flex:none}
+.row .m{flex:1}
+.row .m .cd{font-size:15px;letter-spacing:.16em}
+.row .arw{color:var(--gold);font-size:17px;transition:.5s var(--ease)}
+.row:hover .arw{transform:translateX(6px)}
+
+.marquee{overflow:hidden;margin:24px 0 18px;padding:12px 0;
+  mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.marquee div{display:flex;gap:30px;white-space:nowrap;animation:marq 26s linear infinite}
+.marquee span{font-family:"Noto Serif SC",serif;font-weight:300;font-size:13px;letter-spacing:.3em;color:#7B7369}
+.marquee span i{font-style:normal;color:var(--accent);margin-right:10px}
+
+/* 玻璃 Dock（iOS 26 风格，真玻璃） */
+.dock-wrap{position:sticky;bottom:10px;z-index:62;padding:0 14px;margin-top:14px}
+.dock{display:flex;justify-content:space-around;align-items:center;gap:6px;padding:10px 8px;--r:26px;--gb:26px}
+.dock span{font-family:"Noto Serif SC",serif;font-weight:300;font-size:11px;letter-spacing:.2em;
+  color:#5A5049;text-align:center;flex:1;padding:5px 0;border-radius:16px;transition:.4s var(--ease)}
+.dock span.on{color:var(--ink);background:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+.dock span em{display:block;font-style:normal;font-size:7.5px;letter-spacing:.28em;color:rgba(139,131,120,.8);margin-top:2px}
+
+/* 内页头 */
+.ihead{padding:8px 22px 20px}
+.ihead .back{font-size:19px;color:var(--muted)}
+.ihead .cd{font-size:28px;margin-top:10px;letter-spacing:.24em}
+.ihead .cnsub{font-size:11.5px;color:var(--muted);letter-spacing:.18em;margin-top:8px}
+
+/* 系列双封面 */
+.cover{position:relative;height:284px;margin:0 22px 14px;border-radius:6px;overflow:hidden;cursor:pointer;
+  box-shadow:0 26px 58px rgba(30,26,23,.20);transition:.65s var(--ease)}
+.cover img{width:100%;height:100%;object-fit:cover;filter:saturate(.94)}
+.cover .tint{position:absolute;inset:0;mix-blend-mode:multiply;transition:.65s var(--ease)}
+.cover:hover{transform:translateY(-5px)}
+.cover .big{position:absolute;left:20px;top:16px;font-family:"Noto Serif SC",serif;font-weight:200;
+  font-size:31px;color:#fff;letter-spacing:.28em;text-shadow:0 2px 24px rgba(0,0,0,.45)}
+.cover .vslip{position:absolute;right:14px;top:14px;writing-mode:vertical-rl;font-family:"Noto Serif SC",serif;
+  font-weight:300;font-size:11px;letter-spacing:.34em;color:#221D19;padding:10px 7px;--r:3px;--gb:24px;z-index:5}
+.cover .foot{position:absolute;left:18px;right:18px;bottom:16px;color:#fff;display:flex;align-items:flex-end;justify-content:space-between;z-index:5}
+.cover .foot .cd{font-size:15px;letter-spacing:.2em;text-shadow:0 1px 16px rgba(0,0,0,.4)}
+.cover .go{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#221D19;
+  --r:50%;--gb:18px;transition:.55s var(--ease);font-size:15px}
+.cover:hover .go{transform:rotate(45deg) scale(1.06)}
+.cover .strips{position:absolute;right:14px;bottom:62px;display:flex;gap:5px;z-index:5}
+.cover .strips i{width:24px;height:32px;border-radius:3px;background-size:cover;background-position:center;
+  border:1px solid rgba(255,255,255,.5);opacity:.92}
+.cmeta{display:flex;justify-content:space-between;padding:0 24px;color:var(--muted);font-size:10px;letter-spacing:.2em;margin-bottom:20px}
+
+/* ============================================================
+   主题 A · 西式浪漫（排在新中式之前）
+   奶白 + 玫瑰 + 香槟 · 大圆角 · 拱形 · 罗马斜体序号
+   ============================================================ */
+.twe{--paper:#FBF6F5;--ink:#241E1B;--muted:#948880;--accent:#C08994;--gold:#C8AE84;--r:20px;
+  background:var(--paper);color:var(--ink);min-height:100%;position:relative;overflow:hidden}
+.twe .w1{width:300px;height:300px;left:-90px;top:-80px;background:#F6E3E4;opacity:.68;animation:d1 30s var(--ease-io) infinite alternate}
+.twe .w2{width:280px;height:280px;right:-80px;top:220px;background:#F4E9DC;opacity:.65;animation:d2 36s var(--ease-io) infinite alternate}
+.twe .w3{width:340px;height:340px;left:10px;bottom:-130px;background:#F8ECEA;opacity:.62;animation:d3 34s var(--ease-io) infinite alternate}
+.twe .oring{position:absolute;border-radius:50%;border:1px solid rgba(192,137,148,.20);z-index:0}
+.twe .o1{width:330px;height:330px;left:-120px;top:70px}
+.twe .o2{width:230px;height:230px;right:-90px;bottom:130px;border-color:rgba(200,174,132,.30)}
+.twe .glass::after{box-shadow:inset 1px 0 0 rgba(255,214,226,.5),inset -1px 0 0 rgba(255,236,214,.4),inset 0 -1px 0 rgba(255,255,255,.22)}
+.twe .the-head .cd{font-family:"Noto Serif SC",serif;font-weight:200;font-size:34px;color:var(--accent)}
+.twe .the-head .cd em{color:var(--ink)}
+.twe .book .ph{aspect-ratio:4/5;height:auto;border-radius:170px 170px 20px 20px;box-shadow:0 26px 58px rgba(120,80,88,.18)}
+.twe .book .num{font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:300;color:var(--accent);font-size:46px;left:8px;top:-18px}
+.twe .chapter .cnum{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:14px;color:var(--accent)}
+.twe .chapter .crow .bar{background:var(--gold);opacity:.9}
+.twe .shot{border-radius:18px}
+.twe .shot.moon{border-radius:50%;width:74%;margin:0 auto;box-shadow:0 26px 62px rgba(192,137,148,.26)}
+.twe .shot .dtag{--r:999px}
+
+/* ============================================================
+   主题 B · 新中式（精致打磨版）
+   绢白 + 绛 + 香槟金 + 黛青 · 直角玻璃 + 双线金框 · 细宋序号
+   ============================================================ */
+.tcn{--paper:#F8F5F1;--ink:#201B17;--muted:#8C8477;--accent:#9E4E55;--gold:#C0A46F;--jade:#6E7C76;--r:3px;
+  background:var(--paper);color:var(--ink);min-height:100%;position:relative;overflow:hidden}
+.tcn .silk{position:absolute;inset:0;z-index:0;opacity:.30;
+  background-image:repeating-linear-gradient(90deg,transparent 0 47px,rgba(32,27,23,.055) 47px 48px)}
+.tcn .g1{width:290px;height:290px;left:-80px;top:-60px;background:#EEDDDB;opacity:.64;animation:d1 28s var(--ease-io) infinite alternate}
+.tcn .g2{width:310px;height:310px;right:-100px;bottom:-70px;background:#F0E5D3;opacity:.6;animation:d2 34s var(--ease-io) infinite alternate}
+.tcn .g3{width:240px;height:240px;left:60px;top:340px;background:#E4E6E0;opacity:.5;animation:d3 38s var(--ease-io) infinite alternate}
+.tcn .glass{--r:3px}
+.tcn .glass::after{box-shadow:inset 1px 0 0 rgba(192,164,111,.55),inset -1px 0 0 rgba(110,124,118,.38),inset 0 -1px 0 rgba(255,255,255,.18)}
+/* 双线金框 + 玻璃 */
+.dframe{border:1px solid var(--gold);
+  box-shadow:inset 0 0 0 5px var(--paper), inset 0 0 0 6px rgba(192,164,111,.55), 0 26px 56px rgba(32,27,23,.20)}
+.vslip2{writing-mode:vertical-rl;font-family:"Noto Serif SC",serif;font-weight:300;font-size:11px;
+  letter-spacing:.34em;padding:10px 7px;color:var(--ink);--r:3px;--gb:24px}
+
+.the-head{padding:6px 22px 20px;position:relative;z-index:2}
+.the-head .row{display:flex;align-items:center;justify-content:space-between}
+.the-head .cd{font-size:33px;margin-top:8px;letter-spacing:.3em}
+.the-head .cd em{font-style:normal;color:var(--accent)}
+.seal-mini{width:32px;height:32px;border-radius:3px;border:1px solid var(--accent);color:var(--accent);
+  display:grid;place-items:center;font-family:"Noto Serif SC",serif;font-weight:400;font-size:14px;transform:rotate(-2deg)}
+.hrjade{display:flex;align-items:center;gap:8px;margin-top:12px}
+.hrjade i{height:1px;background:var(--jade);opacity:.7;width:26px}
+.hrjade i.gold{background:var(--gold);width:34px;opacity:.9}
+
+/* 册封面 */
+.book{margin:0 22px 28px;position:relative;z-index:2}
+.book.r{margin-left:auto;margin-right:22px}
+.book .ph{position:relative;aspect-ratio:4/5;height:auto;overflow:hidden;border-radius:3px}
+.book .ph img{width:100%;height:100%;object-fit:cover}
+.book .ph .veil{position:absolute;inset:0;background:linear-gradient(180deg,transparent 52%,rgba(32,27,23,.34))}
+.book .num{position:absolute;left:-4px;top:-16px;font-family:"Noto Serif SC",serif;font-weight:200;font-size:44px;
+  color:var(--accent);line-height:1;letter-spacing:0;text-shadow:0 2px 0 var(--paper)}
+.book .slip{position:absolute;right:12px;top:12px;z-index:6}
+.book .bmeta{display:flex;align-items:baseline;justify-content:space-between;margin-top:14px}
+.book .bmeta .cd{font-size:13px;letter-spacing:.2em}
+.book .bmeta .en{font-size:8.5px}
+.book .hair{height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:12px;opacity:.8}
+
+/* 章节（六段叙事） */
+.ab-hero{position:relative;height:396px;overflow:hidden}
+.ab-hero img{width:100%;height:100%;object-fit:cover}
+.ab-hero .fade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.22),transparent 42%,rgba(0,0,0,.58))}
+.ab-hero .t{position:absolute;left:22px;right:22px;bottom:22px;color:#fff}
+.ab-hero .t .cd{font-size:23px;letter-spacing:.26em}
+.ab-hero .t .en{color:rgba(255,255,255,.82);margin-top:6px}
+.ab-hero .t .fl{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.ab-hero .t .fl span{font-family:"Noto Serif SC",serif;font-weight:300;font-size:9.5px;letter-spacing:.14em;
+  padding:5px 9px;--r:999px;--gb:16px;color:#231E1A}
+/* 亮图上的玻璃：加强白底，保证墨色字可读（白纱/红金礼服都不糊） */
+.ab-hero .glass,.shot .glass{
+  --gt:linear-gradient(158deg,rgba(255,255,255,.82),rgba(255,255,255,.58) 58%,rgba(255,255,255,.70))}
+.ab-hero .glass::before,.shot .glass::before{opacity:.45}
+
+.chapter{padding:26px 22px 30px;position:relative;z-index:2}
+.chapter .crow{display:flex;align-items:center;gap:10px}
+.chapter .cnum{font-family:"Noto Serif SC",serif;font-weight:300;font-size:12px;letter-spacing:.3em;color:var(--accent)}
+.chapter .crow .bar{height:1px;width:22px;background:var(--jade);opacity:.75}
+.chapter .crow .en{font-size:8.5px}
+.chapter .cd{font-size:22px;margin:8px 0 6px;letter-spacing:.24em}
+.chapter .desc{font-size:11.5px;color:var(--muted);letter-spacing:.1em;line-height:1.9;margin-bottom:15px;max-width:24em}
+.shot.full img{aspect-ratio:3/4;height:auto}
+.shot.duo{display:flex;gap:11px}
+.shot.duo img{flex:1;aspect-ratio:3/4;height:auto;object-fit:cover;border-radius:8px;box-shadow:0 18px 40px rgba(32,27,23,.16)}
+.shot.off{width:66%;margin-left:16%}
+.shot.off img{aspect-ratio:3/4;height:auto}
+.shot.moon{border-radius:50% 50% 4px 4px/32% 32% 4px 4px;width:80%;margin:0 auto;
+  box-shadow:0 24px 58px rgba(32,27,23,.22)}
+.shot.moon img{aspect-ratio:4/5;height:auto}
+.shot .cap{position:absolute;left:12px;bottom:12px;font-size:9px;letter-spacing:.26em;color:#221D19;
+  padding:5px 11px;--r:999px;--gb:16px;z-index:5}
+.shot .dtag{position:absolute;right:12px;top:12px;font-family:"Noto Serif SC",serif;font-weight:300;font-size:10px;
+  letter-spacing:.24em;color:var(--ink);padding:5px 11px;--r:999px;--gb:16px;z-index:5}
+.ab-foot{display:flex;align-items:center;justify-content:space-between;margin:0 22px;padding:20px 0;
+  border-top:1px solid rgba(32,27,23,.10)}
+.ab-foot .cd{font-size:16px;letter-spacing:.22em}
+.ab-foot .arw{color:var(--accent);font-size:18px}
+
+/* ---------- 照片比例适配 ---------- */
+.r23{aspect-ratio:2/3}.r34{aspect-ratio:3/4}.r45{aspect-ratio:4/5}
+.r11{aspect-ratio:1/1}.r43{aspect-ratio:4/3}.r32{aspect-ratio:3/2}.r169{aspect-ratio:16/9}
+.fit{width:100%;height:100%;object-fit:cover;display:block}
+.ratio-tag{position:absolute;left:10px;top:10px;font-family:ui-monospace,Menlo,monospace;font-size:9px;
+  letter-spacing:.1em;color:#221D19;padding:3px 8px;--r:999px;--gb:14px;z-index:5}
+
+/* ---------- 查看器 ---------- */
+.vw{background:#15120F;color:#E9E3D9;min-height:100%;position:relative;overflow:hidden;--r:18px}
+.vw .gl{position:absolute;width:320px;height:320px;border-radius:50%;filter:blur(76px);opacity:.28;left:50px;top:130px;background:#7A5140}
+.vw .hd{display:flex;align-items:center;justify-content:space-between;padding:54px 22px 10px}
+.vw .hd .cd{font-size:12px;letter-spacing:.22em}
+.vw .st{height:404px;display:grid;place-items:center;padding:0 18px}
+.vw .st img{max-width:100%;max-height:100%;border-radius:4px;box-shadow:0 40px 80px rgba(0,0,0,.55)}
+.vw .ft{padding:14px 18px 26px;--gb:28px}
+.vw .cnt{display:flex;align-items:baseline;justify-content:space-between;font-size:10px;letter-spacing:.26em;color:#D8D1C6}
+.vw .trk{height:2px;background:rgba(233,227,217,.22);margin:12px 0 14px;position:relative;border-radius:2px}
+.vw .trk i{position:absolute;left:0;top:0;height:100%;width:34%;background:#E9E3D9;border-radius:2px}
+.vw .thumbs{display:flex;gap:8px;overflow:hidden}
+.vw .thumbs i{width:46px;height:60px;border-radius:4px;background-size:cover;background-position:center;opacity:.55;flex:none}
+.vw .thumbs i.on{opacity:1;outline:1px solid rgba(233,227,217,.7);outline-offset:2px}
+.vw .tip{text-align:center;font-size:10px;letter-spacing:.22em;color:#9A928A;margin-top:14px}
+.vw .glass{--gt:linear-gradient(158deg,rgba(255,255,255,.14),rgba(255,255,255,.05) 55%,rgba(255,255,255,.08));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.30),inset 0 -1px 0 rgba(255,255,255,.06),0 18px 44px rgba(0,0,0,.4)}
+/* 暗房底栏：深色 scrim，避免模糊把底下的亮色礼服「透」上来糊住文字 */
+.vw .glass .scrim{background:rgba(14,12,10,.46)}
+
+/* ---------- 关于 ---------- */
+.ab{padding:0 22px;position:relative;z-index:2}
+.ab .portrait{width:172px;height:172px;margin:4px auto 0;border-radius:50%;position:relative}
+.ab .portrait img{width:100%;height:100%;object-fit:cover;border-radius:50%;box-shadow:0 26px 56px rgba(30,26,23,.22)}
+.ab .portrait::after{content:"";position:absolute;inset:-16px;border-radius:50%;border:1px solid rgba(194,168,116,.5);animation:spin 22s linear infinite}
+.ab .portrait::before{content:"";position:absolute;inset:-27px;border-radius:50%;border:1px dashed rgba(194,168,116,.3);animation:spin 34s linear infinite reverse}
+.ab .name{text-align:center;font-size:23px;margin-top:20px;letter-spacing:.3em}
+.ab .role{text-align:center;font-size:10px;letter-spacing:.26em;color:var(--muted);margin-top:8px}
+.ab .bio{text-align:center;font-size:12px;color:#4B423A;max-width:23em;margin:16px auto 0;line-height:2.1;letter-spacing:.04em}
+.stats{display:flex;justify-content:space-between;margin:22px 0;padding:16px 4px;--r:16px;--gb:14px}
+.stats div{text-align:center;flex:1}
+.stats b{display:block;font-family:"Noto Serif SC",serif;font-weight:200;font-size:23px;letter-spacing:.06em}
+.stats span{font-size:10px;letter-spacing:.2em;color:var(--muted);font-family:"Noto Serif SC",serif;font-weight:300}
+.steps{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:20px}
+.steps span{padding:7px 15px;font-family:"Noto Serif SC",serif;font-weight:300;font-size:11px;letter-spacing:.2em;
+  color:#3C342D;--r:999px;--gb:12px}
+/* 品牌块（关于页）：字标 → 英文 → 引导线 → 标语，四级递进 */
+.brandblk{text-align:center;margin:0 0 22px}
+/* 字标三字等大，不做缩放修正（原 1.045× 已实测推翻） */
+.brandblk .rose{color:var(--accent)}
+.brandblk .hairline{display:block;width:32px;height:1px;background:var(--gold);opacity:.85;margin:0 auto 11px}
+.qrb{padding:20px;text-align:center;--r:18px;--gb:18px}
+.qrb .qb{width:126px;height:126px;margin:0 auto 14px;border:1px dashed rgba(194,168,116,.7);border-radius:10px;
+  display:grid;place-items:center;color:#8A6C2F;font-size:10px;letter-spacing:.18em;font-family:"Noto Serif SC",serif;font-weight:300}
+.qrb p{font-size:10.5px;letter-spacing:.18em;color:var(--muted);font-family:"Noto Serif SC",serif;font-weight:300}
+.cta{margin-top:16px;width:100%;height:52px;--r:16px;--gb:16px;
+  font-family:"Noto Serif SC",serif;font-weight:300;font-size:13px;letter-spacing:.34em;text-indent:.34em;color:#221D19}
+.cta em{font-style:normal;font-size:8.5px;letter-spacing:.3em;color:rgba(34,29,25,.5);margin-left:8px;
+  font-family:"Jost",sans-serif;text-transform:uppercase}
+
+/* ---------- 品牌标识（内联 SVG，继承 currentColor） ---------- */
+.nav .brandlock{display:flex;align-items:center;gap:7px}
+.nav .brandlock .mk{width:17px;height:17px;flex:none;display:block}
+.nav .brandlock .cn{font-family:"Noto Serif SC",serif;font-weight:300;font-size:13px;letter-spacing:.2em;text-indent:.2em;color:var(--ink)}
+.nav .brandlock .ac{color:var(--accent)}
+.nav .right{display:flex;align-items:center;gap:9px}
+.nav .whoami{display:flex;align-items:center;gap:6px}
+.nav .whoami .pt{width:20px;height:20px;border-radius:50%;overflow:hidden;flex:none;
+  box-shadow:0 0 0 .5px rgba(29,25,22,.18),0 3px 9px rgba(30,22,18,.12)}
+.nav .whoami .pt img{width:100%;height:100%;object-fit:cover;display:block}
+.nav .whoami .n{font-family:"Noto Serif SC",serif;font-weight:300;font-size:10px;letter-spacing:.16em;color:var(--muted)}
+
+/* ---------- 个人署名条（首屏角落 → 关于页入口） ---------- */
+.byline{display:flex;align-items:center;gap:11px;margin:2px 22px 0;padding:11px 13px;--r:16px;--gb:12px;
+  text-decoration:none;color:var(--ink)}
+.byline .pt{width:34px;height:34px;border-radius:50%;overflow:hidden;flex:none;
+  box-shadow:0 0 0 .5px rgba(29,25,22,.2),0 6px 16px rgba(30,22,18,.14)}
+.byline .pt img{width:100%;height:100%;object-fit:cover;display:block}
+.byline .tx{flex:1;display:flex;flex-direction:column;gap:3px;min-width:0}
+.byline .tx .n{font-family:"Noto Serif SC",serif;font-weight:300;font-size:11.5px;letter-spacing:.16em}
+.byline .tx .en{font-family:"Jost",sans-serif;font-weight:300;font-size:7.5px;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--muted)}
+.byline .arw{font-size:13px;color:var(--muted)}
+.byline .seal-mini{border-color:var(--accent);color:var(--accent)}
+
+/* ---------- 多图布局（面部细节 / 头饰造型 · 1–N 张） ---------- */
+.mwrap{padding:0 22px}
+.mlab{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:24px 0 9px}
+.mlab .t{font-family:"Noto Serif SC",serif;font-weight:300;font-size:12px;letter-spacing:.16em}
+.mlab .c{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:8.5px;color:var(--muted);letter-spacing:.08em}
+.mg{display:grid;gap:9px}
+.mg figure{margin:0;position:relative;overflow:hidden;border-radius:10px;background:#EBE4DE}
+.mg figure img{width:100%;height:100%;object-fit:cover;display:block}
+.mg.one figure{aspect-ratio:3/4}
+.mg.two{grid-template-columns:1fr 1fr}
+.mg.two figure{aspect-ratio:3/4}
+.mg.three{grid-template-columns:1.42fr 1fr;grid-template-rows:repeat(2,132px)}
+.mg.three figure{aspect-ratio:auto;height:100%}
+.mg.three figure:first-child{grid-row:1/3}
+.mg.four{grid-template-columns:1fr 1fr}
+.mg.four figure{aspect-ratio:3/4}
+.mg.wide figure{aspect-ratio:3/2}
+.mg.mix figure.w{grid-column:1/-1;aspect-ratio:3/2}
+.mstrip{display:flex;gap:9px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.mstrip::-webkit-scrollbar{height:0}
+.mstrip figure{margin:0;flex:0 0 74%;aspect-ratio:3/4;border-radius:10px;overflow:hidden;
+  scroll-snap-align:start;background:#EBE4DE}
+.mstrip figure img{width:100%;height:100%;object-fit:cover;display:block}
+.mstrip figure:last-child{flex:0 0 46%}
+.mstrip .morecap{flex:0 0 74%;aspect-ratio:3/4;border-radius:10px;border:1px dashed rgba(29,25,22,.22);
+  display:grid;place-items:center;scroll-snap-align:start;font-family:"Noto Serif SC",serif;
+  font-weight:300;font-size:11px;letter-spacing:.2em;color:var(--muted)}
+.mhint{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.mhint .d{display:flex;gap:4px}
+.mhint .d i{width:12px;height:2px;border-radius:2px;background:rgba(29,25,22,.16)}
+.mhint .d i.on{background:var(--accent);width:20px}
+.mhint .n{font-family:ui-monospace,Menlo,monospace;font-size:8.5px;color:var(--muted);letter-spacing:.1em}
+.secmark{display:flex;align-items:flex-end;justify-content:space-between;margin:30px 0 14px;padding-top:18px;
+  border-top:1px solid rgba(29,25,22,.1)}
+.secmark .l{display:flex;align-items:baseline;gap:11px}
+.secmark .tx{display:flex;flex-direction:column}
+.secmark .no{font-family:"Noto Serif SC",serif;font-weight:200;font-size:26px;color:var(--accent);letter-spacing:.06em}
+.secmark .t{font-family:"Noto Serif SC",serif;font-weight:300;font-size:16px;letter-spacing:.22em}
+.secmark .en{display:block;font-size:8px;letter-spacing:.32em;color:var(--muted);text-transform:uppercase;margin-top:5px}
+.sealv{width:30px;height:74px;border:1px solid var(--accent);border-radius:2px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-family:"Noto Serif SC",serif;font-weight:400;font-size:15px;
+  line-height:1.06;color:var(--accent);flex:none}
+.mintro{font-size:11.5px;line-height:1.95;color:#4A423B;letter-spacing:.03em;margin:16px 0 2px}
+.mfoot{font-size:10.5px;line-height:1.85;color:var(--muted);letter-spacing:.04em;margin-top:12px}
+/* 关于页品牌块里的完整字标（内联 SVG，继承 currentColor） */
+.brandblk .lgmark{display:block;color:var(--ink)}
+.brandblk .lgmark svg{display:block;width:206px;height:auto;margin:0 auto}
+.brandblk .sub2{font-family:"Noto Serif SC",serif;font-weight:300;font-size:11px;letter-spacing:.3em;
+  text-indent:.3em;margin-top:14px}
+.brandblk .sub2en{font-family:"Jost",sans-serif;font-weight:300;font-size:7.5px;letter-spacing:.36em;
+  text-indent:.36em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+
+/* ---------- 图集 / 比例 ---------- */
+.ggrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:0 22px}
+.ggrid figure{position:relative;border-radius:10px;overflow:hidden;box-shadow:0 16px 34px rgba(30,26,23,.13)}
+.rgrid{display:flex;flex-direction:column;gap:13px;padding:0 22px}
+.rgrid figure{position:relative;border-radius:10px;overflow:hidden;box-shadow:0 18px 38px rgba(30,26,23,.14)}
+.rgrid .pair{display:flex;gap:11px}
+.rgrid .pair figure{flex:1}
+
+/* ---------- 备注栏 ---------- */
+.notes{flex:1;min-width:300px;background:var(--shell-panel);border-radius:16px;padding:22px 24px;
+  box-shadow:0 10px 40px rgba(22,20,18,.06)}
+.notes .tag{font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--shell-muted)}
+.notes h4{font-family:"Noto Serif SC",serif;font-weight:300;font-size:20px;margin:6px 0 2px;letter-spacing:.12em}
+.notes .route{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#8A6C2F;margin-bottom:14px}
+.notes h5{font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--shell-muted);
+  margin:16px 0 6px;font-weight:400}
+.notes ul{list-style:none}
+.notes li{font-size:13px;line-height:1.8;margin-bottom:8px;padding-left:14px;position:relative;color:#332E28}
+.notes li::before{content:"";position:absolute;left:0;top:12px;width:5px;height:1px;background:#B99A62}
+.notes li b{font-weight:500;color:#161412}
+.notes li code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:#F4F1EC;padding:1px 5px;border-radius:4px}
+
+/* ---------- 底部规范区 ---------- */
+.specs{margin-top:40px;background:#fff;border-radius:18px;padding:26px 28px;box-shadow:0 10px 40px rgba(22,20,18,.06)}
+.specs h3{font-family:"Noto Serif SC",serif;font-weight:300;font-size:19px;letter-spacing:.16em;margin-bottom:4px}
+.specs .cap{font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--shell-muted)}
+.specs table{width:100%;border-collapse:collapse;margin-top:16px;font-size:12.5px}
+.specs th{text-align:left;font-weight:400;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--shell-muted);padding:8px 10px;border-bottom:1px solid var(--shell-line)}
+.specs td{padding:9px 10px;border-bottom:1px solid var(--shell-line);vertical-align:top;line-height:1.75;color:#332E28}
+.specs td b{font-weight:500;color:#161412}
+.specs td code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:#F4F1EC;padding:1px 5px;border-radius:4px}
+.ok{color:#3E7A52}.no{color:#9E4E55}.mid{color:#8A6C2F}
+.swatch{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.swatch div{width:120px;border-radius:10px;padding:10px 12px;font-size:10px;letter-spacing:.16em;color:#221D19;
+  border:1px solid rgba(0,0,0,.06);font-family:"Noto Serif SC",serif;font-weight:300}
+.foot{margin-top:36px;font-size:11px;letter-spacing:.2em;color:var(--shell-muted);text-align:center;
+  font-family:"Noto Serif SC",serif;font-weight:300}
+@media (max-width:1180px){.notes{order:3;width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <div>
+      <span class="sub">Design Mockup v4 · Liquid Glass</span>
+      <h1>予时妍 · YUÉ ATELIER · 设计稿 v6</h1>
+    </div>
+  </div>
+  <p class="legend">v6 = v5 + <b>Logo 落地 / 个人署名 / 多图布局</b>。本版五件事：① 导航与关于页换成<b>新 Logo</b>（内联 SVG 符号 + 字标，可继承 currentColor）；② 首屏新增<b>个人署名</b>——右上角头像圆章 + Hero 下方「甜茉 · 化妆师个人作品集」署名条，点进关于页；③ 新增第 <b>11 屏「多图布局」</b>——面部细节 / 头饰造型支持 1–N 张，含 1/2/3/4/6 张与横图混排的实际排布；④ 副标改为更高级的 <b>「婚礼 与 日常」</b>（砍掉行业词「妆造」）；⑤ 印章按拍板上<b>繁体「予時妍」</b>。名字与字标规范见 <b>brand-identity.html</b>，Logo 资产规范见 <b>logo-board.html</b>。原型 demo 一行未动。</p>
+
+  <div class="toggles">
+    <button class="tg" id="tgAnn">◇ 玻璃分层标注</button>
+    <button class="tg warn" id="tgBlur">◇ X5 降级预览（假玻璃）</button>
+    <button class="tg on" id="tgLight">◇ 光影跟随（指针 / 陀螺仪）</button>
+    <button class="tg" id="replay">↻ 重播动效</button>
+  </div>
+
+  <div class="grid">
+    <div class="rail">
+      <div class="rail-title">Screens</div>
+      <div id="tabs">
+        <button class="tab on" data-p="home"><i>01</i><b>首页</b><em>动态背景 · 玻璃 Dock</em></button>
+        <button class="tab" data-p="coll"><i>02</i><b>系列双封面</b><em>西式在前</em></button>
+        <button class="tab" data-p="welist"><i>03</i><b>西式 · 册页</b><em>玫瑰 · 拱形</em></button>
+        <button class="tab" data-p="cnlist"><i>04</i><b>新中式 · 册页</b><em>绛 · 金框</em></button>
+        <button class="tab" data-p="wealb"><i>05</i><b>西式 · 详情</b><em>六段叙事</em></button>
+        <button class="tab" data-p="cnalb"><i>06</i><b>新中式 · 详情</b><em>六段叙事</em></button>
+        <button class="tab" data-p="gallery"><i>07</i><b>平铺图集</b><em>订婚 / 孕亲</em></button>
+        <button class="tab" data-p="ratio"><i>08</i><b>比例适配</b><em>竖构图 / 横构图</em></button>
+        <button class="tab" data-p="viewer"><i>09</i><b>查看器</b><em>暗房玻璃</em></button>
+        <button class="tab" data-p="about"><i>10</i><b>关于 · 预约</b><em>转化闭环</em></button>
+        <button class="tab" data-p="multi"><i>11</i><b>多图布局</b><em>面部 / 头饰 1–N 张</em></button>
+      </div>
+    </div>
+
+    <div class="phone">
+      <div class="screen" id="screen">
+        <div class="notch"></div>
+        <div class="bar"><span>00:59</span><span style="letter-spacing:.18em">▮▮▮ ⌁</span></div>
+
+        <!-- ============ 01 首页 ============ -->
+        <section class="stage on" data-s="home">
+          <div class="ms">
+            <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+            <div class="sweep"></div>
+            <div class="page-body">
+              <div class="nav">
+                <span class="brandlock">
+                  <svg class="mk" viewBox="0 0 64 64" aria-hidden="true" fill="none">
+                    <circle cx="32" cy="32" r="22.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                            stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+                    <circle cx="32" cy="32" r="5.4" fill="currentColor" stroke="none"/>
+                  </svg>
+                  <span class="cn">予时<span class="ac">妍</span></span>
+                </span>
+                <span class="right">
+                  <span class="whoami">
+                    <span class="pt"><img src="assets/img/portrait.png" alt="甜茉" /></span>
+                    <span class="n">甜茉</span>
+                  </span>
+                  <span class="menu"><span></span><span></span></span>
+                </span>
+              </div>
+              <div class="hero">
+                <div class="en">Yué Atelier · Est. 2018</div>
+                <h2 class="lead cd"><span class="z1">予</span>时<span class="rose">妍</span></h2>
+                <div class="sub"><span class="cn">为重要时刻，留一份美</span></div>
+                <div class="en enline">Makeup &amp; Hair · Bridal &amp; Daily</div>
+                <div class="shot hero-shot">
+                  <img src="assets/img/hero.png" />
+                  <span class="glass dtag" data-g="real" style="right:12px;top:12px;position:absolute;z-index:5">Nº 01<i class="gtag">G2 真</i></span>
+                  <span class="glass" data-g="real" style="position:absolute;left:14px;bottom:14px;z-index:5;--r:999px;--gb:20px;padding:7px 13px;font-size:10px;letter-spacing:.24em;color:#221D19">2026 婚礼季<i class="gtag">G3 真</i></span>
+                </div>
+                <div class="cue"><i></i><span>向下浏览</span></div>
+                <a class="byline glass light" data-g="light" href="#about">
+                  <span class="scrim"></span>
+                  <span class="pt"><img src="assets/img/portrait.png" alt="甜茉" /></span>
+                  <span class="tx">
+                    <span class="n">甜茉 · 化妆师个人作品集</span>
+                    <span class="en">Tianmo · Personal Portfolio</span>
+                  </span>
+                  <span class="seal-mini" style="width:24px;height:24px;font-size:12px">妍</span>
+                  <i class="gtag li">L5 轻</i>
+                </a>
+              </div>
+              <div class="sec-head">
+                <div><div class="en">Collections</div><div class="cd">作品系列</div></div>
+                <span class="cn" style="font-size:11px;color:var(--muted);letter-spacing:.18em">共 三 类</span>
+              </div>
+              <div class="secs">
+                <div class="row glass light" data-g="light">
+                  <span class="scrim"></span>
+                  <img src="assets/img/w-a.png" />
+                  <span class="m"><span class="cd">婚庆跟妆</span><br/><span class="en">Bridal</span></span>
+                  <span class="arw">→</span>
+                  <i class="gtag li">L1 轻</i>
+                </div>
+                <div class="row glass light" data-g="light">
+                  <span class="scrim"></span>
+                  <img src="assets/img/nc-c.png" />
+                  <span class="m"><span class="cd">订婚宴跟妆</span><br/><span class="en">Engagement</span></span>
+                  <span class="arw">→</span>
+                </div>
+                <div class="row glass light" data-g="light">
+                  <span class="scrim"></span>
+                  <img src="assets/img/family.png" />
+                  <span class="m"><span class="cd">孕妇照 · 亲子照</span><br/><span class="en">Maternity</span></span>
+                  <span class="arw">→</span>
+                </div>
+              </div>
+              <div class="marquee"><div>
+                <span><i>壹</i>西式浪漫</span><span><i>贰</i>新中式</span><span><i>叁</i>订婚宴</span><span><i>肆</i>孕亲照</span>
+                <span><i>壹</i>西式浪漫</span><span><i>贰</i>新中式</span><span><i>叁</i>订婚宴</span><span><i>肆</i>孕亲照</span>
+              </div></div>
+            </div>
+            <div class="dock-wrap">
+              <div class="dock glass" data-g="real"><span class="scrim"></span>
+                <span class="on">首页<em>Home</em></span><span>作品<em>Works</em></span>
+                <span>关于<em>Studio</em></span><span>联系<em>Contact</em></span>
+                <i class="gtag">G1 真 · 26px</i>
+              </div>
+            </div>
+            <div class="grain"></div>
+          </div>
+        </section>
+
+        <!-- ============ 02 系列 ============ -->
+        <section class="stage" data-s="coll">
+          <div class="ms">
+            <div class="blob b1"></div><div class="blob b2"></div><div class="sweep"></div>
+            <div class="page-body">
+              <div class="ihead">
+                <span class="back">←</span>
+                <div class="cd">选择你的美</div>
+                <div class="cnsub">两种审美 · 各成一册</div>
+                <div class="en" style="margin-top:8px">Two Languages of Beauty</div>
+              </div>
+              <a class="cover">
+                <img src="assets/img/w-a.png" />
+                <span class="tint" style="background:rgba(192,137,148,.24)"></span>
+                <span class="big">西式浪漫</span>
+                <span class="glass vslip" data-g="real">玫瑰 · 香槟 · 低髻<i class="gtag">G4 真</i></span>
+                <span class="strips"><i style="background-image:url(assets/img/w-b.png)"></i><i style="background-image:url(assets/img/hero.png)"></i><i style="background-image:url(assets/img/closeup-face.png)"></i></span>
+                <span class="foot">
+                  <span><span class="cd">轻盈浪漫之美</span><br/><span class="en" style="color:rgba(255,255,255,.82)">Western Romance</span></span>
+                  <span class="glass go" data-g="real">→</span>
+                </span>
+              </a>
+              <div class="cmeta"><span>玫瑰 · 奶白 · 香槟</span><span>共 四 册</span></div>
+              <a class="cover">
+                <img src="assets/img/nc-b.png" />
+                <span class="tint" style="background:rgba(158,78,85,.24)"></span>
+                <span class="big">新中式</span>
+                <span class="glass vslip" data-g="real">绛 · 描金 · 盘发</span>
+                <span class="strips"><i style="background-image:url(assets/img/nc-a.png)"></i><i style="background-image:url(assets/img/nc-c.png)"></i><i style="background-image:url(assets/img/closeup-head.png)"></i></span>
+                <span class="foot">
+                  <span><span class="cd">东方含蓄之美</span><br/><span class="en" style="color:rgba(255,255,255,.82)">Modern Oriental</span></span>
+                  <span class="glass go" data-g="real">→</span>
+                </span>
+              </a>
+              <div class="cmeta"><span>绛红 · 藕荷 · 香槟金</span><span>共 六 册</span></div>
+            </div>
+            <div class="dock-wrap">
+              <div class="dock glass" data-g="real"><span class="scrim"></span>
+                <span>首页<em>Home</em></span><span class="on">作品<em>Works</em></span>
+                <span>关于<em>Studio</em></span><span>联系<em>Contact</em></span>
+              </div>
+            </div>
+            <div class="grain"></div>
+          </div>
+        </section>
+
+        <!-- ============ 03 西式册页 ============ -->
+        <section class="stage" data-s="welist">
+          <div class="twe">
+            <div class="blob w1"></div><div class="blob w2"></div><div class="blob w3"></div>
+            <div class="oring o1"></div><div class="oring o2"></div>
+            <div class="page-body">
+              <div class="the-head">
+                <div class="row"><span class="back" style="font-size:19px;color:var(--muted)">←</span><span class="en">04 Albums</span></div>
+                <div class="cd"><em>西式</em>浪漫</div>
+                <div class="hrjade"><i style="background:var(--gold)"></i><i style="background:var(--gold);width:18px"></i><span class="cn" style="font-size:10.5px;letter-spacing:.24em;color:var(--muted)">每场婚礼 · 一册</span></div>
+                <div class="en" style="margin-top:6px">Western Romance · Soft &amp; Airy</div>
+              </div>
+
+              <div class="book">
+                <div class="ph">
+                  <img src="assets/img/w-a.png" />
+                  <div class="veil"></div>
+                  <span class="num">Ⅰ</span>
+                  <span class="slip"><span class="glass vslip2" data-g="real">其一 · 婚礼全程<i class="gtag">G5 真</i></span></span>
+                </div>
+                <div class="bmeta"><span class="cd" style="letter-spacing:.16em">香槟裸妆 · 低盘发</span><span class="en">The Album Ⅰ</span></div>
+                <div class="hair" style="background:linear-gradient(90deg,var(--gold),transparent)"></div>
+              </div>
+
+              <div class="book r">
+                <div class="ph">
+                  <img src="assets/img/hero.png" />
+                  <div class="veil"></div>
+                  <span class="num">Ⅱ</span>
+                  <span class="slip"><span class="glass vslip2" data-g="real">其二 · 婚礼全程</span></span>
+                </div>
+                <div class="bmeta"><span class="cd" style="letter-spacing:.16em">雾感眼妆 · 珍珠耳饰</span><span class="en">The Album Ⅱ</span></div>
+                <div class="hair" style="background:linear-gradient(90deg,var(--gold),transparent)"></div>
+              </div>
+
+              <div class="book">
+                <div class="ph">
+                  <img src="assets/img/w-b.png" />
+                  <div class="veil"></div>
+                  <span class="num">Ⅲ</span>
+                  <span class="slip"><span class="glass vslip2" data-g="real">其三 · 婚礼全程</span></span>
+                </div>
+                <div class="bmeta"><span class="cd" style="letter-spacing:.16em">缎面蝴蝶结 · 玫瑰棕唇</span><span class="en">The Album Ⅲ</span></div>
+                <div class="hair" style="background:linear-gradient(90deg,var(--gold),transparent)"></div>
+              </div>
+
+              <div class="ab-foot"><span><span class="cd">翻至下一册</span><br/><span class="en">Next Album</span></span><span class="arw">→</span></div>
+            </div>
+            <div class="grain"></div>
+          </div>
+        </section>
+
+        <!-- ============ 04 新中式册页 ============ -->
+        <section class="stage" data-s="cnlist">
+          <div class="tcn">
+            <div class="silk"></div>
+            <div class="blob g1"></div><div class="blob g2"></div><div class="blob g3"></div>
+            <div class="page-body">
+              <div class="the-head">
+                <div class="row"><span class="back" style="font-size:19px;color:var(--muted)">←</span><span class="seal-mini">妍</span></div>
+                <div class="cd">新<em>中式</em></div>
+                <div class="hrjade"><i></i><i class="gold"></i><span class="cn" style="font-size:10.5px;letter-spacing:.24em;color:var(--muted)">每场婚礼 · 一册</span></div>
+                <div class="en" style="margin-top:6px">Modern Oriental · 06 Albums</div>
+              </div>
+
+              <div class="book">
+                <div class="ph dframe">
+                  <img src="assets/img/nc-b.png" />
+                  <div class="veil"></div>
+                  <span class="num">壹</span>
+                  <span class="slip"><span class="glass vslip2" data-g="real">其一 · 婚礼全程<i class="gtag">G6 真</i></span></span>
+                </div>
+                <div class="bmeta"><span class="cd">绛唇 · 描金眼线 · 盘发</span><span class="en">The Album Ⅰ</span></div>
+                <div class="hair"></div>
+              </div>
+
+              <div class="book r">
+                <div class="ph dframe">
+                  <img src="assets/img/nc-c.png" />
+                  <div class="veil"></div>
+                  <span class="num">贰</span>
+                  <span class="slip"><span class="glass vslip2" data-g="real">其二 · 婚礼全程</span></span>
+                </div>
+                <div class="bmeta"><span class="cd">点翠 · 绒花 · 柳叶眉</span><span class="en">The Album Ⅱ</span></div>
+                <div class="hair"></div>
+              </div>
+
+              <div class="book">
+                <div class="ph dframe">
+                  <img src="assets/img/nc-a.png" />
+                  <div class="veil"></div>
+                  <span class="num">叁</span>
+                  <span class="slip"><span class="glass vslip2" data-g="real">其三 · 婚礼全程</span></span>
+                </div>
+                <div class="bmeta"><span class="cd">素纱 · 步摇 · 绛色唇釉</span><span class="en">The Album Ⅲ</span></div>
+                <div class="hair"></div>
+              </div>
+
+              <div class="ab-foot"><span><span class="cd">翻至下一册</span><br/><span class="en">Next Album</span></span><span class="arw">→</span></div>
+            </div>
+            <div class="grain"></div>
+          </div>
+        </section>
+
+        <!-- ============ 05 西式详情 ============ -->
+        <section class="stage" data-s="wealb">
+          <div class="twe">
+            <div class="blob w1"></div><div class="blob w2"></div><div class="oring o2"></div>
+            <div class="page-body" style="padding-top:0">
+              <div class="ab-hero">
+                <img src="assets/img/w-a.png" />
+                <div class="fade"></div>
+                <div class="t">
+                  <div class="cd">婚礼跟妆 · 其一</div>
+                  <div class="en">Western Romance · Chapter Ⅰ</div>
+                  <div class="fl">
+                    <span class="glass" data-g="real">晨袍</span><span class="glass" data-g="real">出门</span>
+                    <span class="glass" data-g="real">仪式主纱</span><span class="glass" data-g="real">敬酒</span>
+                    <span class="glass" data-g="real">面部</span><span class="glass" data-g="real">头饰</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chapter">
+                <div class="crow"><span class="cnum">Ⅰ</span><span class="bar"></span><span class="en">Morning Robe</span></div>
+                <div class="cd">晨袍造型</div>
+                <div class="desc">奶油质地底妆，一层不含糊的晨间光泽。</div>
+                <div class="shot full"><img src="assets/img/hero.png" /><span class="glass cap" data-g="light">造型 01 · 奶油肌<i class="gtag li">L2 轻</i></span></div>
+              </div>
+
+              <div class="chapter">
+                <div class="crow"><span class="cnum">Ⅱ</span><span class="bar"></span><span class="en">Out the Door</span></div>
+                <div class="cd">出门造型</div>
+                <div class="shot duo">
+                  <img src="assets/img/w-b.png" />
+                  <img src="assets/img/w-a.png" />
+                </div>
+              </div>
+
+              <div class="chapter">
+                <div class="crow"><span class="cnum">Ⅲ</span><span class="bar"></span><span class="en">Ceremony</span></div>
+                <div class="cd">仪式主纱</div>
+                <div class="desc">雾感眼窝配玫瑰棕，缎面蝴蝶结落在低髻边缘。</div>
+                <div class="shot full"><img src="assets/img/w-a.png" /><span class="glass cap" data-g="light">造型 03 · 主纱</span></div>
+              </div>
+
+              <div class="chapter">
+                <div class="crow"><span class="cnum">Ⅳ</span><span class="bar"></span><span class="en">The Toast</span></div>
+                <div class="cd">敬酒造型</div>
+                <div class="shot off"><img src="assets/img/w-b.png" /><span class="glass cap" data-g="light">造型 04 · 香槟敬酒</span></div>
+              </div>
+
+              <div class="chapter">
+                <div class="crow"><span class="cnum">Ⅴ</span><span class="bar"></span><span class="en">Face Detail</span></div>
+                <div class="cd">面部细节</div>
+                <div class="shot moon"><img src="assets/img/closeup-face.png" /><span class="glass dtag" data-g="light">特写</span></div>
+              </div>
+
+              <div class="chapter">
+                <div class="crow"><span class="cnum">Ⅵ</span><span class="bar"></span><span class="en">Headdress</span></div>
+                <div class="cd">头饰造型</div>
+                <div class="shot moon"><img src="assets/img/closeup-head.png" /><span class="glass dtag" data-g="light">头饰</span></div>
+              </div>
+
+              <div class="ab-foot"><span><span class="cd">下一册 · 其二</span><br/><span class="en">Next Album</span></span><span class="arw">→</span></div>
+            </div>
+            <div class="grain"></div>
+          </div>
+        </section>
+
+        <!-- ============ 06 新中式详情 ============ -->
+        <section class="stage" data-s="cnalb">
+          <div class="tcn">
+            <div class="silk"></div>
+            <div class="blob g1"></div><div class="blob g2"></div>
+            <div class="page-body" style="padding-top:0">
+              <div class="ab-hero">
+                <img src="assets/img/nc-b.png" />
+                <div class="fade"></div>
+                <div class="t">
+                  <div class="cd">婚礼跟妆 · 其一</div>
+                  <div class="en">Modern Oriental · Chapter Ⅰ</div>
+                  <div class="fl">
+                    <span class="glass" data-g="real">晨袍</span><span class="glass" data-g="real">出门</span>
+                    <span class="glass" data-g="real">仪式主纱</span><span class="glass" data-g="real">敬酒</span>
+                    <span class="glass" data-g="real">面部</span><span class="glass" data-g="real">头饰</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chapter">
+                <div class="crow"><span class="cnum">壹</span><span class="bar"></span><span class="en">Morning Robe</span></div>
+                <div class="cd">晨袍造型</div>
+                <div class="desc">清透底妆，眉眼留白。晨光里最先出现的一版自己。</div>
+                <div class="shot full"><img src="assets/img/nc-a.png" /><span class="glass cap" data-g="light">造型 01 · 清透底<i class="gtag li">L3 轻</i></span></div>
+              </div>
+
+              <div class="chapter">
+                <div class="crow"><span class="cnum">贰</span><span class="bar"></span><span class="en">Out the Door</span></div>
+                <div class="cd">出门造型</div>
+                <div class="shot duo">
+                  <img src="assets/img/nc-c.png" />
+                  <img src="assets/img/nc-b.png" />
+                </div>
+              </div>
+
+              <div class="chapter">
+                <div class="crow"><span class="cnum">叁</span><span class="bar"></span><span class="en">Ceremony</span></div>
+                <div class="cd">仪式主纱</div>
+                <div class="desc">主纱登场的一刻：描金眼线、绛色唇釉、盘发成形。</div>
+                <div class="shot off dframe"><img src="assets/img/nc-c.png" /><span class="glass cap" data-g="light">造型 03 · 主纱</span></div>
+              </div>
+
+              <div class="chapter">
+                <div class="crow"><span class="cnum">肆</span><span class="bar"></span><span class="en">The Toast</span></div>
+                <div class="cd">敬酒造型</div>
+                <div class="shot full"><img src="assets/img/nc-b.png" /><span class="glass cap" data-g="light">造型 04 · 绛色敬酒</span></div>
+              </div>
+
+              <div class="chapter">
+                <div class="crow"><span class="cnum">伍</span><span class="bar"></span><span class="en">Face Detail</span></div>
+                <div class="cd">面部细节</div>
+                <div class="shot moon"><img src="assets/img/closeup-face.png" /><span class="glass dtag" data-g="light">特写</span></div>
+              </div>
+
+              <div class="chapter">
+                <div class="crow"><span class="cnum">陆</span><span class="bar"></span><span class="en">Headdress</span></div>
+                <div class="cd">头饰造型</div>
+                <div class="shot moon"><img src="assets/img/closeup-head.png" /><span class="glass dtag" data-g="light">头饰</span></div>
+              </div>
+
+              <div class="ab-foot"><span><span class="cd">下一册 · 其二</span><br/><span class="en">Next Album</span></span><span class="arw">→</span></div>
+            </div>
+            <div class="grain"></div>
+          </div>
+        </section>
+
+        <!-- ============ 07 平铺图集 ============ -->
+        <section class="stage" data-s="gallery">
+          <div class="ms">
+            <div class="blob b2"></div><div class="blob b3"></div>
+            <div class="page-body">
+              <div class="ihead">
+                <span class="back">←</span>
+                <div class="cd">订婚宴跟妆</div>
+                <div class="cnsub">全程记录 · 不设分类</div>
+                <div class="en" style="margin-top:8px">Engagement</div>
+              </div>
+              <div class="ggrid">
+                <figure class="r34"><img class="fit" src="assets/img/hero.png" /></figure>
+                <figure class="r45"><img class="fit" src="assets/img/nc-a.png" /></figure>
+                <figure class="r45"><img class="fit" src="assets/img/closeup-face.png" /></figure>
+                <figure class="r34"><img class="fit" src="assets/img/nc-c.png" /></figure>
+                <figure class="r34"><img class="fit" src="assets/img/closeup-head.png" /></figure>
+                <figure class="r45"><img class="fit" src="assets/img/family.png" /></figure>
+              </div>
+            </div>
+            <div class="dock-wrap">
+              <div class="dock glass" data-g="real"><span class="scrim"></span>
+                <span>首页<em>Home</em></span><span class="on">作品<em>Works</em></span>
+                <span>关于<em>Studio</em></span><span>联系<em>Contact</em></span>
+              </div>
+            </div>
+            <div class="grain"></div>
+          </div>
+        </section>
+
+        <!-- ============ 08 比例适配 ============ -->
+        <section class="stage" data-s="ratio">
+          <div class="ms">
+            <div class="blob b1"></div><div class="blob b3"></div>
+            <div class="page-body">
+              <div class="ihead">
+                <span class="back">←</span>
+                <div class="cd">比例适配</div>
+                <div class="cnsub">竖构图为主 · 横构图少量</div>
+                <div class="en" style="margin-top:8px">Aspect Ratio Rules</div>
+              </div>
+              <div class="rgrid">
+                <figure class="r23"><img class="fit" src="assets/img/nc-b.png" /><span class="glass ratio-tag" data-g="light">2:3 竖 · 主纱全身</span></figure>
+                <div class="pair">
+                  <figure class="r34"><img class="fit" src="assets/img/closeup-face.png" /><span class="glass ratio-tag" data-g="light">3:4 竖 · 特写</span></figure>
+                  <figure class="r34"><img class="fit" src="assets/img/closeup-head.png" /><span class="glass ratio-tag" data-g="light">3:4 竖 · 头饰</span></figure>
+                </div>
+                <figure class="r32"><img class="fit" src="assets/img/family.png" /><span class="glass ratio-tag" data-g="light">3:2 横 · 环境合影</span></figure>
+                <figure class="r45"><img class="fit" src="assets/img/nc-a.png" /><span class="glass ratio-tag" data-g="light">4:5 竖 · 半身</span></figure>
+                <figure class="r169"><img class="fit" src="assets/img/w-a.png" /><span class="glass ratio-tag" data-g="light">16:9 横 · 大场景（少见）</span></figure>
+              </div>
+            </div>
+            <div class="dock-wrap">
+              <div class="dock glass" data-g="real"><span class="scrim"></span>
+                <span>首页<em>Home</em></span><span class="on">作品<em>Works</em></span>
+                <span>关于<em>Studio</em></span><span>联系<em>Contact</em></span>
+              </div>
+            </div>
+            <div class="grain"></div>
+          </div>
+        </section>
+
+        <!-- ============ 09 查看器 ============ -->
+        <section class="stage" data-s="viewer">
+          <div class="vw">
+            <div class="gl"></div>
+            <div class="hd">
+              <span class="cd">婚礼跟妆 · 其一 · 仪式主纱</span>
+              <span class="glass" data-g="real" style="--r:50%;--gb:18px;width:28px;height:28px;display:grid;place-items:center;font-size:14px;color:#E9E3D9">×</span>
+            </div>
+            <div class="st"><img src="assets/img/nc-c.png" /></div>
+            <div class="ft glass" data-g="real">
+              <span class="scrim"></span>
+              <div class="cnt"><span>03 / 12</span><span>Ceremony</span></div>
+              <div class="trk"><i></i></div>
+              <div class="thumbs">
+                <i style="background-image:url(assets/img/nc-a.png)"></i>
+                <i style="background-image:url(assets/img/nc-b.png)"></i>
+                <i class="on" style="background-image:url(assets/img/nc-c.png)"></i>
+                <i style="background-image:url(assets/img/closeup-head.png)"></i>
+                <i style="background-image:url(assets/img/closeup-face.png)"></i>
+                <i style="background-image:url(assets/img/hero.png)"></i>
+              </div>
+              <div class="tip">左右滑动切换 · 双击放大</div>
+              <i class="gtag">G7 真 · 28px</i>
+            </div>
+            <div class="grain" style="opacity:.07;mix-blend-mode:overlay"></div>
+          </div>
+        </section>
+
+        <!-- ============ 10 关于 ============ -->
+        <section class="stage" data-s="about">
+          <div class="ms">
+            <div class="blob b1"></div><div class="blob b2"></div><div class="sweep"></div>
+            <div class="page-body">
+              <div class="ihead">
+                <span class="back">←</span>
+                <div class="cd">关于甜茉</div>
+                <div class="en" style="margin-top:8px">The Studio</div>
+              </div>
+              <div class="ab">
+                <div class="portrait"><img src="assets/img/portrait.png" /></div>
+                <div class="name cd">化妆师 甜茉</div>
+                <div class="role">跟妆八年 · 新中式 × 西式</div>
+                <div class="bio">妆面干净透亮，造型考究。新中式取古意而不老气，西式求轻盈而不寡淡——让你在这一天里，始终像自己。</div>
+                <div class="stats glass light" data-g="light">
+                  <span class="scrim"></span>
+                  <div><b>08</b><span>从业年数</span></div>
+                  <div><b>300+</b><span>服务新娘</span></div>
+                  <div><b>12</b><span>到访城市</span></div>
+                  <i class="gtag li">L4 轻</i>
+                </div>
+                <div class="steps">
+                  <span class="glass light" data-g="light">沟通</span>
+                  <span class="glass light" data-g="light">试妆</span>
+                  <span class="glass light" data-g="light">跟妆</span>
+                  <span class="glass light" data-g="light">补场</span>
+                </div>
+                <div class="brandblk">
+                  <span class="lgmark">
+                    <svg viewBox="0 0 240 100" aria-label="予时妍 YUÉ ATELIER">
+                      <g transform="translate(4,26) scale(0.75)" fill="none">
+                        <circle cx="32" cy="32" r="22.5" stroke="currentColor" stroke-width="2.4"
+                                stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
+                        <circle cx="32" cy="32" r="5.1" fill="currentColor" stroke="none"/>
+                      </g>
+                      <line x1="63" y1="26" x2="63" y2="74" stroke="currentColor" stroke-width="0.7" opacity="0.22"/>
+                      <text font-family="Noto Serif SC,serif" font-weight="200" fill="currentColor">
+                        <tspan x="76" y="58" font-size="33">予</tspan>
+                        <tspan x="118.9" y="58" font-size="33">时</tspan>
+                        <tspan x="165.1" y="58" font-size="33" fill="var(--accent)">妍</tspan>
+                      </text>
+                      <circle cx="85" cy="68.6" r="1.7" fill="var(--gold)"/>
+                      <line x1="90" y1="68.6" x2="199" y2="68.6" stroke="var(--gold)" stroke-width="0.9" stroke-linecap="round"/>
+                      <text x="85" y="86" font-size="8.6" letter-spacing="3.5" fill="currentColor" opacity="0.74"
+                            font-family="Bodoni Moda,Georgia,serif">YUÉ ATELIER</text>
+                    </svg>
+                  </span>
+                  <div class="sub2">婚礼 与 日常</div>
+                  <div class="sub2en">Bridal &amp; Daily</div>
+                  <span class="hairline"></span>
+                  <div class="cn" style="font-size:11px;letter-spacing:.22em;color:var(--muted)">为重要时刻，留一份美</div>
+                  <span class="sealv" style="margin:20px auto 0" aria-hidden="true">予<br/>時<br/>妍</span>
+                </div>
+                <div class="qrb glass" data-g="real">
+                  <span class="scrim"></span>
+                  <div class="qb">微信二维码<br/>待替换</div>
+                  <p>扫码添加微信 · 沟通档期与试妆</p>
+                  <i class="gtag">G8 真</i>
+                </div>
+                <button class="cta glass" data-g="real"><span class="scrim"></span>预约跟妆<em>Book Now</em><i class="gtag">G9 真</i></button>
+              </div>
+            </div>
+            <div class="dock-wrap">
+              <div class="dock glass" data-g="real"><span class="scrim"></span>
+                <span>首页<em>Home</em></span><span>作品<em>Works</em></span>
+                <span class="on">关于<em>Studio</em></span><span>联系<em>Contact</em></span>
+              </div>
+            </div>
+            <div class="grain"></div>
+          </div>
+        </section>
+
+        <!-- ============ 11 多图布局 ============ -->
+        <section class="stage" data-s="multi">
+          <div class="ms">
+            <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+            <div class="sweep"></div>
+            <div class="page-body">
+              <div class="ihead">
+                <span class="back">←</span>
+                <div class="cd">多图布局</div>
+                <div class="en" style="margin-top:8px">Multi-photo Sections</div>
+              </div>
+              <div class="mwrap">
+                <p class="mintro">
+                  「面部细节」与「头饰造型」这两段，后台可以只配 1 张，也可以配 12 张——<b>布局按张数自动切换</b>，
+                  不改文案、不改页面结构。下面每一格都是真实渲染，不是示意图。
+                </p>
+
+                <div class="mlab"><span class="t">① 1 张 · 单幅</span><span class="c">grid 1col · aspect 3:4</span></div>
+                <div class="mg one">
+                  <figure><img src="assets/img/closeup-face.png" alt="" /></figure>
+                </div>
+
+                <div class="mlab"><span class="t">② 2 张 · 双联</span><span class="c">1fr 1fr · gap 9</span></div>
+                <div class="mg two">
+                  <figure><img src="assets/img/closeup-face.png" alt="" /></figure>
+                  <figure><img src="assets/img/closeup-head.png" alt="" /></figure>
+                </div>
+
+                <div class="mlab"><span class="t">③ 3 张 · 主图 + 双叠</span><span class="c">1.42fr 1fr · rows 132px</span></div>
+                <div class="mg three">
+                  <figure><img src="assets/img/closeup-face.png" alt="" /></figure>
+                  <figure><img src="assets/img/closeup-head.png" alt="" /></figure>
+                  <figure><img src="assets/img/nc-b.png" alt="" /></figure>
+                </div>
+
+                <div class="mlab"><span class="t">④ 4 张 · 2×2 宫格</span><span class="c">1fr 1fr · aspect 3:4</span></div>
+                <div class="mg four">
+                  <figure><img src="assets/img/closeup-face.png" alt="" /></figure>
+                  <figure><img src="assets/img/closeup-head.png" alt="" /></figure>
+                  <figure><img src="assets/img/nc-b.png" alt="" /></figure>
+                  <figure><img src="assets/img/nc-c.png" alt="" /></figure>
+                </div>
+
+                <div class="mlab"><span class="t">⑤ 5 张以上 · 横滑（推荐）</span><span class="c">scroll-snap x mandatory</span></div>
+                <div class="mstrip">
+                  <figure><img src="assets/img/closeup-face.png" alt="" /></figure>
+                  <figure><img src="assets/img/closeup-head.png" alt="" /></figure>
+                  <figure><img src="assets/img/nc-b.png" alt="" /></figure>
+                  <figure><img src="assets/img/nc-c.png" alt="" /></figure>
+                  <figure><img src="assets/img/w-b.png" alt="" /></figure>
+                  <span class="morecap">查看全部<br/>12 张</span>
+                </div>
+                <div class="mhint">
+                  <span class="d"><i class="on"></i><i></i><i></i><i></i><i></i></span>
+                  <span class="n">1 / 6 · 左右滑动</span>
+                </div>
+
+                <div class="mlab"><span class="t">⑥ 混合比例 · 横图整行独占</span><span class="c">grid-column 1 / -1</span></div>
+                <div class="mg mix two">
+                  <figure class="w"><img src="assets/img/family.png" alt="" /></figure>
+                  <figure><img src="assets/img/nc-a.png" alt="" /></figure>
+                  <figure><img src="assets/img/nc-c.png" alt="" /></figure>
+                </div>
+
+                <div class="secmark">
+                  <span class="l">
+                    <span class="no">伍</span>
+                    <span class="tx">
+                      <span class="t">面部细节</span>
+                      <span class="en">Facial Detail · 4 photos</span>
+                    </span>
+                  </span>
+                  <span class="sealv" aria-hidden="true">予<br/>時<br/>妍</span>
+                </div>
+                <div class="mg four">
+                  <figure><img src="assets/img/closeup-face.png" alt="" /></figure>
+                  <figure><img src="assets/img/closeup-head.png" alt="" /></figure>
+                  <figure><img src="assets/img/nc-b.png" alt="" /></figure>
+                  <figure><img src="assets/img/nc-c.png" alt="" /></figure>
+                </div>
+                <p class="mfoot">
+                  章节标题行右端那枚<b>竖排三字印</b>是每段的落款——繁体「予時妍」，全站唯一用繁体字的地方，
+                  尺寸 30×74，出现在章节开头而不是结尾，避免和「下一册」的分页器打架。
+                </p>
+              </div>
+            </div>
+            <div class="dock-wrap">
+              <div class="dock glass" data-g="real"><span class="scrim"></span>
+                <span>首页<em>Home</em></span><span class="on">作品<em>Works</em></span>
+                <span>关于<em>Studio</em></span><span>联系<em>Contact</em></span>
+              </div>
+            </div>
+            <div class="grain"></div>
+          </div>
+        </section>
+
+      </div>
+      <div class="home-ind"></div>
+    </div>
+
+    <div class="notes" id="notes"></div>
+  </div>
+
+  <div class="specs">
+    <span class="cap">Engineering Notes</span>
+    <h3>玻璃分层配方 · 降级矩阵 · 性能预算 · 比例规范</h3>
+
+    <table>
+      <thead><tr><th style="width:120px">层</th><th>实现</th><th style="width:280px">参数</th></tr></thead>
+      <tbody>
+        <tr><td><b>① 高光</b></td><td><code>.glass::before</code> 双层背景：斜向静态光泽 + 跟随指针/陀螺仪的径向光斑，<code>mix-blend-mode:screen</code></td><td><code>radial 240×200 at var(--mx) var(--my)</code> · 线性 <code>118deg</code></td></tr>
+        <tr><td><b>② 折射</b></td><td>可选 <code>.lens</code> 层：<code>filter:url(#lgRefract) blur(7px)</code>（feTurbulence + feDisplacementMap）</td><td>仅固定层，每帧 4–8ms；滚动区禁用</td></tr>
+        <tr><td><b>③ 模糊</b></td><td><code>backdrop-filter: blur() saturate() brightness()</code>（必须带 <code>-webkit-</code> 前缀）</td><td>真玻璃 22–28px / 轻玻璃 11–14px；saturate 150–180%</td></tr>
+        <tr><td><b>④ 底色</b></td><td><code>--gt</code> 线性渐变 + <code>.scrim</code> 暖色底（解决白婚纱糊字）</td><td>白 8–30% 透明；scrim <code>rgba(255,246,240,.10)</code></td></tr>
+        <tr><td><b>⑤ 色散边</b></td><td><code>.glass::after</code> 三向 inset 描边（暖粉 / 冷蓝 / 白底边）</td><td><code>inset 1px 0 0</code> 粉 · <code>inset -1px 0 0</code> 蓝</td></tr>
+        <tr><td><b>⑥ 投影</b></td><td>外阴影 <code>0 16px 40px rgba(30,22,18,.13)</code></td><td>环境色取墨色而非纯黑</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:22px">
+      <thead><tr><th style="width:150px">运行环境</th><th style="width:150px">backdrop-filter</th><th style="width:150px">真折射 url()</th><th>落地档位</th></tr></thead>
+      <tbody>
+        <tr><td>Android 微信（X5）</td><td class="no">✕ 静默忽略</td><td class="no">✕</td><td><b>假玻璃</b>：半透明 + 内高光 + 1px 白描边，零 GPU，视觉接近不掉帧</td></tr>
+        <tr><td>iOS 微信（WKWebView）</td><td class="ok">✓ 跟随 Safari</td><td class="ok">✓ 16.4+</td><td>真玻璃</td></tr>
+        <tr><td>Safari 15.4+</td><td class="ok">✓（需前缀）</td><td class="ok">✓ 16.4+</td><td>真玻璃</td></tr>
+        <tr><td>Chrome / Edge 76+</td><td class="ok">✓</td><td class="ok">✓</td><td>真玻璃</td></tr>
+        <tr><td>Firefox 103+</td><td class="ok">✓</td><td class="ok">✓</td><td>真玻璃</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:22px">
+      <thead><tr><th style="width:150px">红线</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>禁 overflow + radius</td><td>玻璃元素本身同时写 <code>overflow:hidden</code> 与 <code>border-radius</code> → Safari 直接放弃模糊；裁切一律交给 <code>::before</code> 的 <code>border-radius:inherit</code></td></tr>
+        <tr><td>禁 will-change 叠加</td><td><code>will-change:transform</code> / <code>translateZ(0)</code> 与 backdrop-filter 叠加会炸层，掉帧</td></tr>
+        <tr><td>@supports 不可信</td><td>旧 WebKit 会对 <code>@supports (backdrop-filter)</code> 返回 true 但不生效 → 需配 UA / 特性实测判断</td></tr>
+        <tr><td>白纱 scrim</td><td>玻璃层上文字一律<b>墨色</b>，统一压 8–12% 暖色 scrim；禁用纯白字</td></tr>
+        <tr><td>数量上限</td><td>同屏真玻璃 ≤ 3 处；滚动容器内只用轻玻璃（11–14px）</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:22px">
+      <thead><tr><th style="width:150px">构图</th><th style="width:150px">占比（预估）</th><th>处理规则</th></tr></thead>
+      <tbody>
+        <tr><td><b>3:4 竖</b></td><td>约 55%</td><td>主栅格，单列全幅、双联各占一半</td></tr>
+        <tr><td><b>2:3 竖</b></td><td>约 25%</td><td>同 3:4 容器，<code>object-fit:cover</code>，容器高度按 aspect-ratio 自适应</td></tr>
+        <tr><td><b>4:5 竖</b></td><td>约 12%</td><td>同上，略矮；双联时与 3:4 混排不强制等高</td></tr>
+        <tr><td><b>3:2 / 4:3 横</b></td><td>约 6%</td><td><b>不裁人物</b>：单独占一整行，按原比例展示，高度 = 宽度 ÷ 比例</td></tr>
+        <tr><td><b>16:9 横</b></td><td>约 2%</td><td>同上；若确为全景，允许上下留白（letterbox）</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top:44px">多图区布局 · 面部细节 / 头饰造型（1–N 张）</h3>
+    <p style="font-size:12.5px;color:var(--shell-muted);max-width:64em;margin:8px 0 14px;letter-spacing:.03em">
+      这两段是化妆师最想被看到的图，数量由后台决定。前端<b>按张数自动选 class</b>，不靠人工排版。对应第 11 屏。
+    </p>
+    <table>
+      <thead><tr><th style="width:110px">张数 n</th><th style="width:190px">布局</th><th>实现</th></tr></thead>
+      <tbody>
+        <tr><td><b>1</b></td><td>单幅</td><td><code>grid-template-columns:1fr</code> · <code>aspect-ratio:3/4</code> · 圆角 10</td></tr>
+        <tr><td><b>2</b></td><td>双联</td><td><code>1fr 1fr</code> · gap 9px · 两图等高裁切</td></tr>
+        <tr><td><b>3</b></td><td>主图 + 双叠</td><td><code>grid-template-columns:1.42fr 1fr</code> · <code>grid-template-rows:repeat(2,132px)</code> · 首图 <code>grid-row:1/3</code></td></tr>
+        <tr><td><b>4</b></td><td>2×2 宫格</td><td><code>1fr 1fr</code> · <code>aspect-ratio:3/4</code> · gap 9px</td></tr>
+        <tr><td><b>5–6</b></td><td>横滑</td><td><code>display:flex</code> + <code>scroll-snap-type:x mandatory</code> · 每屏露 <b>74%</b> · 末位「查看全部 N 张」</td></tr>
+        <tr><td><b>7+</b></td><td>横滑 + 计数</td><td>同上 + 进度条 + <code>1 / N</code> 计数；<b>禁止无限纵向堆高</b></td></tr>
+        <tr><td><b>含横图</b></td><td>整行独占</td><td><code>grid-column:1/-1</code> · <code>aspect-ratio:3/2</code>（按原比例）· <b>不裁人物</b></td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:22px">
+      <thead><tr><th style="width:200px">后台配置字段</th><th style="width:150px">取值</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><code>photos[]</code></td><td>数组</td><td>每项含 <code>url / w / h / ratio / orientation</code>；前端只读不改</td></tr>
+        <tr><td><code>layout</code></td><td>auto / single / duo / grid / strip</td><td>默认 <code>auto</code>（按张数自动选）；留手动覆盖的口子给特殊册子</td></tr>
+        <tr><td><code>maxVisible</code></td><td>1–6</td><td>超过则进横滑，不在页面上全部铺开</td></tr>
+        <tr><td><code>lazy</code></td><td>true</td><td>非首屏图片 <code>loading="lazy"</code>；横滑区预加载相邻 1 张</td></tr>
+        <tr><td><code>domBudget</code></td><td>6</td><td>单段最多直接渲染 6 张 <code>&lt;img&gt;</code>，其余进横滑按需挂载（性能红线）</td></tr>
+      </tbody>
+    </table>
+
+    <div class="swatch">
+      <div style="background:#FBF6F5">西式纸 #FBF6F5</div>
+      <div style="background:#C08994;color:#fff">西式玫瑰 #C08994</div>
+      <div style="background:#C8AE84">西式香槟 #C8AE84</div>
+      <div style="background:#F8F5F1">绢白 #F8F5F1</div>
+      <div style="background:#9E4E55;color:#fff">绛 #9E4E55</div>
+      <div style="background:#C0A46F">描金 #C0A46F</div>
+      <div style="background:#6E7C76;color:#fff">黛青 #6E7C76</div>
+    </div>
+  </div>
+
+  <div class="foot">予时妍 · YUÉ ATELIER · 设计稿 v6 · 共 11 屏 · 原型 demo 未改动 · 2026-10</div>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="lgRefract" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.014 0.02" numOctaves="2" seed="7" result="noise"/>
+      <feGaussianBlur in="noise" stdDeviation="2" result="soft"/>
+      <feDisplacementMap in="SourceGraphic" in2="soft" scale="18" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<script>
+var NOTES = {
+  home:{tag:"Screen 01",t:"首页 · 动态背景 + 玻璃 Dock",route:"#/",
+    h:["<b>动态背景三层</b>：① 三团环境色光斑 30–36s 缓慢漂移（玫瑰 / 香槟 / 米灰）；② 一道 11s 柔光斜扫；③ 5% 颗粒层压噪。静止时画面仍在呼吸。",
+       "<b>玻璃 Dock</b>（G1 · 真玻璃 26px）：iOS 26 风格悬浮底栏，<code>position:sticky</code> 贴底，选中项再嵌一层更亮的玻璃 pill —— 全站最强的液态感展示位。",
+       "主标中文「予时妍」，英文仅 9px 疏排点缀；栏目三项（婚庆跟妆 / 订婚宴 / 孕亲照）用<b>轻玻璃</b>卡片（L1，11px），滚动区内不用真玻璃。",
+       "走马灯顺序已改：<b>壹 西式浪漫 → 贰 新中式 → 叁 订婚宴 → 肆 孕亲照</b>。",
+       "hero 图上两枚真玻璃标签（G2 / G3）压白纱 —— 标签底色已带 10% 暖色 scrim，文字为墨色，不会糊。",
+       "<b>本版新增 · 个人署名两处</b>：① 导航右端 20px 头像圆章 + 「甜茉」（角落署名，头像即身份）；② Hero 下方一条<b>署名条</b>（L5 轻玻璃）「甜茉 · 化妆师个人作品集 / Tianmo · Personal Portfolio」+ 右侧朱文小印 —— 点整条进关于页。个人工作室必须让访客第一眼知道「这是谁的作品集」。",
+       "<b>本版新增 · 导航改用 Logo</b>：内联 SVG 品牌符号（17px，缺口左下）+「予时<span style=\"color:#B0707B\">妍</span>」。内联是为了继承 <code>currentColor</code>，深色模式下零成本跟随。"]},
+  coll:{tag:"Screen 02",t:"系列双封面 · 西式在前",route:"#/collection",
+    h:["<b>顺序已调整</b>：西式浪漫封面在第一位，新中式第二位。",
+       "两封面各用一枚<b>竖排玻璃绢签</b>（G4 · 真玻璃 24px）：西式「玫瑰 · 香槟 · 低髻」，新中式「绛 · 描金 · 盘发」——同一位置，两种材质语言。",
+       "右下角圆形玻璃箭头按钮，hover 旋转 45° 并放大 1.06。",
+       "两个封面分属两套主题变量，点击后整页切 theme（含背景光斑、圆角、字体、序号体系）。"]},
+  welist:{tag:"Screen 03",t:"西式 · 册页",route:"#/style/we",
+    h:["奶白 #FBF6F5 + 玫瑰 #C08994 + 香槟 #C8AE84；封面顶部<b>拱形裁切</b>（170px 圆角），序号用罗马斜体 Ⅰ Ⅱ Ⅲ。",
+       "玻璃为<b>大圆角</b>（--r:20px），色散边走暖粉 / 暖金（<code>rgba(255,214,226,.5)</code> / <code>rgba(255,236,214,.4)</code>）。",
+       "竖排签牌改<b>胶囊形</b>（--r:999px），与新中式的直角签形成对照。",
+       "背景两处极淡圆形 line-art 光环 + 三团玫瑰/香槟光斑漂移。"]},
+  cnlist:{tag:"Screen 04",t:"新中式 · 册页",route:"#/style/cn",
+    h:["绢白 #F8F5F1 + <b>绛 #9E4E55</b> + 描金 #C0A46F + 黛青 #6E7C76（冷调点缀，避免红金发闷）。",
+       "玻璃为<b>直角</b>（--r:3px），色散边走金 / 青：<code>rgba(192,164,111,.55)</code> / <code>rgba(110,124,118,.38)</code> —— 这是与新中式相性最好的折射配色。",
+       "封面套<b>双线金框</b>（1px 金线 + 内缩 5px 留白 + 第二根金线），玻璃签牌（G6）浮在框内右上角。",
+       "序号「壹貳叁」细宋 200 字重 44px，绛色悬出图外。",
+       "背景：极淡绢纹竖线（48px 节奏，透明度 .30）+ 三团藕荷 / 香槟光斑 28–38s 漂移。"]},
+  wealb:{tag:"Screen 05",t:"西式 · 详情 · 六段叙事",route:"#/album/w1?style=we",
+    h:["六段顺序：晨袍造型 → 出门造型 → <b>仪式主纱</b> → 敬酒造型 → 面部细节 → 头饰造型（章号 Ⅰ–Ⅵ 罗马斜体）。",
+       "<b>零筛选</b>：无 gate、无 chips，一次垂直铺开。",
+       "hero 底部六枚中文流程胶囊，全部走<b>真玻璃</b>（16px，深色玻璃配墨色字 + scrim）。",
+       "图片节奏：全幅 18px 圆角 → 双联 → 全幅 → 66% 错位 → 正圆特写 ×2。所有图片容器一律 <code>aspect-ratio</code>（3:4 / 4:5）等比，<b>不写死高度</b>。",
+       "章节卡上的说明标签用轻玻璃（L2，11px），滚动区内不上真玻璃。"]},
+  cnalb:{tag:"Screen 06",t:"新中式 · 详情 · 六段叙事",route:"#/album/w2?style=cn",
+    h:["结构与西式完全同构，只换 skin：直角玻璃（--r:3px）、细宋中文序号壹貳叁肆伍陆、月洞门拱形特写、双线金框错位图。",
+       "第三章标题已修正为 <b>仪式主纱</b>（v3 误写作「礼仪主纱」，本版全局修正）。",
+       "特写（面部 / 头饰）用<b>月洞门</b>拱形裁切 + 金描边，是这版新中式最出彩的一处。",
+       "两套主题共用一套 DOM 结构，切换只换根 class（<code>.twe</code> / <code>.tcn</code>）+ 一组 CSS 变量。"]},
+  gallery:{tag:"Screen 07",t:"平铺图集 · 订婚",route:"#/gallery/engagement",
+    h:["两列错落瀑布流，容器一律用 <code>aspect-ratio</code>（3:4 / 4:5 混排）+ <code>object-fit:cover</code>，不再写死高度。",
+       "次要板块不设分类，玻璃只出现在底部 Dock。"]},
+  ratio:{tag:"Screen 08",t:"比例适配 · 横竖混排",route:"spec",
+    h:["<b>竖构图为主</b>：3:4（约 55%）、2:3（约 25%）、4:5（约 12%）——统一进同一列，容器高度由 aspect-ratio 决定。",
+       "<b>横构图少量</b>：3:2 / 4:3（约 6%）、16:9（约 2%）——<b>不裁人物</b>，单独占一整行按原比例展示，必要时上下留白。",
+       "每张图左上角有比例标签（轻玻璃），上线前由后端读取图片真实宽高写入 <code>orientation</code> 字段，前端据此选 class。",
+       "上传侧建议：长边 1600–2000px、WebP q=82、保留 EXIF 方向；后端落库时存 <code>w/h/ratio</code> 三字段。"]},
+  viewer:{tag:"Screen 09",t:"查看器 · 暗房玻璃",route:"overlay",
+    h:["底栏整块<b>真玻璃 28px</b>（G7）：暖近黑底 + 冷调玻璃，进度条、缩略图条、中文提示均浮在其上。",
+       "背景一团柔光避免压暗肤色；右上角关闭按钮也是玻璃圆片。",
+       "标题已修正为「婚礼跟妆 · 其一 · <b>仪式主纱</b>」。",
+       "手势：左右滑动切换 / 双击放大 / 下拉关闭；玻璃层在关闭动画结束后卸载，避免常驻合成开销。"]},
+  about:{tag:"Screen 10",t:"关于 · 预约闭环",route:"#/about",
+    h:["数据条（L4 轻玻璃）、流程胶囊（轻玻璃）、二维码卡（G8 真玻璃）、CTA（G9 真玻璃 16px）。",
+       "头像圆形 + 双层金环缓转（实线 22s / 虚线 34s 反向）。",
+       "中文为主，CTA 内 BOOK NOW 仅 8.5px 注脚。",
+       "<b>本版新增 · 品牌块换成完整字标</b>：内联 <code>wordmark-h</code>（206px）→ 副标「婚礼 与 日常 / BRIDAL &amp; DAILY」→ 金线 → 标语 → 竖排三字<b>繁体朱文印「予時妍」</b>。",
+       "副标已按拍板升级：砍掉行业词「妆造」，只留场景词「婚礼 与 日常」——更高级。"]},
+  multi:{tag:"Screen 11",t:"多图布局 · 面部细节 / 头饰造型",route:"#/album/* (sections 5–6)",
+    h:["<b>为什么单独做一屏</b>：「面部细节」「头饰造型」这两段是化妆师真正想让人看的图，后台配几张不确定——可能 1 张，也可能 12 张。不能靠人工排，必须<b>按张数自动切布局</b>。",
+       "<b>六种布局全部真实渲染</b>：① 1 张单幅 → ② 2 张双联 → ③ 3 张主图+双叠（1.42fr : 1fr）→ ④ 4 张 2×2 → ⑤ 5 张以上横滑 → ⑥ 混合比例横图整行独占。",
+       "<b>5 张以上一律横滑，不纵向堆高</b>：<code>scroll-snap-type:x mandatory</code>，每屏露出 74%，配进度条 + 「1 / 6」计数，末位是「查看全部 12 张」。用原生滚动而不是 JS 轮播——微信里 JS 轮播和页面手势会打架。",
+       "<b>横图铁律</b>：容器比例永远跟随图片本身。检测到横图（宽 > 高）时该图 <code>grid-column:1/-1</code> 独占整行，按原比例展示，<b>绝不裁人物</b>。",
+       "<b>不建议</b>用瀑布流（masonry）承载这两段：化妆师要的是「一套作品逐张看」，瀑布流的无序感会削弱叙事。",
+       "章节标题行右端加竖排三字印「予時妍」（30×74，繁体）作为落款——全站唯一用繁体字的位置。"]}
+};
+
+var tabs=document.querySelectorAll('.tab');
+var stages=document.querySelectorAll('.stage');
+var notes=document.getElementById('notes');
+var scr=document.getElementById('screen');
+
+function paint(p){
+  stages.forEach(function(s){ s.classList.toggle('on', s.dataset.s===p); });
+  scr.scrollTop=0;
+  var n=NOTES[p];
+  notes.innerHTML='<div class="tag">'+n.tag+'</div><h4>'+n.t+'</h4><div class="route">'+n.route+
+    '</div><h5>本屏设计说明</h5><ul>'+n.h.map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul>';
+  tabs.forEach(function(t){ t.classList.toggle('on', t.dataset.p===p); });
+  if(lightOn) applyLight(50,26);
+}
+tabs.forEach(function(t){ t.addEventListener('click', function(){ paint(t.dataset.p); }); });
+
+document.getElementById('replay').addEventListener('click', function(){
+  var cur=document.querySelector('.stage.on');
+  var html=cur.innerHTML; cur.innerHTML=''; void cur.offsetWidth; cur.innerHTML=html;
+  scr.scrollTop=0;
+});
+
+/* ---------- 开关 ---------- */
+var ann=document.getElementById('tgAnn');
+ann.addEventListener('click',function(){
+  document.documentElement.classList.toggle('annotate');
+  ann.classList.toggle('on');
+});
+var blurBtn=document.getElementById('tgBlur');
+blurBtn.addEventListener('click',function(){
+  document.documentElement.classList.toggle('noblur');
+  blurBtn.classList.toggle('on');
+});
+
+/* ---------- 光影跟随：指针 / 陀螺仪 ---------- */
+var lightOn=true;
+var lightBtn=document.getElementById('tgLight');
+function applyLight(x,y){
+  scr.style.setProperty('--mx',x+'%');
+  scr.style.setProperty('--my',y+'%');
+}
+scr.addEventListener('pointermove',function(e){
+  if(!lightOn) return;
+  var r=scr.getBoundingClientRect();
+  applyLight(((e.clientX-r.left)/r.width*100).toFixed(1), ((e.clientY-r.top)/r.height*100).toFixed(1));
+});
+lightBtn.addEventListener('click',function(){
+  lightOn=!lightOn;
+  lightBtn.classList.toggle('on',lightOn);
+  if(!lightOn){ scr.style.removeProperty('--mx'); scr.style.removeProperty('--my'); }
+  else applyLight(50,26);
+});
+
+/* 陀螺仪：iOS 13+ 需用户手势触发 DeviceOrientationEvent.requestPermission()；
+   Android 多数直接可用。此处只做监听，未申请权限（设计稿用途）。 */
+window.addEventListener('deviceorientation',function(e){
+  if(!lightOn||e.gamma==null||e.beta==null) return;
+  var x=Math.max(0,Math.min(100,50+e.gamma*1.6));
+  var y=Math.max(0,Math.min(100,50+e.beta*1.2));
+  applyLight(x.toFixed(1),y.toFixed(1));
+});
+
+paint('home');
+</script>
+</body>
+</html>
