@@ -77,6 +77,18 @@ services:
     # 这样即使防火墙漏配，API 也不会直接暴露到公网。
     expose:
       - "8082"
+    # ⚠️ 这一段是**整个部署能跑起来的关键**，别删（2026-10-03 首次部署踩过）。
+    #
+    # 坑：只在文件**末尾**的顶层 `networks:` 声明了 sanhe_default，
+    #      却没在**服务里** networks: 引用它 ——
+    #      compose 看到服务没声明网络，就自动挂到项目默认网络 mua_default，
+    #      同时按顶层声明**顺手新建**了一个空的 sanhe_default 副本之外的默认网。
+    #      结果：容器状态显示 Up，但 DB_HOST=sanhe-mysql 报 ENOTFOUND
+    #      （MySQL 在真 sanhe_default 里，容器却在另一个网），
+    #      错误信息完全指向"数据库地址写错"，极具误导性。
+    # 正确：顶层声明网络 + 服务里显式引用，两者都要有。
+    networks:
+      - sanhe_default
     # 2核/1.7GB 机器（与 sanhe-mysql 768m + sanhe-server 1024m 共存）：
     # Node 常驻约 150-200MB，512m 留够转码时的临时峰值。
     # ⚠️ 改大前先 free -m 看可用值：三个容器上限之和必须低于物理内存。
@@ -89,7 +101,12 @@ services:
       start_period: 20s
     logging:
       driver: json-file
-      options: { max-size: "10m", file: "3" }
+      # ⚠️ 键名是 max-file，不是 file（2026-10-03 首次部署踩过）。
+      # 写成 file 会报 `unknown log opt 'file' for json-file log driver`，
+      # 而这个错误发生在**容器创建阶段** —— 迁移、健康检查、启动全都被它挡住，
+      # 日志里只有一行 daemon 报错，完全看不出是日志配置写错。
+      # 这个选项直接决定容器能不能被创建，别改错。
+      options: { max-size: "10m", max-file: "3" }
 
 networks:
   # 加入 sanhe 的网络以容器名访问它的 MySQL。
