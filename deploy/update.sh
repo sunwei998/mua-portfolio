@@ -362,6 +362,32 @@ else
   say "  ⚠ uploads 目录里没有可用文件（首次部署需先上传素材）"
 fi
 
+# ------------------------------------------------------------------ 12) 同步 Nginx 站点配置
+# ⚠️ **必须做**（2026-10-04 分叉事故的直接对策）：
+#    此前本脚本完全不管 nginx，服务器跑的是早期手工写的一份，
+#    而仓库里那份带 gzip/缓存/正确 healthz/正确 admin alias 的配置**从未部署**。
+#    两份并存且互不干涉，肉眼完全看不出来，直到某个功能出事才暴露。
+#    现在每次部署都用仓库版本覆盖，让「仓库 = 线上」成为不变量。
+#
+#    安全边界：只在 nginx -t 通过后才 reload。语法不过就 reload 会把现有站点全搞挂，
+#    所以失败时宁可保留旧配置、只告警。
+if [ -f "$SCRIPT_DIR/nginx.conf" ]; then
+  NGX_TARGET="${NGX_TARGET:-/etc/nginx/sites-available/mua}"
+  if [ -d "$(dirname "$NGX_TARGET")" ]; then
+    if cp "$SCRIPT_DIR/nginx.conf" "$NGX_TARGET" 2>/dev/null; then
+      if nginx -t >/dev/null 2>&1; then
+        systemctl reload nginx 2>/dev/null || true
+        say "  ✓ Nginx 站点配置已同步并重载"
+      else
+        say "  ⚠ $SCRIPT_DIR/nginx.conf 语法未通过，已保留旧配置线上不动："
+        nginx -t 2>&1 | tail -3 | sed 's/^/      /'
+      fi
+    fi
+  else
+    say "  ⚠ 未找到 $(dirname "$NGX_TARGET")，跳过 nginx 同步（非标准安装？）"
+  fi
+fi
+
 say "✓ 全部完成：${NEW_REV:0:8}（前台 /  → http://127.0.0.1:${HTTP_PORT}/）"
 docker image prune -f >/dev/null 2>&1 || true
 exit 0
