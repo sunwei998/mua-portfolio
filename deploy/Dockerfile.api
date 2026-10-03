@@ -7,16 +7,18 @@
 #   若 tsx 只在 dev 依赖里会直接崩（曾踩过，见项目记忆铁律 12）。
 #   代价是容器启动多一层 tsx 编译（约 1-2 秒），对一个作品集站点完全可接受。
 #
-# ⚠️ 关于 ffmpeg（第一次部署在此卡死 15 分钟的根因）：
-#   `ffmpeg-static` 的 postinstall 会从 GitHub release 下载二进制，国内直连不通，
-#   npm ci 会**挂住直到超时**。但 ffmpeg-static 支持用环境变量 FFMPEG_BIN 覆盖路径
-#   （见其 package.json 的 binary-path-env-var），所以这里：
-#     ① apt 装发行版的 ffmpeg（Ubuntu 源，国内秒装）；
-#     ② npm ci --ignore-scripts 跳过所有 postinstall（不联网下载）；
-#     ③ 运行时 FFMPEG_BIN=/usr/bin/ffmpeg 指到系统二进制。
-#   转码功能完整保留，构建不再依赖外网。
-#   另一个 ffprobe-static 不用管：它**没有 postinstall**，Linux 二进制随包自带
-#   （61MB，node_modules 里有 bin/linux/x64/ffprobe），npm ci 会直接解压到位。
+# ⚠️ 关于 ffmpeg（这里有两个独立的坑，都实际卡死过一轮部署）：
+#   坑① `ffmpeg-static` 的 postinstall 从 GitHub release 下载二进制，国内直连不通，
+#        npm ci 会**挂住直到超时**。但 ffmpeg-static 支持用环境变量 FFMPEG_BIN
+#        覆盖路径（见其 package.json 的 binary-path-env-var），所以：
+#          ① apt 装发行版的 ffmpeg（见下方，注意**必须换国内源**）；
+#          ② npm ci --ignore-scripts 跳过所有 postinstall（不联网下载）；
+#          ③ 运行时 FFMPEG_BIN=/usr/bin/ffmpeg 指到系统二进制。
+#        转码功能完整保留，构建不再依赖外网。
+#        另一个 ffprobe-static 不用管：它**没有 postinstall**，Linux 二进制随包自带
+#        （61MB，node_modules 里有 bin/linux/x64/ffprobe），npm ci 会直接解压到位。
+#   坑② apt 装 ffmpeg 本身也会卡 —— 默认源 10.3KB/s，索引要 15 分钟。
+#        详见下面那层 RUN 的注释。**这是首次部署真正卡住的那一处。**
 # ============================================================================
 FROM node:22-bookworm-slim
 
