@@ -22,24 +22,34 @@ FROM node:22-bookworm-slim
 
 # ffmpeg：上传视频自动转码用（后台「首页视频」槽位）。
 #
-# ⚠️ **必须用国内镜像**（2026-10-03 首次部署实测卡死 8 分钟的直接原因）：
-#   默认的 deb.debian.org 从国内拉 bookworm 主索引实测仅 **15 KB/s**，
-#   单个 Packages.gz（8.79MB）要跑 10 分钟以上，表现为「构建一直停在
-#   #6 apt-get update，日志半天不动」——极易误判成构建坏了或内存不够。
-#   换成清华镜像实测 **22 MB/s**（差 1400 倍），同一层从「十分钟」变「几秒」。
-#   sed 写法：把源里的 deb.debian.org / security.debian.org 统一指向清华，
-#   注释掉 bookworm-security 那行（清华路径已含 security 仓库，指过去反而 404）。
-#   ⚠️ 换镜像后这层**必须重建**（RUN 指令变了，层缓存自动失效，无需手动清）。
+# ⚠️ **必须换源**（2026-10-03 首次部署实测卡死 15 分钟的直接原因）：
+#   默认 deb.debian.org 从这台机器拉 bookworm 主索引仅 **10.3 KB/s**，
+#   9.4MB 索引硬扛了 15 分 15 秒，表现为「构建一直停在 #6 apt-get update」，
+#   极易误判成构建坏了 / 内存不够 / 网络不通。
+#
+#   换腾讯云内网源实测 **2 秒**完成（同一台机器、同一层）。
+#
+#   两个踩过的坑（都实际浪费了一轮构建）：
+#   ① **只能用 HTTP，不能用 HTTPS**。node:22-bookworm-slim 基础镜像里
+#      **没装 ca-certificates**，走 https 会直接
+#      「Certificate verification failed: The certificate is NOT trusted」——
+#      而 apt 对索引拉取失败只给 W: 警告并「ignore」，**不中断**，
+#      于是日志里 8 秒就"跑完"了 update，实际一个包都没索引到，
+#      紧接着 install 才炸。表现极具误导性（update 成功 → install 失败）。
+#   ② **只能改 URIs，不能动 Suites**。debian.sources 是 deb822 格式，
+#      一条记录由 Types/URIs/Suites/Components/Signed-By 多个行段组成，
+#      给 Suites 行加 `#` 注释会破坏记录结构。
+#      正确做法只替换 URIs 行的域名，Suites 保持原样。
 RUN set -eux; \
     sed -i \
-      -e 's|deb.debian.org/debian|mirrors.tuna.tsinghua.edu.cn/debian|g' \
-      -e 's|security.debian.org/debian-security|mirrors.tuna.tsinghua.edu.cn/debian-security|g' \
-      -e 's|deb.debian.org/debian-security|mirrors.tuna.tsinghua.edu.cn/debian-security|g' \
+      -e 's|http://deb.debian.org/debian-security|http://mirrors.tencentyun.com/debian-security|g' \
+      -e 's|http://deb.debian.org/debian|http://mirrors.tencentyun.com/debian|g' \
       /etc/apt/sources.list.d/debian.sources; \
-    sed -i '/bookworm-security/s/^/#/' /etc/apt/sources.list.d/debian.sources; \
     apt-get update; \
-    apt-get install -yqq --no-install-recommends ffmpeg; \
+    apt-get install -yqq --no-install-recommends ffmpeg ca-certificates; \
     rm -rf /var/lib/apt/lists/*
+# ca-certificates 一并装上：基础镜像默认没有，缺它会让任何 https 源
+# 报「certificate is NOT trusted」，而 apt 只警告不报错（见上）。
 
 WORKDIR /app
 
