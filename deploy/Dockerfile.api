@@ -1,0 +1,63 @@
+# ============================================================================
+# 予时妍 YUÉ ATELIER · API 镜像（Node 22 + Fastify 5 + TypeScript）
+#
+# 为什么用 tsx 直跑而不是先 tsc 编译：
+#   server/package.json 的 start 就是 `tsx src/index.ts`，且 tsx 在 **dependencies**
+#   里（不在 devDependencies）—— 这是有意为之：生产 `npm ci --omit=dev` 后
+#   若 tsx 只在 dev 依赖里会直接崩（曾踩过，见项目记忆铁律 12）。
+#   代价是容器启动多一层 tsx 编译（约 1-2 秒），对一个作品集站点完全可接受。
+#
+# ⚠️ 关于 ffmpeg（第一次部署在此卡死 15 分钟的根因）：
+#   `ffmpeg-static` 的 postinstall 会从 GitHub release 下载二进制，国内直连不通，
+#   npm ci 会**挂住直到超时**。但 ffmpeg-static 支持用环境变量 FFMPEG_BIN 覆盖路径
+#   （见其 package.json 的 binary-path-env-var），所以这里：
+#     ① apt 装发行版的 ffmpeg（Ubuntu 源，国内秒装）；
+#     ② npm ci --ignore-scripts 跳过所有 postinstall（不联网下载）；
+#     ③ 运行时 FFMPEG_BIN=/usr/bin/ffmpeg 指到系统二进制。
+#   转码功能完整保留，构建不再依赖外网。
+#   另一个 ffprobe-static 不用管：它**没有 postinstall**，Linux 二进制随包自带
+#   （61MB，node_modules 里有 bin/linux/x64/ffprobe），npm ci 会直接解压到位。
+# ============================================================================
+FROM node:22-bookworm-slim
+
+# ffmpeg：上传视频自动转码用（后台「首页视频」槽位）。用 Debian 源即可，国内可达。
+# -yqq：非交互 + 静默，避免构建日志刷屏
+RUN apt-get update \
+ && apt-get install -yqq --no-install-recommends ffmpeg \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# 先只拷依赖清单 → 装依赖 → 再拷源码。
+# 这样改业务代码时不会让 npm ci 的层缓存失效（重建只要几秒）。
+COPY server/package.json server/package-lock.json ./
+# --omit=dev：TypeScript 类型与 @types/node 运行时不需要
+# --ignore-scripts：跳过 postinstall（唯一目的就是不联网下 ffmpeg，见上）
+RUN npm ci --omit=dev --ignore-scripts && npm cache clean --force
+
+COPY server/src ./src
+COPY server/migrations ./migrations
+
+# 容器内上传落盘目录（compose 里挂成卷，容器重建不丢后台上传的素材）
+RUN mkdir -p /app/data/uploads
+ENV MUA_UPLOAD_DIR=/app/data/uploads
+
+# 不以 root 跑业务进程
+ENV NODE_ENV=production \
+    PORT=8082 \
+    HOST=0.0.0.0 \
+    FFMPEG_BIN=/usr/bin/ffmpeg
+
+# node 用户由基础镜像提供；data 目录先建好再切换属主，避免启动时写不进去
+RUN chown -R node:node /app/data
+USER node
+
+EXPOSE 8082
+
+# 健康检查走 /api/health（带 DB ping）。Compose 的 healthcheck 复用这个端点，
+# 但这里也留一份，单独 docker run 时同样能自检。
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 --start-period=20s \
+  CMD node -e "fetch('http://127.0.0.1:8082/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+
+# 启动命令用 node_modules 里的 tsx 可执行文件（绝对路径，避免 PATH 差异）
+CMD ["node_modules/.bin/tsx", "src/index.ts"]

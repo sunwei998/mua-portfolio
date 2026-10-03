@@ -1,0 +1,89 @@
+# ============================================================================
+# 予时妍 YUÉ ATELIER · 生产编排（API 单容器）
+#
+# 一键起服务：
+#     cd /opt/mua/deploy
+#     cp env.example .env && nano .env      # 填密码与密钥
+#     docker compose up -d --build
+#
+# 为什么只有一个容器（与 sanhe 相反）：
+#   sanhe 是「MySQL + 后端 + Nginx 前端」三容器自闭环，对外只占 80。
+#   本项目**不自带数据库**（复用同机 sanhe-mysql 容器，见下方 networks 段），
+#   也**不用容器跑 Nginx** —— 宿主机已装 Nginx（sanhe 迁移下来的习惯），
+#   由它托管 site/ 与 admin/dist/ 两个静态根并反代 /api 到本容器。
+#   少两个容器 = 少 400MB 常驻内存（这机器只有 1679MB），
+#   且静态文件不经容器层，直读磁盘，微信 X5 加载更快。
+#
+# 与 sanhe 的隔离（**改动时务必保持**）：
+#   · 容器名 mua-api，与 sanhe-{mysql,server,web} 无交集
+#   · 端口 8083（80 归 sanhe-web，443 备用）
+#   · 只**加入** sanhe_default 网络（external: true），不修改该网络任何配置
+#   · 卷名 mua_uploads_assets，独立于 sanhe 的卷
+# ============================================================================
+
+name: mua
+
+services:
+  # ------------------------------------------------------------------- API
+  api:
+    build:
+      # 上下文是仓库根：Dockerfile 里要 COPY server/package.json 与 server/src
+      context: ..
+      dockerfile: deploy/Dockerfile.api
+    image: mua-api:latest
+    container_name: mua-api
+    restart: unless-stopped
+    environment:
+      # ⚠️ 三个值缺一不可（与 server/src/index.ts 的默认值不同）：
+      #   · DB_HOST=sanhe-mysql   —— 容器名，不是 127.0.0.1
+      #   · PORT=8082             —— 容器内端口，Nginx 反代目标
+      #   · HOST=0.0.0.0          —— ⚠️ 源码默认是 127.0.0.1！不改则容器内
+      #     只能自己连自己，Nginx 反代会 ECONNREFUSED（本机开发默认值不适合容器）
+      DB_HOST: ${DB_HOST:-sanhe-mysql}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_USER: ${DB_USER:-mua}
+      DB_PASSWORD: ${DB_PASSWORD:?请在 .env 里设置 DB_PASSWORD}
+      DB_NAME: ${DB_NAME:-mua_portfolio}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET:?请在 .env 里设置 ADMIN_JWT_SECRET}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-mua}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      # 指到 apt 装的系统 ffmpeg（覆盖 ffmpeg-static 的默认路径，见 Dockerfile.api 注释）
+      FFMPEG_BIN: /usr/bin/ffmpeg
+      NODE_ENV: production
+      PORT: 8082
+      HOST: 0.0.0.0
+      TZ: Asia/Shanghai
+    volumes:
+      # 后台上传的图片/视频落盘处。**不能丢** —— 容器删了素材就没了。
+      # 首次部署需手工 rsync 种子（uploads 被 gitignore，不在仓库里）
+      - mua-uploads:/app/data/uploads
+    # 不对宿主机暴露端口：只有宿主 Nginx 能访问它。
+    # 这样即使防火墙漏配，API 也不会直接暴露到公网。
+    expose:
+      - "8082"
+    # 2核/1.7GB 机器（与 sanhe-mysql 768m + sanhe-server 1024m 共存）：
+    # Node 常驻约 150-200MB，512m 留够转码时的临时峰值。
+    # ⚠️ 改大前先 free -m 看可用值：三个容器上限之和必须低于物理内存。
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:8082/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: json-file
+      options: { max-size: "10m", file: "3" }
+
+volumes:
+  mua-uploads:
+    # 显式命名，避免 compose 项目名变化导致卷"查无此物"、素材看似消失
+    name: mua_uploads_assets
+
+networks:
+  # 加入 sanhe 的网络以容器名访问它的 MySQL。
+  # ⚠️ external: true = 「这个网络已存在，直接用，别动它」。
+  # 若漏了这个声明，compose 会新建一个同名网络，MySQL 就在别的网里了，
+  # 表现为 DB_HOST=sanhe-mysql 报 ENOTFOUND，而容器状态却显示 Up（极具误导性）。
+  sanhe_default:
+    external: true

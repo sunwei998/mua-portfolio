@@ -1,0 +1,54 @@
+# ============================================================================
+# 予时妍 YUÉ ATELIER · 自动部署
+#
+# 触发时机：**手动**（GitHub 网页点一次"Run workflow"才部署）。
+#           日常 push 不触发 —— 迭代频繁，避免每次提交都在 1.7GB 的小机器上构建。
+# 做什么：  SSH 登录服务器执行 deploy/update.sh —— 真正的构建与切换全在服务器本机，
+#           GitHub 只负责"通知"这一下。
+#
+# 为什么不在 GitHub 上构建再传过去：
+#   镜像传输动辄几百 MB，跨境既慢又易断；在服务器上就地构建能复用 Docker 层缓存。
+#   而且这台机器本来就跑着 sanhe 的三个容器，构建内存要省着花。
+#
+# ⚠️ 需要在仓库 Settings → Secrets and variables → Actions 里配 3 个密钥：
+#   SERVER_HOST      服务器公网 IP（119.45.182.37）
+#   SERVER_USER      登录用户名（腾讯云 Ubuntu 镜像是 ubuntu）
+#   SERVER_SSH_KEY   服务器上专用部署私钥的**完整内容**（含首尾两行）
+# ============================================================================
+name: deploy
+
+on:
+  # 手动触发：GitHub 网页 → Actions → deploy → Run workflow
+  workflow_dispatch:
+
+  # 想恢复「push main 即部署」，把下面 4 行的注释取消即可：
+  # push:
+  #   branches: [main]
+  #   paths-ignore:
+  #     - '**.md'
+
+# 同一时刻只允许一个部署在跑，避免两次触发交叉导致容器状态错乱
+concurrency:
+  group: mua-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20        # 首次构建较慢，留足余量
+    steps:
+      - name: 准备 SSH 私钥与 known_hosts
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          # 预先采集指纹，避免首次连接时卡在交互确认上
+          ssh-keyscan -H "${{ secrets.SERVER_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: 在服务器上执行更新
+        run: |
+          # 必须是 sudo：/opt/mua/.git 属 root，且脚本用 docker compose
+          ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=30 \
+              -i ~/.ssh/id_ed25519 \
+              "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}" \
+              'sudo bash /opt/mua/deploy/update.sh'

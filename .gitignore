@@ -19,6 +19,13 @@ admin/dist/
 site/img/uploads/
 server/.tmp/
 
+# ---------- ③bis 部署运行期产物（服务器上生成，不入版本库）----------
+# 生产的数据库备份：含明文数据与凭据派生值，只能留在服务器上。
+# 本地若手工跑过 deploy/*.sh 也会产生同名目录，一并排除。
+backups/
+mua-db-*.sql.gz
+deploy/.env            # 生产环境变量（含密码），与 server/.env.mua 同样严禁入库
+
 # ---------- ④ 凭据与本地环境（严禁入库）----------
 .env
 .env.*
@@ -48,5 +55,8 @@ server/.env.mua
 #   · 站点图片：site/img/*.png（welcome/nc-* 等，前台实际引用，约 24MB）
 #   · 品牌资产：assets/（logo 矢量 + 分享板成品，约 23MB）
 #   · 交付文档：README.md、design-*.html、build-plan.html、tech-plan.html
+#   · 部署编排：deploy/（Dockerfile.api、docker-compose.yml、nginx.conf、
+#       update.sh、sync-uploads.sh、env.example）与 .github/workflows/deploy.yml
+#       —— update.sh 是生产部署的唯一入口，缺了它服务器就没法更新代码。
 # 体积焦虑的正解是把图片搬去 COS + CDN，不是把它们从版本库里删掉。
 # ============================================================
