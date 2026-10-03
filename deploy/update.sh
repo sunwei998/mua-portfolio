@@ -147,15 +147,31 @@ if docker image inspect mua-api:latest >/dev/null 2>&1; then
 fi
 
 # ------------------------------------------------------------------ 4) 回滚函数
+# ⚠️ 这里的 `git reset --hard "$OLD_REV"` 是**部署编排配置**的回滚，
+#    不是业务代码的。它有一个实测踩过的陷阱：
+#      回滚会连带把 deploy/docker-compose.yml 一起退回旧版，
+#      而旧版 compose 里可能有**当时还没发现的 bug**（例如 logging 键名写错）。
+#      于是 `docker compose up -d` 用坏配置重建容器 → 重现同一个错误 →
+#      「回滚」本身失败，线上既没有新版本也没有旧版本。
+#    实测：2026-10-03 首次部署就是这样，API 明明健康（/api/health 200），
+#    健康检查却因 502 超时，回滚又因旧 compose 报错，最后全线卡死。
+#
+#    正确做法：**回滚只回滚镜像，不回滚编排文件**。
+#    编排配置（compose / nginx）属于「环境」，修复它对旧镜像只有好处没有坏处；
+#    旧镜像配新编排照样能跑（本次实测 mua-api:prev + 新 compose 正常启动）。
+#    所以这里**不 reset**，只切镜像标签。
 rollback() {
   say "！！ 更新失败：$1"
-  say "自动回滚到 ${OLD_REV:0:8} …"
-  cd "$REPO_DIR" && git reset --hard --quiet "$OLD_REV"
-  cd "$SCRIPT_DIR"
+  say "自动回滚镜像到 ${OLD_REV:0:8}（**不**回退编排配置，见函数头注释）…"
+  # 工作副本代码保持在失败的新版本 —— 它是当前 origin/main，
+  # 下次重跑 update.sh 能直接拿到修复后的内容；回退代码只会把 bug 一起带回来。
   if docker image inspect mua-api:prev >/dev/null 2>&1; then
     docker tag mua-api:prev mua-api:latest || true
+    cd "$SCRIPT_DIR"
+    docker compose up -d --force-recreate --remove-orphans 2>&1 | tail -5 || true
+  else
+    say "  ⚠ 没有 :prev 镜像可回退（首次部署场景），请人工介入。"
   fi
-  docker compose up -d --remove-orphans || true
   say "----- API 最后 60 行日志 -----"
   docker compose logs --tail 60 api 2>/dev/null || true
   say "已回滚。注意：数据库未回滚（迁移不可逆）。"
@@ -226,6 +242,26 @@ docker compose up -d --remove-orphans || rollback "容器启动失败"
 
 # ------------------------------------------------------------------ 10) 健康检查
 # 两个入口都验：/healthz 验 Nginx、/api/health 验后端（含 DB ping）真的起来了
+#
+# ⚠️ 超时时**必须打印分层诊断**，否则只能干瞪眼（2026-10-03 实测踩过）：
+#   当时容器 healthy、docker exec 直连 /api/health 200 且 db:true，
+#   但经 Nginx 就是 502 —— 因为 compose 用的是 `expose` 而非 `ports`，
+#   宿主上根本没开监听端口，而后端确实好好地活着，只是"没有门进"。
+#   没有这层诊断的话，看到「健康检查超时」只能怀疑后端挂了，
+#   实际上后端一点问题都没有。
+diagnose() {
+  say "----- 分层诊断 -----"
+  local c
+  for c in $(docker compose ps -q api 2>/dev/null); do
+    say "  容器状态: $(docker inspect -f '{{.State.Status}}{{if .State.Health}}{{.State.Health.Status}}{{end}}' "$c" 2>/dev/null)"
+  done
+  say "  宿主监听 8082: $(ss -ltn 2>/dev/null | grep -q ':8082' && echo 有 || echo '**无**（compose 用了 expose 而非 ports？宿主 Nginx 连不上）')"
+  say "  直连后端 8082: $(curl -fsS --max-time 5 http://127.0.0.1:8082/api/health 2>/dev/null || echo '**不通**')"
+  say "  经 Nginx /api/health: HTTP $(curl -s -o /dev/null -w '%{http_code}' --max-time 5 http://127.0.0.1:${HTTP_PORT}/api/health 2>/dev/null || echo '**不通**')"
+  say "  经 Nginx /healthz:    HTTP $(curl -s -o /dev/null -w '%{http_code}' --max-time 5 http://127.0.0.1:${HTTP_PORT}/healthz 2>/dev/null || echo '**不通**')"
+  say "---------------------"
+}
+
 say "健康检查（最多等待 ${HEALTH_WAIT}s）…"
 deadline=$(( $(date +%s) + HEALTH_WAIT ))
 while [ "$(date +%s)" -lt "$deadline" ]; do
@@ -238,7 +274,8 @@ while [ "$(date +%s)" -lt "$deadline" ]; do
 done
 
 # ⚠️ 必须在这里终止：健康检查超时意味着新版本起不来，
-#    若继续往下走会同步素材并 exit 0 —— 部署失败却被报成"成功"，是最坏的失败模式。
+#    若继续往下走会 exit 0 —— 部署失败却被报成"成功"，是最坏的失败模式。
+diagnose
 rollback "新版本启动后健康检查未通过"
 
 # ------------------------------------------------------------------ 11) 收尾
