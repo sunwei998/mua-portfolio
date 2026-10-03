@@ -20,11 +20,26 @@
 # ============================================================================
 FROM node:22-bookworm-slim
 
-# ffmpeg：上传视频自动转码用（后台「首页视频」槽位）。用 Debian 源即可，国内可达。
-# -yqq：非交互 + 静默，避免构建日志刷屏
-RUN apt-get update \
- && apt-get install -yqq --no-install-recommends ffmpeg \
- && rm -rf /var/lib/apt/lists/*
+# ffmpeg：上传视频自动转码用（后台「首页视频」槽位）。
+#
+# ⚠️ **必须用国内镜像**（2026-10-03 首次部署实测卡死 8 分钟的直接原因）：
+#   默认的 deb.debian.org 从国内拉 bookworm 主索引实测仅 **15 KB/s**，
+#   单个 Packages.gz（8.79MB）要跑 10 分钟以上，表现为「构建一直停在
+#   #6 apt-get update，日志半天不动」——极易误判成构建坏了或内存不够。
+#   换成清华镜像实测 **22 MB/s**（差 1400 倍），同一层从「十分钟」变「几秒」。
+#   sed 写法：把源里的 deb.debian.org / security.debian.org 统一指向清华，
+#   注释掉 bookworm-security 那行（清华路径已含 security 仓库，指过去反而 404）。
+#   ⚠️ 换镜像后这层**必须重建**（RUN 指令变了，层缓存自动失效，无需手动清）。
+RUN set -eux; \
+    sed -i \
+      -e 's|deb.debian.org/debian|mirrors.tuna.tsinghua.edu.cn/debian|g' \
+      -e 's|security.debian.org/debian-security|mirrors.tuna.tsinghua.edu.cn/debian-security|g' \
+      -e 's|deb.debian.org/debian-security|mirrors.tuna.tsinghua.edu.cn/debian-security|g' \
+      /etc/apt/sources.list.d/debian.sources; \
+    sed -i '/bookworm-security/s/^/#/' /etc/apt/sources.list.d/debian.sources; \
+    apt-get update; \
+    apt-get install -yqq --no-install-recommends ffmpeg; \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 

@@ -1,0 +1,51 @@
+# ============================================================================
+# Docker 构建上下文排除（2026-10-03 补）
+#
+# 为什么需要：build context 是仓库根（compose 里 context: ..），
+# 不排除的话每次构建都要把 admin/ node_modules、.git、uploads 素材
+# （63MB）打包传给 docker daemon —— 1.7GB 内存机器上纯属浪费，
+# 且缓存每次都失效（改一个 .ts 文件，63MB 素材也跟着重传）。
+#
+# ⚠️ 排障提示：构建日志里 `load build context` 显示的体积就是这里过滤后的结果。
+#    若它异常小（比如只有一百多 KB），多半是某条规则把源码也误伤了 ——
+#    镜像只 COPY server/package.json + server/src + server/migrations，
+#    **别把 server/ 整条路径排除掉**，那样会得到一个"构建成功但启动即崩"的镜像
+#    （模块找不到，且报错发生在容器启动阶段而非构建阶段，极难定位）。
+# ============================================================================
+
+# 依赖：镜像内自己 npm ci 装，不需要宿主机的
+node_modules
+**/node_modules
+
+# 版本库与工作区状态
+.git
+.gitignore
+.workbuddy
+
+# 宿主环境变量（含数据库密码与 JWT 密钥，**绝不能进镜像层**）
+.env
+**/.env
+**/.env.*
+!.env.example
+server/.env.mua
+
+# 构建产物：镜像内自己构建，宿主机这份是陈旧的
+admin/dist
+site/img/uploads
+
+# 设计与归档交付物（仓库根十几个独立 HTML 原型，不参与运行时）
+*.html
+!site/index.html
+
+# 品牌资产同理：运行时不引用，Nginx 直接托管仓库里的那份
+assets/
+
+# 日志与临时文件
+*.log
+server/.tmp
+npm-debug.log*
+
+# 编辑器与系统垃圾
+.DS_Store
+.idea/
+.vscode/
