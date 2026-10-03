@@ -293,19 +293,27 @@ diagnose() {
 
 say "健康检查（最多等待 ${HEALTH_WAIT}s）…"
 deadline=$(( $(date +%s) + HEALTH_WAIT ))
+HEALTHY=0
 while [ "$(date +%s)" -lt "$deadline" ]; do
   if curl -fsS --max-time 5 "http://127.0.0.1:${HTTP_PORT}/healthz" >/dev/null 2>&1 \
      && curl -fsS --max-time 5 "http://127.0.0.1:${HTTP_PORT}/api/health" >/dev/null 2>&1; then
     say "✓ 新版本健康，部署完成：${NEW_REV:0:8}"
     docker compose ps
+    HEALTHY=1
+    break
   fi
   sleep 5
 done
 
-# ⚠️ 必须在这里终止：健康检查超时意味着新版本起不来，
-#    若继续往下走会 exit 0 —— 部署失败却被报成"成功"，是最坏的失败模式。
-diagnose
-rollback "新版本启动后健康检查未通过"
+# ⚠️ 这里必须靠标志位分支，**不能靠"循环跑完就往下走"**（2026-10-03 踩过）：
+#   健康检查成功时若不 break，循环会一直转到 deadline，
+#   然后把一次**成功的部署**报成"新版本启动后健康检查未通过"并触发回滚。
+#   表现极具迷惑性：日志里几十行「✓ 新版本健康，部署完成」，
+#   紧接着却是「！！ 更新失败」—— 明明成功了却说失败。
+if [ "$HEALTHY" != "1" ]; then
+  diagnose
+  rollback "新版本启动后健康检查未通过"
+fi
 
 # ------------------------------------------------------------------ 11) 收尾
 # uploads 已是 bind mount（宿主 /opt/mua/site/img/uploads ⇄ 容器 /site/img/uploads），
