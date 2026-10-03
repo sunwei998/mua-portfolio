@@ -217,11 +217,28 @@ say "代码已切换到 ${NEW_REV:0:8}（已校验）"
 
 cd "$SCRIPT_DIR"
 
-# uploads 目录权限：bind mount 的宿主目录必须对容器内 node 用户（uid 1000）可写，
-# 否则后台上传静默 EACCES。git 不跟踪目录权限位，clone 出来是 root:root 755。
+# uploads 目录权限：这是本项目最容易踩的一处，两端都要照顾到。
+#
+#   写的一侧：bind mount 的宿主目录必须对容器内 node 用户（uid 1000）可写，
+#             否则后台上传静默 EACCES。git 不跟踪权限位，clone 出来是 root:root 755。
+#   读的一侧：宿主 Nginx 以 **www-data** 身份跑，必须能读 uploads 里的每个文件。
+#
+# ⚠️ 为什么必须显式 chmod 644（2026-10-03 首次部署踩过）：
+#   素材第一次是 tar/rsync 传上来的，**会保留源文件权限**。
+#   本地 macOS 上有些视频是 -rw-------（仅属主可读），
+#   传到服务器后 nginx 读不了 ⇒ 前台视频 **403**，
+#   而同目录的 png 是 644 ⇒ 图片正常、视频 403。
+#   这种"部分资源 403、部分正常"的分裂现象极难定位，
+#   一定要连文件权限一起核对（curl 一下每个类型，别只看目录存在）。
+#   nginx 错误日志里的 `open() ... failed (13: Permission denied)` 是判据。
 if [ -d "$REPO_DIR/site/img/uploads" ]; then
   chown -R 1000:1000 "$REPO_DIR/site/img/uploads" 2>/dev/null || true
-  chmod 755 "$REPO_DIR/site/img/uploads" 2>/dev/null || true
+  # 目录 755（可遍历可列）、文件 644（www-data 可读、node 可读）
+  find "$REPO_DIR/site/img/uploads" -type d -exec chmod 755 {} + 2>/dev/null || true
+  find "$REPO_DIR/site/img/uploads" -type f -exec chmod 644 {} + 2>/dev/null || true
+  # macOS 资源叉垃圾：tar/scp 传输会带出 ._xxx（AppleDouble），共 28 个左右。
+  # 它们不影响功能但会污染目录、且在某些工具下被当真实文件扫到。
+  find "$REPO_DIR/site/img/uploads" -name '._*' -type f -delete 2>/dev/null || true
 fi
 
 # ------------------------------------------------------------------ 6) 装依赖 + 构建
@@ -316,12 +333,33 @@ if [ "$HEALTHY" != "1" ]; then
 fi
 
 # ------------------------------------------------------------------ 11) 收尾
-# uploads 已是 bind mount（宿主 /opt/mua/site/img/uploads ⇄ 容器 /site/img/uploads），
+# uploads 是 bind mount（宿主 /opt/mua/site/img/uploads ⇄ 容器 /site/img/uploads），
 # API 写入与 Nginx 读取同属一个目录，无需同步。sync-uploads.sh 已随之退休。
-# 唯一要确认的是写权限：node 用户（uid 1000）必须能写该目录，否则后台上传会 EACCES。
+#
+# ⚠️ 这里做**真实验证**而不是「配了就当好了」—— 2026-10-03 首次部署就是
+#    配完权限就以为完事，结果前台视频一直 403：
+#      写侧：容器内 node 用户能否写（test -w）
+#      读侧：宿主 nginx 能否真的取到文件（curl 实取一个真实文件，拿 HTTP 码）
+#    两者都不是配置能保证的，必须实测。
+say "校验上传目录（写：容器 node 用户 / 读：宿主 nginx）…"
 if ! docker compose exec -T api test -w /site/img/uploads 2>/dev/null; then
-  say "  ⚠ 容器内 /site/img/uploads 不可写 —— 后台上传会失败。"
+  say "  ✗ 容器内 /site/img/uploads 不可写 ⇒ 后台上传会 EACCES 失败。"
   say "    修复： sudo chown -R 1000:1000 $REPO_DIR/site/img/uploads"
+else
+  say "  ✓ 容器内可写（上传可用）"
+fi
+# 取目录里任意一个真实文件做读验证（优先视频，因为权限问题最先在视频上暴露）
+SAMPLE="$(find "$REPO_DIR/site/img/uploads" -maxdepth 1 -type f \( -name '*.mp4' -o -name '*.png' -o -name '*.jpg' \) -printf '%f\n' 2>/dev/null | head -1)"
+if [ -n "$SAMPLE" ]; then
+  CODE="$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "http://127.0.0.1:${HTTP_PORT}/img/uploads/$SAMPLE" 2>/dev/null || echo 000)"
+  if [ "$CODE" = "200" ] || [ "$CODE" = "206" ]; then
+    say "  ✓ 宿主可读（$SAMPLE → HTTP $CODE）"
+  else
+    say "  ✗ 宿主读不到 $SAMPLE（HTTP $CODE）⇒ 前台素材会加载失败。"
+    say "    修复： sudo chmod 644 $REPO_DIR/site/img/uploads/*"
+  fi
+else
+  say "  ⚠ uploads 目录里没有可用文件（首次部署需先上传素材）"
 fi
 
 say "✓ 全部完成：${NEW_REV:0:8}（前台 /  → http://127.0.0.1:${HTTP_PORT}/）"
