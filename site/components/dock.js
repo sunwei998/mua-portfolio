@@ -5,7 +5,6 @@
 // @ts-check
 
 import { symbolSVG } from './brandMark.js';
-import { currentRoute } from '../router.js';
 
 /** Dock 三项（2026-10-03：关于页更名「联系」，dock 收为 首页/作品/联系） */
 const ITEMS = /** @type {const} */ ([
@@ -13,6 +12,15 @@ const ITEMS = /** @type {const} */ ([
   { href: '/collection', label: '作品', icon: 'book',   nav: 'work'  },
   { href: '/about',      label: '联系', icon: 'wechat', nav: 'about' },
 ]);
+
+/**
+ * 作品域前缀：这些路由下「作品」保持高亮（/style/* /album/* /gallery/* /wedding）。
+ * ⚠️ 刻意自包含、不依赖 router.js 的 currentRoute——dock.js 是无版本号 URL，
+ * 微信 X5 会长时间缓存旧版，若再依赖 router.js 的「新导出」，旧 router.js 缓存
+ * 会导致 dock.js import 失败全站白屏。前缀匹配在任何旧版本组合下都安全。
+ */
+const WORK_PREFIX = ['/collection', '/wedding', '/style', '/album', '/gallery'];
+const isWork = (p) => WORK_PREFIX.some((pre) => p === pre || p.startsWith(pre + '/'));
 
 const ICONS = {
   ring:   symbolSVG(),
@@ -28,12 +36,14 @@ export function mountDock(host) {
   if (!host) return;
 
   const paint = () => {
-    // 高亮归属 = 当前命中路由的 nav 字段（作品域：/collection /wedding /style/* /album/* /gallery/* 全部保持「作品」亮）
-    const nav = (currentRoute() || {}).nav || null;
+    const path = location.pathname;
     host.innerHTML = `
       <nav class="dock glass" aria-label="主导航"><ul>
         ${ITEMS.map((it) => {
-          const active = nav === it.nav;
+          const active =
+            it.nav === 'home'  ? path === '/' :
+            it.nav === 'work'  ? isWork(path) :
+            path === '/about';
           return `<li><a href="${it.href}" ${active ? 'aria-current="page"' : ''}>
             ${ICONS[it.icon] || ''}<b>${it.label}</b></a></li>`;
         }).join('')}

@@ -5,7 +5,7 @@
 
 import { initRouter } from './router.js';
 import { initGlass } from './components/glass.js';
-import { mountDock } from './components/dock.js';
+import { mountDock } from './components/dock.js?v=20261004b';
 import { initViewer } from './components/viewer.js';
 import { initInk } from './components/ink.js';
 import { initAmbient, bindReveals } from './components/reveal.js';
