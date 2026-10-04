@@ -27,6 +27,25 @@ let titleText = '';
 /** 动画进行中（commit/cancel 未落定）——期间忽略新的翻页输入 */
 let anim = false;
 
+/* ---- 缩放状态（双指捏合 / 双击切换，放大后单指平移看局部） ---- */
+let scale = 1;        // 当前缩放（1=原始）
+let panX = 0, panY = 0;
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+const dist = (a, b) => Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+
+/** 按 scale/panX/panY 即时变换图片（跟手时无过渡） */
+function applyZoom(smooth) {
+  if (!ui) return;
+  ui.img.style.transition = smooth ? EASE : 'none';
+  ui.img.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+  ui.stage.classList.toggle('is-zoom', scale > 1.05);
+}
+/** 复位到 1×（换页/捏回/双击缩小时调用） */
+function resetZoom() {
+  scale = 1; panX = 0; panY = 0;
+  applyZoom(true);
+}
+
 /**
  * 视图渲染时注册一组可查看的照片（路由切换时自动清空）。
  * @param {string} id
@@ -53,7 +72,7 @@ function renderMeta() {
   ui.title.textContent = titleText;
   ui.count.textContent = `${idx + 1} / ${list.length}`;
   ui.fill.style.width = `${((idx + 1) / list.length) * 100}%`;
-  ui.stage.classList.remove('is-zoom');
+  resetZoom();
   Array.from(ui.thumbs.children).forEach((el, i) =>
     (/** @type {HTMLElement} */ (el)).classList.toggle('on', i === idx));
   for (const n of [idx + 1, idx - 1]) {
@@ -243,15 +262,52 @@ export function initViewer() {
   let dragged = false;  // 本次手势发生过水平拖拽 → 吞掉随后的 click（防误触放大/关图）
   let lastTap = 0;
 
+  /* 手势局部状态（缩放本体在模块级） */
+  let pinchMode = false;
+  let pinchStartDist = 0, pinchStartScale = 1;
+  let lastPX = 0, lastPY = 0;
+
   stage.addEventListener('touchstart', (e) => {
     sx = e.touches[0].clientX;
     sy = e.touches[0].clientY;
     t0 = Date.now();
     mode = ''; gDir = 0; dxCur = 0; prepOk = false;
+    if (e.touches.length === 2) {
+      pinchMode = true;
+      pinchStartDist = dist(e.touches[0], e.touches[1]);
+      pinchStartScale = scale;
+    }
+    lastPX = e.touches[0].clientX;
+    lastPY = e.touches[0].clientY;
   }, { passive: true });
 
   stage.addEventListener('touchmove', (e) => {
-    if (!ui || !list.length || anim || list.length < 2 || reduced) return;
+    if (!ui || !list.length || anim || reduced) return;
+
+    /* 双指捏合：接管手势、阻止浏览器默认缩放（仅捏合时 preventDefault，不影响单指长按） */
+    if (pinchMode) {
+      e.preventDefault();
+      if (e.touches.length === 2) {
+        const d = dist(e.touches[0], e.touches[1]);
+        scale = clamp(pinchStartScale * d / Math.max(1, pinchStartDist), 1, 4);
+        applyZoom(false);
+      }
+      return;
+    }
+
+    /* 放大态单指平移看局部（不翻页） */
+    if (scale > 1.05) {
+      e.preventDefault();
+      panX += e.touches[0].clientX - lastPX;
+      panY += e.touches[0].clientY - lastPY;
+      applyZoom(false);
+      lastPX = e.touches[0].clientX;
+      lastPY = e.touches[0].clientY;
+      return;
+    }
+
+    /* 单指翻页 */
+    if (list.length < 2) return;
     const dx = e.touches[0].clientX - sx;
     const dy = e.touches[0].clientY - sy;
     if (!mode) {
@@ -266,9 +322,18 @@ export function initViewer() {
     const w = stageW();
     setT(ui.curLayer, dx, false);
     setT(ui.altLayer, (gDir > 0 ? w : -w) + dx, false);
-  }, { passive: true });
+  }, { passive: false });
 
   stage.addEventListener('touchend', (e) => {
+    /* 捏合结束：缩回 <1.1 则复位；否则保持放大 */
+    if (pinchMode) {
+      pinchMode = false;
+      if (scale < 1.1) resetZoom();
+      return;
+    }
+    /* 放大态平移结束：不触发翻页/双击 */
+    if (scale > 1.05) return;
+
     const dt = Date.now() - t0;
     if (mode === 'h') {
       const flick = dt < 260 && Math.abs(dxCur) > 28;
@@ -293,7 +358,10 @@ export function initViewer() {
   stage.addEventListener('click', (e) => {
     if (dragged) return; // 翻页手势不触发双击判定
     const now = Date.now();
-    if (now - lastTap < 300) stage.classList.toggle('is-zoom');
+    if (now - lastTap < 300) {
+      if (scale > 1.05) resetZoom();
+      else { scale = 2.5; applyZoom(true); }
+    }
     lastTap = now;
     void e;
   });

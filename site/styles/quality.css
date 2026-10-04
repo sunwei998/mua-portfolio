@@ -36,7 +36,7 @@
   padding:4px 8px;cursor:pointer;opacity:.8;flex:none;
 }
 .viewer .v-close:active{opacity:.45}
-.viewer .v-stage{flex:1;position:relative;display:grid;place-items:center;overflow:hidden;touch-action:pan-y}
+.viewer .v-stage{flex:1;position:relative;display:grid;place-items:center;overflow:hidden;touch-action:none}
 /* 翻页双层：动画平移 layer，缩放作用于层内 img，互不打架 */
 .viewer .v-layer{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;will-change:transform}
 .viewer .v-layer.alt{visibility:hidden}
@@ -45,7 +45,9 @@
   max-width:100%;max-height:100%;object-fit:contain;
   box-shadow:0 34px 90px rgba(0,0,0,.6);
   transform:scale(1);transition:transform .45s var(--ease);
-  -webkit-user-select:none;user-select:none;
+  /* 放开系统长按保存：微信/iOS 对 img 弹「保存图片」菜单 */
+  -webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto;
+  pointer-events:auto;
 }
 .viewer .v-stage.is-zoom .v-img{transform:scale(1.9)}
 .viewer .v-foot{
