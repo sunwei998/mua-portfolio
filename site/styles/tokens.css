@@ -45,3 +45,6 @@
    字距由统一 letter-spacing 控制 —— 全站唯一口径 */
 .wordmark{font-family:"Noto Serif SC",serif;font-weight:200}
 .wordmark .acc{color:var(--accent)}
+
+/* 花头茉字形（草字头=茉莉花剪影 + 木部）：与文本字同尺寸、基线对齐 */
+.mo-glyph{display:inline-block;width:1em;height:1em;vertical-align:-0.14em;flex:none;stroke-width:2.4}
