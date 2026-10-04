@@ -445,6 +445,10 @@ function renderFlat(el, a, siblings) {
 
   el.innerHTML = `
     <div class="ab-hero short">
+      <a class="ab-back" href="/style/${a.style}" aria-label="返回册页">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12.5 4.5 7 10l5.5 5.5"/></svg>
+        <span>册页</span>
+      </a>
       <img src="${a.coverKey}" alt="${a.titleCn}" />
       <div class="fade"></div>
       <div class="t">
@@ -506,6 +510,10 @@ export async function album(el, params) {
 
   el.innerHTML = `
     <div class="ab-hero">
+      <a class="ab-back" href="/style/${a.style}" aria-label="返回册页">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12.5 4.5 7 10l5.5 5.5"/></svg>
+        <span>册页</span>
+      </a>
       <img src="${a.coverKey}" alt="${a.titleCn}" />
       <div class="fade"></div>
       <div class="t">

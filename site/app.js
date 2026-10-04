@@ -14,7 +14,7 @@ import { home } from './views/home.js';
 import { collection } from './views/collection.js';
 import { wedding } from './views/wedding.js';
 import { styleList } from './views/styleList.js';
-import { album } from './views/album.js';
+import { album } from './views/album.js?v=20261005a';
 import { gallery } from './views/gallery.js';
 import { about } from './views/about.js';
 import { stub } from './views/stub.js';
