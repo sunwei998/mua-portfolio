@@ -314,11 +314,11 @@ function clearVideo(slot: VidSlot) {
           </el-form-item>
           <el-form-item label="主理人头像">
             <div class="pic-field">
-              <el-image v-if="s.portraitKey" :src="s.portraitKey" class="pic-thumb avatar-thumb" :preview-src-list="[s.portraitKey]" preview-teleported />
-              <div v-else class="pic-thumb avatar-thumb avatar-empty">未设置<br />（默认使用 /img/portrait.webp）</div>
+              <el-image :src="s.portraitKey || '/img/portrait.webp'" class="pic-thumb avatar-thumb" :preview-src-list="[s.portraitKey || '/img/portrait.webp']" preview-teleported />
               <div class="pic-ops">
                 <el-button size="small" plain @click="pickImage('portraitKey')">{{ s.portraitKey ? '重新上传' : '上传图片' }}</el-button>
                 <el-button v-if="s.portraitKey" size="small" text type="danger" @click="s.portraitKey = ''">移除</el-button>
+                <span class="pic-note">{{ s.portraitKey ? '已上传自定义头像' : '当前显示站点默认头像' }}</span>
               </div>
             </div>
           </el-form-item>
@@ -439,10 +439,7 @@ h2 { margin: 0 0 16px; font-size: 18px; color: #221d19; }
 }
 .qr-thumb { width: 120px; height: 120px; }
 .avatar-thumb { width: 96px; height: 96px; border-radius: 50%; overflow: hidden; }
-.avatar-empty {
-  display: flex; align-items: center; justify-content: center; text-align: center;
-  font-size: 11px; color: #8a8177; box-shadow: 0 0 0 1px #e3dccf inset;
-}
+.pic-note { font-size: 11px; color: #8a8177; letter-spacing: .05em; }
 .pic-ops { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
 
 /* ---------- 首页精选卡 ---------- */
