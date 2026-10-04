@@ -11,6 +11,7 @@
  * @property {(el: HTMLElement, params: Record<string, string>) => (void | Promise<void | ViewOverride>)} view
  * @property {string}  title  渲染完成后写入 document.title（微信 SPA 分享一期对策）
  * @property {'ms'|'twe'|'tcn'} theme  根主题 class
+ * @property {'home'|'work'|'about'} [nav]  Dock 高亮归属（缺省则该路由不高亮任何项）
  */
 
 /** 视图可在异步取数后覆盖标题 / 主题（如册详情的主题由 album.style 决定）

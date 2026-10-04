@@ -33,32 +33,32 @@ document.addEventListener('gesturechange', (e) => e.preventDefault());
 
 /** @type {import('./router.js').Route[]} */
 const routes = [
-  { path: '/',              view: home,        theme: 'ms',
+  { path: '/',              view: home,        theme: 'ms', nav: 'home',
     title: '予时妍 YUÉ ATELIER · 为重要时刻，留一份美' },
-  { path: '/collection',    view: collection,  theme: 'ms',
+  { path: '/collection',    view: collection,  theme: 'ms', nav: 'work',
     title: '作品系列 · 予时妍 YUÉ ATELIER' },
   // 婚庆跟妆专属入口（首页 row 直达）：只出婚礼双封面，不出更多时刻
-  { path: '/wedding',       view: wedding,     theme: 'ms',
+  { path: '/wedding',       view: wedding,     theme: 'ms', nav: 'work',
     title: '婚庆跟妆 · 予时妍 YUÉ ATELIER' },
   // 册页列表：西式婚礼 twe / 新中式婚礼 tcn 主题在注册期就定死，无闪切；
   // V7 三新系列（更多时刻）走中性 ms 主题
-  { path: '/style/western', view: styleList('western'), theme: 'twe',
+  { path: '/style/western', view: styleList('western'), theme: 'twe', nav: 'work',
     title: '西式婚礼 · 予时妍 YUÉ ATELIER' },
-  { path: '/style/chinese', view: styleList('chinese'), theme: 'tcn',
+  { path: '/style/chinese', view: styleList('chinese'), theme: 'tcn', nav: 'work',
     title: '新中式婚礼 · 予时妍 YUÉ ATELIER' },
-  { path: '/style/engagement', view: styleList('engagement'), theme: 'ms',
+  { path: '/style/engagement', view: styleList('engagement'), theme: 'ms', nav: 'work',
     title: '订婚宴跟妆 · 予时妍 YUÉ ATELIER' },
-  { path: '/style/maternity', view: styleList('maternity'), theme: 'ms',
+  { path: '/style/maternity', view: styleList('maternity'), theme: 'ms', nav: 'work',
     title: '孕妈照 · 予时妍 YUÉ ATELIER' },
-  { path: '/style/family', view: styleList('family'), theme: 'ms',
+  { path: '/style/family', view: styleList('family'), theme: 'ms', nav: 'work',
     title: '亲子照 · 予时妍 YUÉ ATELIER' },
   // 册详情：主题由 album.style 决定，视图取数后通过 ViewOverride 切根 class
-  { path: '/album/:slug',   view: album,       theme: 'ms',
+  { path: '/album/:slug',   view: album,       theme: 'ms', nav: 'work',
     title: '予时妍 YUÉ ATELIER' },
-  { path: '/gallery/:slug', view: gallery,     theme: 'ms',
+  { path: '/gallery/:slug', view: gallery,     theme: 'ms', nav: 'work',
     title: '图集 · 予时妍 YUÉ ATELIER' },
   // 联系（原「关于」页更名，2026-10-03 拍板）：品牌介绍 + 预约转化同页
-  { path: '/about',         view: about,       theme: 'ms',
+  { path: '/about',         view: about,       theme: 'ms', nav: 'about',
     title: '联系 · 予时妍 YUÉ ATELIER' },
   { path: '*',              view: stub('页面不存在', '404', '这里什么都没有'), theme: 'ms',
     title: '404 · 予时妍 YUÉ ATELIER' },

@@ -68,7 +68,7 @@
 
 /* 主题级色散边覆盖（v6 :262 / :285） */
 .twe .glass::after{box-shadow:inset 1px 0 0 rgba(255,214,226,.5),inset -1px 0 0 rgba(255,236,214,.4),inset 0 -1px 0 rgba(255,255,255,.22)}
-.tcn .glass{--r:3px}
+.tcn .glass:not(.dock){--r:3px}
 .tcn .glass::after{box-shadow:inset 1px 0 0 rgba(192,164,111,.55),inset -1px 0 0 rgba(110,124,118,.38),inset 0 -1px 0 rgba(255,255,255,.18)}
 
 /* ---------- X5 降级：backdrop-filter 不可用（探测失败或 ?noblur=1 强制） ---------- */

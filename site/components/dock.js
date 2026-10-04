@@ -5,12 +5,13 @@
 // @ts-check
 
 import { symbolSVG } from './brandMark.js';
+import { currentRoute } from '../router.js';
 
 /** Dock 三项（2026-10-03：关于页更名「联系」，dock 收为 首页/作品/联系） */
 const ITEMS = /** @type {const} */ ([
-  { href: '/',           label: '首页', icon: 'ring'   },
-  { href: '/collection', label: '作品', icon: 'book'   },
-  { href: '/about',      label: '联系', icon: 'wechat' },
+  { href: '/',           label: '首页', icon: 'ring',   nav: 'home'  },
+  { href: '/collection', label: '作品', icon: 'book',   nav: 'work'  },
+  { href: '/about',      label: '联系', icon: 'wechat', nav: 'about' },
 ]);
 
 const ICONS = {
@@ -27,14 +28,12 @@ export function mountDock(host) {
   if (!host) return;
 
   const paint = () => {
-    const path = location.pathname;
+    // 高亮归属 = 当前命中路由的 nav 字段（作品域：/collection /wedding /style/* /album/* /gallery/* 全部保持「作品」亮）
+    const nav = (currentRoute() || {}).nav || null;
     host.innerHTML = `
       <nav class="dock glass" aria-label="主导航"><ul>
         ${ITEMS.map((it) => {
-          // 首页 = 精确 /；其余按前缀匹配
-          const active =
-            it.href === '/' ? path === '/' :
-            path === it.href || path.startsWith(it.href + '/');
+          const active = nav === it.nav;
           return `<li><a href="${it.href}" ${active ? 'aria-current="page"' : ''}>
             ${ICONS[it.icon] || ''}<b>${it.label}</b></a></li>`;
         }).join('')}
