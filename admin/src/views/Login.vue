@@ -58,7 +58,6 @@ async function submit() {
     <section class="panel">
       <div class="form">
         <header class="brand">
-          <span class="mark" aria-hidden="true">妝</span>
           <h1>茉與妝</h1>
           <p class="sub"><span>MO·BEAUTÉ</span><i aria-hidden="true"></i><span>管理后台</span></p>
         </header>
@@ -194,13 +193,6 @@ async function submit() {
 
 /* 字标 */
 .brand { text-align: center; margin-bottom: clamp(30px, 4.6vh, 48px); }
-.brand .mark {
-  display: grid; place-items: center;
-  width: 46px; height: 46px; margin: 0 auto 16px; border-radius: 50%;
-  font-family: "Noto Serif SC", serif; font-weight: 300; font-size: 21px; color: #fff;
-  background: linear-gradient(150deg, #d08a86, var(--rose) 58%, #9c5c62);
-  box-shadow: 0 10px 24px -10px rgba(176,112,123,.8);
-}
 .brand h1 {
   margin: 0; font-family: "Noto Serif SC", serif; font-weight: 300;
   font-size: 27px; letter-spacing: .3em; text-indent: .3em; color: var(--ink);

@@ -28,13 +28,8 @@ function logout() {
 <template>
   <el-container style="height:100vh">
     <el-aside width="216px" class="side">
-      <!-- 品牌：开口环符号（纯路径 currentColor）+ 三字字标 + 拉丁注脚 -->
+      <!-- 品牌：三字字标 + 拉丁注脚（旧开口环 sym 符号已移除） -->
       <div class="brand">
-        <svg class="sym" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="22.5" fill="none" stroke="currentColor" stroke-width="1.8"
-                  stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
-          <circle cx="32" cy="32" r="5.1" fill="currentColor"/>
-        </svg>
         <p class="wm">茉與妝</p>
         <p class="en"><i aria-hidden="true"></i><span>MO·BEAUTÉ · ADMIN</span><i aria-hidden="true"></i></p>
       </div>
@@ -69,7 +64,6 @@ function logout() {
 
 /* ---- 品牌区 ---- */
 .brand { padding: 30px 0 24px; text-align: center; }
-.brand .sym { width: 34px; height: 34px; color: var(--mua-rose, #B0707B); }
 .brand .wm {
   margin: 12px 0 0;
   font-family: var(--mua-serif, serif); font-weight: 300;

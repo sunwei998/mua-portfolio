@@ -15,17 +15,39 @@ async function load() {
 }
 onMounted(load);
 
-async function save() {
+async function save(kind: string) {
   if (!s.value) return;
   saving.value = true;
   try {
     await api.put('/api/admin/site', s.value);
-    ElMessage.success('已保存，前台刷新生效');
+    ElMessage.success(`${kind}已保存，前台刷新生效`);
   } catch (e) {
     ElMessage.error(e instanceof Error ? e.message : '保存失败');
   } finally {
     saving.value = false;
   }
+}
+
+/* ---------- 折叠面板：单次只展开一类 ---------- */
+const open = ref('brand');
+
+/** 图片字段（hero / 二维码）直接本地上传，不填地址 */
+function pickImage(field: 'heroKey' | 'qrcodeKey') {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = async () => {
+    const file = input.files?.[0];
+    if (!file || !s.value) return;
+    try {
+      const { key } = await api.upload(file);
+      s.value[field] = key;
+      ElMessage.success('已上传，点该类「保存」后前台生效');
+    } catch (e) {
+      ElMessage.error(e instanceof Error ? e.message : '上传失败');
+    }
+  };
+  input.click();
 }
 
 /* ---------- 改密码 ---------- */
@@ -259,98 +281,116 @@ function clearVideo(slot: VidSlot) {
   <div v-if="s">
     <h2>站点设置</h2>
 
-    <el-card class="card" shadow="never">
-      <template #header>品牌与文案</template>
-      <el-form label-width="110">
-        <el-form-item label="品牌中文"><el-input v-model="s.brandCn" style="width:240px" /></el-form-item>
-        <el-form-item label="品牌英文"><el-input v-model="s.brandEn" style="width:240px" /></el-form-item>
-        <el-form-item label="标语"><el-input v-model="s.taglineCn" style="width:320px" /></el-form-item>
-        <el-form-item label="字标副标（短）"><el-input v-model="s.subCn" style="width:240px" /></el-form-item>
-        <el-form-item label="副标长版"><el-input v-model="s.subLongCn" style="width:420px" /></el-form-item>
-        <el-form-item label="署名条"><el-input v-model="s.bylineCn" style="width:320px" placeholder="甜茉 · 化妆师个人作品集" /></el-form-item>
-        <el-form-item label="关于页简介">
-          <el-input v-model="s.bioCn" type="textarea" :rows="4" style="width:520px" />
-        </el-form-item>
-      </el-form>
-    </el-card>
+    <el-collapse v-model="open" accordion>
+      <!-- ─────────── ① 品牌与文案 ─────────── -->
+      <el-collapse-item name="brand" title="品牌与文案">
+        <el-form label-width="110">
+          <el-form-item label="品牌中文"><el-input v-model="s.brandCn" style="width:240px" /></el-form-item>
+          <el-form-item label="品牌英文"><el-input v-model="s.brandEn" style="width:240px" /></el-form-item>
+          <el-form-item label="标语"><el-input v-model="s.taglineCn" style="width:320px" /></el-form-item>
+          <el-form-item label="字标副标（短）"><el-input v-model="s.subCn" style="width:240px" /></el-form-item>
+          <el-form-item label="副标长版"><el-input v-model="s.subLongCn" style="width:420px" /></el-form-item>
+          <el-form-item label="署名条"><el-input v-model="s.bylineCn" style="width:320px" placeholder="甜茉 · 化妆师个人作品集" /></el-form-item>
+          <el-form-item label="关于页简介">
+            <el-input v-model="s.bioCn" type="textarea" :rows="4" style="width:520px" />
+          </el-form-item>
+        </el-form>
+        <div class="sec-actions">
+          <el-button type="primary" :loading="saving" @click="save('品牌')">保存品牌</el-button>
+        </div>
+      </el-collapse-item>
 
-    <el-card class="card" shadow="never">
-      <template #header>首页</template>
-      <el-form label-width="110">
-        <el-form-item label="Hero 图"><el-input v-model="s.heroKey" style="width:320px" placeholder="/img/hero.png" /></el-form-item>
-        <el-form-item label="Hero 角签"><el-input v-model="s.heroTagCn" style="width:240px" placeholder="2026 婚礼季" /></el-form-item>
-        <el-form-item label="走马灯词">
-          <el-input v-model="MARQUEE_TEXT" style="width:420px" placeholder="婚礼跟妆、订婚宴、孕妇照…"
-                    @focus="syncMarqueeOut" @change="syncMarqueeIn" />
-        </el-form-item>
-        <el-form-item label="微信号"><el-input v-model="s.wechatId" style="width:240px" /></el-form-item>
-        <el-form-item label="二维码图"><el-input v-model="s.qrcodeKey" style="width:320px" /></el-form-item>
-      </el-form>
-    </el-card>
+      <!-- ─────────── ② 首页设置 ─────────── -->
+      <el-collapse-item name="home" title="首页设置">
+        <el-form label-width="110">
+          <el-form-item label="Hero 图">
+            <div class="pic-field">
+              <el-image v-if="s.heroKey" :src="s.heroKey" class="pic-thumb" :preview-src-list="[s.heroKey]" preview-teleported />
+              <div class="pic-ops">
+                <el-button size="small" plain @click="pickImage('heroKey')">{{ s.heroKey ? '重新上传' : '上传图片' }}</el-button>
+                <el-button v-if="s.heroKey" size="small" text type="danger" @click="s.heroKey = ''">移除</el-button>
+              </div>
+            </div>
+          </el-form-item>
+          <el-form-item label="Hero 角签"><el-input v-model="s.heroTagCn" style="width:240px" placeholder="2026 婚礼季" /></el-form-item>
+          <el-form-item label="走马灯词">
+            <el-input v-model="MARQUEE_TEXT" style="width:420px" placeholder="婚礼跟妆、订婚宴、孕妇照…"
+                      @focus="syncMarqueeOut" @change="syncMarqueeIn" />
+          </el-form-item>
+          <el-form-item label="微信号"><el-input v-model="s.wechatId" style="width:240px" /></el-form-item>
+          <el-form-item label="二维码图">
+            <div class="pic-field">
+              <el-image v-if="s.qrcodeKey" :src="s.qrcodeKey" class="pic-thumb qr-thumb" :preview-src-list="[s.qrcodeKey]" preview-teleported />
+              <div class="pic-ops">
+                <el-button size="small" plain @click="pickImage('qrcodeKey')">{{ s.qrcodeKey ? '重新上传' : '上传图片' }}</el-button>
+                <el-button v-if="s.qrcodeKey" size="small" text type="danger" @click="s.qrcodeKey = ''">移除</el-button>
+              </div>
+            </div>
+          </el-form-item>
+        </el-form>
+        <div class="sec-actions">
+          <el-button type="primary" :loading="saving" @click="save('首页')">保存首页</el-button>
+        </div>
+      </el-collapse-item>
 
-    <!-- ─────────── 首页精选（018） ─────────── -->
-    <el-card class="card feat-card" shadow="never" v-loading="featsLoading">
-      <template #header>
+      <!-- ─────────── ③ 首页精选（018） ─────────── -->
+      <el-collapse-item name="feat" title="首页精选">
         <div class="feat-head">
-          <span>首页精选</span>
           <span class="feat-hint">≤ {{ FEATURED_MAX }} 张 · 拖拽图片排序 · 前台 0 张时整块隐藏 · 不影响作品菜单</span>
-          <el-button size="small" type="primary" plain :loading="featsSaving" @click="saveFeats">保存精选</el-button>
         </div>
-      </template>
-
-      <div class="feat-grid">
-        <div v-for="(f, i) in feats" :key="f.cosKey + i"
-             class="feat-tile" draggable="true"
-             @dragstart="onDragStart(i, $event)" @dragover.prevent @drop.prevent="onDropAt(i)">
-          <el-image :src="f.cosKey" fit="cover" class="feat-img" :preview-src-list="[f.cosKey]" preview-teleported />
-          <button class="feat-x" type="button" aria-label="移除" @click="removeFeat(i)">×</button>
-          <span class="feat-orient" :class="f.orientation">{{ f.orientation === 'landscape' ? '横' : '竖' }}</span>
-          <el-tooltip content="图注功能已预留，暂未启用" placement="top">
-            <span class="feat-cap"><el-input v-model="f.captionCn" size="small" disabled placeholder="图注（预留）" /></span>
-          </el-tooltip>
-        </div>
-
-        <button v-if="feats.length < FEATURED_MAX" class="feat-add" type="button" @click="pickUploadFeat">
-          <span class="plus">＋</span>
-          <span class="txt">上传图片</span>
-          <span class="cnt">{{ feats.length }} / {{ FEATURED_MAX }}</span>
-        </button>
-      </div>
-    </el-card>
-
-    <!-- ─────────── 首页视频（018 建列，020 扩双位，021 扩五位） ─────────── -->
-    <el-card class="card" shadow="never">
-      <template #header>
-        <div class="feat-head">
-          <span>首页视频</span>
-          <span class="feat-hint">最多 5 个 · 任意格式（mov/HEVC/4K）自动转码为 H.264 1080p · 随「保存设置」一起生效 · 中间槽位留空不影响其他视频</span>
-        </div>
-      </template>
-      <div v-for="v in vidSlots" :key="v.slot" class="vid-block">
-        <div class="vid-title">{{ v.label }}
-          <span v-if="v.w && v.h" class="vid-meta">{{ v.w }}×{{ v.h }} · {{ v.w >= v.h ? '横屏' : '竖屏' }}<template v-if="v.duration"> · {{ Math.round(v.duration) }}s</template></span>
-        </div>
-        <div class="vid-row">
-          <div class="vid-preview">
-            <video v-if="v.key" :src="v.key" controls preload="metadata" />
-            <div v-else class="vid-empty">空<br /><span>{{ v.slot === 1 ? '前台将显示「视频即将上线」占位画框' : '本槽留空，前台不渲染' }}</span></div>
+        <div class="feat-grid" v-loading="featsLoading">
+          <div v-for="(f, i) in feats" :key="f.cosKey + i"
+               class="feat-tile" draggable="true"
+               @dragstart="onDragStart(i, $event)" @dragover.prevent @drop.prevent="onDropAt(i)">
+            <el-image :src="f.cosKey" fit="cover" class="feat-img" :preview-src-list="[f.cosKey]" preview-teleported />
+            <button class="feat-x" type="button" aria-label="移除" @click="removeFeat(i)">×</button>
+            <span class="feat-orient" :class="f.orientation">{{ f.orientation === 'landscape' ? '横' : '竖' }}</span>
+            <el-tooltip content="图注功能已预留，暂未启用" placement="top">
+              <span class="feat-cap"><el-input v-model="f.captionCn" size="small" disabled placeholder="图注（预留）" /></span>
+            </el-tooltip>
           </div>
-          <div class="vid-ops">
-            <el-button size="small" type="primary" plain @click="pickVideo(v.slot)">{{ v.key ? '重新上传视频' : '上传视频' }}</el-button>
-            <el-button size="small" plain @click="pickPoster(v.slot)">{{ v.posterKey ? '重新上传封面' : '上传封面帧' }}</el-button>
-            <el-button v-if="v.key || v.posterKey" size="small" text type="danger" @click="clearVideo(v.slot)">清除</el-button>
-            <div class="vid-keys">
-              <div class="k"><label>视频</label><el-input :model-value="v.key ?? ''" size="small" placeholder="/img/uploads/….mp4" @update:model-value="(val: string) => setVideoKey(v.slot, val || null)" /></div>
-              <div class="k"><label>封面</label><el-input :model-value="v.posterKey ?? ''" size="small" placeholder="/img/uploads/….jpg" @update:model-value="(val: string) => setVideoPoster(v.slot, val || null)" /></div>
+
+          <button v-if="feats.length < FEATURED_MAX" class="feat-add" type="button" @click="pickUploadFeat">
+            <span class="plus">＋</span>
+            <span class="txt">上传图片</span>
+            <span class="cnt">{{ feats.length }} / {{ FEATURED_MAX }}</span>
+          </button>
+        </div>
+        <div class="sec-actions">
+          <el-button type="primary" :loading="featsSaving" @click="saveFeats">保存精选</el-button>
+        </div>
+      </el-collapse-item>
+
+      <!-- ─────────── ④ 首页视频（018 建列，020 扩双位，021 扩五位） ─────────── -->
+      <el-collapse-item name="video" title="首页视频">
+        <div class="feat-head">
+          <span class="feat-hint">最多 5 个 · 任意格式（mov/HEVC/4K）自动转码为 H.264 1080p · 随该类保存一起生效 · 中间槽位留空不影响其他视频</span>
+        </div>
+        <div v-for="v in vidSlots" :key="v.slot" class="vid-block">
+          <div class="vid-title">{{ v.label }}
+            <span v-if="v.w && v.h" class="vid-meta">{{ v.w }}×{{ v.h }} · {{ v.w >= v.h ? '横屏' : '竖屏' }}<template v-if="v.duration"> · {{ Math.round(v.duration) }}s</template></span>
+          </div>
+          <div class="vid-row">
+            <div class="vid-preview">
+              <video v-if="v.key" :src="v.key" controls preload="metadata" />
+              <div v-else class="vid-empty">空<br /><span>{{ v.slot === 1 ? '前台将显示「视频即将上线」占位画框' : '本槽留空，前台不渲染' }}</span></div>
+            </div>
+            <div class="vid-ops">
+              <el-button size="small" type="primary" plain @click="pickVideo(v.slot)">{{ v.key ? '重新上传视频' : '上传视频' }}</el-button>
+              <el-button size="small" plain @click="pickPoster(v.slot)">{{ v.posterKey ? '重新上传封面' : '上传封面帧' }}</el-button>
+              <el-button v-if="v.key || v.posterKey" size="small" text type="danger" @click="clearVideo(v.slot)">清除</el-button>
+              <div class="vid-keys">
+                <div class="k"><label>视频</label><el-input :model-value="v.key ?? ''" size="small" placeholder="/img/uploads/….mp4" @update:model-value="(val: string) => setVideoKey(v.slot, val || null)" /></div>
+                <div class="k"><label>封面</label><el-input :model-value="v.posterKey ?? ''" size="small" placeholder="/img/uploads/….jpg" @update:model-value="(val: string) => setVideoPoster(v.slot, val || null)" /></div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </el-card>
-
-    <div class="actions">
-      <el-button type="primary" :loading="saving" @click="save">保存设置</el-button>
-    </div>
+        <div class="sec-actions">
+          <el-button type="primary" :loading="saving" @click="save('视频')">保存视频</el-button>
+        </div>
+      </el-collapse-item>
+    </el-collapse>
 
     <el-card class="card" shadow="never">
       <template #header>修改登录密码</template>
@@ -370,6 +410,26 @@ function clearVideo(slot: VidSlot) {
 h2 { margin: 0 0 16px; font-size: 18px; color: #221d19; }
 .card { margin-bottom: 16px; }
 .actions { margin-bottom: 16px; }
+
+/* ---------- 折叠面板与每类保存 ---------- */
+.sec-actions { margin-top: 16px; }
+.el-collapse { border: none; }
+.el-collapse :deep(.el-collapse-item__header) {
+  font-size: 14px; font-weight: 600; color: #221d19;
+  background: #faf7f1; border-bottom: 1px solid #efe8dc;
+}
+.el-collapse :deep(.el-collapse-item__wrap) { background: transparent; }
+.el-collapse :deep(.el-collapse-item__content) { padding: 16px 4px 8px; }
+
+/* ---------- 图片上传字段（hero / 二维码） ---------- */
+.pic-field { display: flex; align-items: flex-start; gap: 12px; }
+.pic-thumb {
+  width: 120px; height: 160px; flex: none;
+  border-radius: 8px; background: #efe9e1; display: block;
+  box-shadow: 0 0 0 1px #e3dccf inset;
+}
+.qr-thumb { width: 120px; height: 120px; }
+.pic-ops { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
 
 /* ---------- 首页精选卡 ---------- */
 .feat-head { display: flex; align-items: center; gap: 12px; }
