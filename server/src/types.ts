@@ -219,6 +219,11 @@ export interface FeaturedItem {
 export interface HomeVideo {
   key: string;
   posterKey: string | null;
+  /** 022 起：上传时 ffprobe 落库并随接口下发，前台首帧即按真实比例渲染；
+   *  null（老数据未回填）时前台退回 loadedmetadata 读元数据兜底 */
+  w: number | null;
+  h: number | null;
+  duration: number | null;
 }
 
 /** GET /api/home —— hero / 三类入口 / 走马灯词 / 署名条（全部来自 site_setting + gallery/collection） */

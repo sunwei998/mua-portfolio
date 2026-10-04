@@ -215,17 +215,32 @@ export interface AdminSite {
   wechatId: string | null;
   qrcodeKey: string | null;
   ogImageKey: string | null;
-  /** 018 建列；020 扩双位、021 扩五位（video2~5*；null = 该位占位态） */
+  /** 018 建列；020 扩双位、021 扩五位（video2~5*；null = 该位占位态）；022 加宽高时长 */
   videoKey: string | null;
   videoPosterKey: string | null;
+  videoWidth: number | null;
+  videoHeight: number | null;
+  videoDuration: number | null;
   video2Key: string | null;
   video2PosterKey: string | null;
+  video2Width: number | null;
+  video2Height: number | null;
+  video2Duration: number | null;
   video3Key: string | null;
   video3PosterKey: string | null;
+  video3Width: number | null;
+  video3Height: number | null;
+  video3Duration: number | null;
   video4Key: string | null;
   video4PosterKey: string | null;
+  video4Width: number | null;
+  video4Height: number | null;
+  video4Duration: number | null;
   video5Key: string | null;
   video5PosterKey: string | null;
+  video5Width: number | null;
+  video5Height: number | null;
+  video5Duration: number | null;
 }
 
 /** 首页精选单图（home_featured，≤20 张；018 建表，020 放宽上限） */

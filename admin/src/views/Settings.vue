@@ -165,12 +165,12 @@ async function saveFeats() {
  * 槽位 → 字段名全部走映射表（配置驱动，将来再扩位只改这两张表）。
  * ============================================================ */
 type VidSlot = 1 | 2 | 3 | 4 | 5;
-const VID_FIELD: Record<VidSlot, { key: string; poster: string }> = {
-  1: { key: 'videoKey', poster: 'videoPosterKey' },
-  2: { key: 'video2Key', poster: 'video2PosterKey' },
-  3: { key: 'video3Key', poster: 'video3PosterKey' },
-  4: { key: 'video4Key', poster: 'video4PosterKey' },
-  5: { key: 'video5Key', poster: 'video5PosterKey' },
+const VID_FIELD: Record<VidSlot, { key: string; poster: string; width: string; height: string; duration: string }> = {
+  1: { key: 'videoKey', poster: 'videoPosterKey', width: 'videoWidth', height: 'videoHeight', duration: 'videoDuration' },
+  2: { key: 'video2Key', poster: 'video2PosterKey', width: 'video2Width', height: 'video2Height', duration: 'video2Duration' },
+  3: { key: 'video3Key', poster: 'video3PosterKey', width: 'video3Width', height: 'video3Height', duration: 'video3Duration' },
+  4: { key: 'video4Key', poster: 'video4PosterKey', width: 'video4Width', height: 'video4Height', duration: 'video4Duration' },
+  5: { key: 'video5Key', poster: 'video5PosterKey', width: 'video5Width', height: 'video5Height', duration: 'video5Duration' },
 };
 const VID_LABEL: Record<VidSlot, string> = {
   1: '视频一（前台在上）',
@@ -185,6 +185,9 @@ const vidSlots = computed(() =>
     label: VID_LABEL[slot],
     key: s.value?.[VID_FIELD[slot].key as keyof AdminSite] as string | null ?? null,
     posterKey: s.value?.[VID_FIELD[slot].poster as keyof AdminSite] as string | null ?? null,
+    w: s.value?.[VID_FIELD[slot].width as keyof AdminSite] as number | null ?? null,
+    h: s.value?.[VID_FIELD[slot].height as keyof AdminSite] as number | null ?? null,
+    duration: s.value?.[VID_FIELD[slot].duration as keyof AdminSite] as number | null ?? null,
   })),
 );
 function setVideoKey(slot: VidSlot, val: string | null) {
@@ -194,6 +197,14 @@ function setVideoKey(slot: VidSlot, val: string | null) {
 function setVideoPoster(slot: VidSlot, val: string | null) {
   if (!s.value) return;
   (s.value as unknown as Record<string, string | null>)[VID_FIELD[slot].poster] = val;
+}
+/* 022：宽高/时长随上传接口的 probe 结果写入，保存时一起落库；传 null = 清除 */
+function setVideoMeta(slot: VidSlot, meta: { width: number; height: number; duration: number } | null) {
+  if (!s.value) return;
+  const rec = s.value as unknown as Record<string, number | null>;
+  rec[VID_FIELD[slot].width] = meta?.width ?? null;
+  rec[VID_FIELD[slot].height] = meta?.height ?? null;
+  rec[VID_FIELD[slot].duration] = meta?.duration ?? null;
 }
 
 function pickVideo(slot: VidSlot) {
@@ -207,6 +218,7 @@ function pickVideo(slot: VidSlot) {
       const res = await api.uploadVideo(file);
       setVideoKey(slot, res.key);
       if (res.posterKey) setVideoPoster(slot, res.posterKey);
+      if (res.probe) setVideoMeta(slot, res.probe);
       ElMessage.success(res.converted
         ? `视频 ${slot} 已自动转码为 H.264 mp4${res.posterKey ? '并生成封面' : ''}，点「保存设置」后前台生效`
         : `视频 ${slot} 已上传，点「保存设置」后前台生效`);
@@ -238,6 +250,7 @@ function pickPoster(slot: VidSlot) {
 function clearVideo(slot: VidSlot) {
   setVideoKey(slot, null);
   setVideoPoster(slot, null);
+  setVideoMeta(slot, null);
   ElMessage.info(`视频 ${slot} 已清除（未保存）`);
 }
 </script>
@@ -314,7 +327,9 @@ function clearVideo(slot: VidSlot) {
         </div>
       </template>
       <div v-for="v in vidSlots" :key="v.slot" class="vid-block">
-        <div class="vid-title">{{ v.label }}</div>
+        <div class="vid-title">{{ v.label }}
+          <span v-if="v.w && v.h" class="vid-meta">{{ v.w }}×{{ v.h }} · {{ v.w >= v.h ? '横屏' : '竖屏' }}<template v-if="v.duration"> · {{ Math.round(v.duration) }}s</template></span>
+        </div>
         <div class="vid-row">
           <div class="vid-preview">
             <video v-if="v.key" :src="v.key" controls preload="metadata" />
@@ -403,6 +418,7 @@ h2 { margin: 0 0 16px; font-size: 18px; color: #221d19; }
 .vid-block { margin-bottom: 20px; }
 .vid-block:last-child { margin-bottom: 0; }
 .vid-title { font-size: 13px; font-weight: 600; color: #5c544b; margin-bottom: 10px; }
+.vid-meta { font-size: 11px; font-weight: 400; color: #9e4e55; margin-left: 8px; }
 .vid-row { display: flex; gap: 18px; align-items: flex-start; }
 .vid-preview {
   flex: none; width: 180px; height: 220px;

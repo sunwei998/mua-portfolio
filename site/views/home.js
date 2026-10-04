@@ -89,13 +89,22 @@ export async function home(el) {
     })), '精选作品');
   }
 
+  /* 播放器容器比例（022 起）：API 已下发宽高时，首帧直接内联真实 aspect-ratio，
+     不再用 CSS 默认的 9:16 把横视频封面裁成竖框；未下发（老数据）时返回空串，
+     仍由 loadedmetadata 兜底。clamp 口径 9:16～16:9，与下方元数据回调一致。 */
+  const vinnerStyle = (v) => {
+    if (!v || !v.w || !v.h) return '';
+    const ar = v.w / v.h;
+    const c = Math.min(Math.max(ar, 9 / 16), 16 / 9);
+    return ` style="aspect-ratio:${c === ar ? `${v.w} / ${v.h}` : String(+c.toFixed(4))}"`;
+  };
   /* 时光影像画框：≤2 个，各自独立播放器（可拖进度 / 全屏 / 时间码）；
      0 个 → 占位画框。区块命名 2026-10-03 拍板：「时光影像 / Time in Motion」。 */
   const frameHtml = (v) => `
     <figure class="vframe">
       <span class="corner tl" aria-hidden="true"></span><span class="corner tr" aria-hidden="true"></span>
       <span class="corner bl" aria-hidden="true"></span><span class="corner br" aria-hidden="true"></span>
-      <div class="vinner">
+      <div class="vinner"${vinnerStyle(v)}>
         <video src="${v.key}" ${v.posterKey ? `poster="${v.posterKey}"` : ''} playsinline preload="metadata"></video>
         <button class="vplay" type="button" aria-label="播放">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
@@ -234,7 +243,9 @@ function bindOneFrame(frame) {
     if (!inner || !vid.videoWidth || !vid.videoHeight) return;
     const ar = vid.videoWidth / vid.videoHeight;
     const clamped = Math.min(Math.max(ar, 9 / 16), 16 / 9);
-    inner.style.aspectRatio = clamped === ar ? `${vid.videoWidth} / ${vid.videoHeight}` : String(+clamped.toFixed(4));
+    inner.style.aspectRatio = clamped === ar
+      ? `${vid.videoWidth} / ${vid.videoHeight}`
+      : String(+clamped.toFixed(4));
   });
   vid.addEventListener('durationchange', paintTime);
 

@@ -134,6 +134,9 @@
 /** @typedef {Object} HomeVideo 首页视频（≤5 个；0 个 = 前台占位态）
  *  @property {string} key
  *  @property {string|null} posterKey
+ *  @property {number|null} w 022 起：真实宽，首帧即按真实比例渲染；null 时退回元数据兜底
+ *  @property {number|null} h
+ *  @property {number|null} duration
  */
 
 /** @typedef {Object} HomePayload

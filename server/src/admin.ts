@@ -582,10 +582,20 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
       wechatId: str(r.wechat_id) || null, qrcodeKey: str(r.qrcode_key) || null,
       ogImageKey: str(r.og_image_key) || null,
       videoKey: str(r.video_key) || null, videoPosterKey: str(r.video_poster_key) || null,
+      videoWidth: num(r.video_width) || null, videoHeight: num(r.video_height) || null,
+      videoDuration: num(r.video_duration) || null,
       video2Key: str(r.video2_key) || null, video2PosterKey: str(r.video2_poster_key) || null,
+      video2Width: num(r.video2_width) || null, video2Height: num(r.video2_height) || null,
+      video2Duration: num(r.video2_duration) || null,
       video3Key: str(r.video3_key) || null, video3PosterKey: str(r.video3_poster_key) || null,
+      video3Width: num(r.video3_width) || null, video3Height: num(r.video3_height) || null,
+      video3Duration: num(r.video3_duration) || null,
       video4Key: str(r.video4_key) || null, video4PosterKey: str(r.video4_poster_key) || null,
+      video4Width: num(r.video4_width) || null, video4Height: num(r.video4_height) || null,
+      video4Duration: num(r.video4_duration) || null,
       video5Key: str(r.video5_key) || null, video5PosterKey: str(r.video5_poster_key) || null,
+      video5Width: num(r.video5_width) || null, video5Height: num(r.video5_height) || null,
+      video5Duration: num(r.video5_duration) || null,
     };
   });
 
@@ -596,9 +606,11 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
                                byline_cn=?, bio_cn=?, stats_json=CAST(? AS JSON),
                                flow_json=CAST(? AS JSON), marquee_json=CAST(? AS JSON),
                                hero_key=?, hero_tag_cn=?, wechat_id=?, qrcode_key=?, og_image_key=?,
-                               video_key=?, video_poster_key=?, video2_key=?, video2_poster_key=?,
-                               video3_key=?, video3_poster_key=?, video4_key=?, video4_poster_key=?,
-                               video5_key=?, video5_poster_key=?
+                               video_key=?, video_poster_key=?, video_width=?, video_height=?, video_duration=?,
+                               video2_key=?, video2_poster_key=?, video2_width=?, video2_height=?, video2_duration=?,
+                               video3_key=?, video3_poster_key=?, video3_width=?, video3_height=?, video3_duration=?,
+                               video4_key=?, video4_poster_key=?, video4_width=?, video4_height=?, video4_duration=?,
+                               video5_key=?, video5_poster_key=?, video5_width=?, video5_height=?, video5_duration=?
        WHERE id = 1`,
       [str(b.brandCn), str(b.brandEn), str(b.taglineCn), str(b.subCn), str(b.subLongCn),
        str(b.bylineCn), str(b.bioCn) || null, JSON.stringify(b.statsJson ?? []),
@@ -606,10 +618,15 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
        str(b.heroKey) || null, str(b.heroTagCn) || null, str(b.wechatId) || null,
        str(b.qrcodeKey) || null, str(b.ogImageKey) || null,
        str(b.videoKey) || null, str(b.videoPosterKey) || null,
+       num(b.videoWidth) || null, num(b.videoHeight) || null, num(b.videoDuration) || null,
        str(b.video2Key) || null, str(b.video2PosterKey) || null,
+       num(b.video2Width) || null, num(b.video2Height) || null, num(b.video2Duration) || null,
        str(b.video3Key) || null, str(b.video3PosterKey) || null,
+       num(b.video3Width) || null, num(b.video3Height) || null, num(b.video3Duration) || null,
        str(b.video4Key) || null, str(b.video4PosterKey) || null,
-       str(b.video5Key) || null, str(b.video5PosterKey) || null],
+       num(b.video4Width) || null, num(b.video4Height) || null, num(b.video4Duration) || null,
+       str(b.video5Key) || null, str(b.video5PosterKey) || null,
+       num(b.video5Width) || null, num(b.video5Height) || null, num(b.video5Duration) || null],
     );
     return { ok: true };
   });

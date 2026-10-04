@@ -163,14 +163,20 @@ export async function registerPublicRoutes(app: FastifyInstance): Promise<void> 
     /** 021 起 ≤5 个视频：video_key（018）+ video2~5_key（020/021）；NULL 槽位剔除，
      *  中间槽位留空不影响前后槽位照常渲染 */
     const slots = [
-      [st.video_key, st.video_poster_key],
-      [st.video2_key, st.video2_poster_key],
-      [st.video3_key, st.video3_poster_key],
-      [st.video4_key, st.video4_poster_key],
-      [st.video5_key, st.video5_poster_key],
+      [st.video_key, st.video_poster_key, st.video_width, st.video_height, st.video_duration],
+      [st.video2_key, st.video2_poster_key, st.video2_width, st.video2_height, st.video2_duration],
+      [st.video3_key, st.video3_poster_key, st.video3_width, st.video3_height, st.video3_duration],
+      [st.video4_key, st.video4_poster_key, st.video4_width, st.video4_height, st.video4_duration],
+      [st.video5_key, st.video5_poster_key, st.video5_width, st.video5_height, st.video5_duration],
     ] as const;
     const videos = slots
-      .map(([k, p]) => (strN(k) ? { key: strN(k) as string, posterKey: strN(p) } : null))
+      .map(([k, p, w, h, d]) => (strN(k) ? {
+        key: strN(k) as string,
+        posterKey: strN(p),
+        w: num(w) || null,
+        h: num(h) || null,
+        duration: num(d) || null,
+      } : null))
       .filter((v): v is HomeVideo => v !== null);
     return {
       heroKey: strN(st.hero_key),
