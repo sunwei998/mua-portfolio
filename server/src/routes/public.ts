@@ -104,6 +104,7 @@ function mapSettings(r: Row): SiteSettings {
     stats: rawStats.map((x) => ({ labelCn: str(x.label), value: str(x.value) })),
     flowSteps: rawFlow.map((x) => ({ step: str(x.step), titleCn: str(x.title) })),
     wechatId: strN(r.wechat_id),
+    contactPhone: strN(r.contact_phone),
     qrcodeKey: strN(r.qrcode_key),
     ogImageKey: strN(r.og_image_key),
     portraitKey: strN(r.portrait_key),

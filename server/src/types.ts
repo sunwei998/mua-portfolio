@@ -170,6 +170,7 @@ export interface SiteSettings {
   stats: { labelCn: string; value: string }[];
   flowSteps: { step: string; titleCn: string }[];
   wechatId: string | null;
+  contactPhone: string | null;
   qrcodeKey: string | null;
   ogImageKey: string | null;
   portraitKey: string | null;

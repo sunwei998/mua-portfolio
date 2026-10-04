@@ -213,6 +213,7 @@ export interface AdminSite {
   heroKey: string | null;
   heroTagCn: string | null;
   wechatId: string | null;
+  contactPhone: string | null;
   qrcodeKey: string | null;
   ogImageKey: string | null;
   portraitKey: string | null;

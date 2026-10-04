@@ -580,7 +580,8 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
       flowJson: Array.isArray(r.flow_json) ? r.flow_json : [],
       marqueeJson: Array.isArray(r.marquee_json) ? r.marquee_json : [],
       heroKey: str(r.hero_key) || null, heroTagCn: str(r.hero_tag_cn) || null,
-      wechatId: str(r.wechat_id) || null, qrcodeKey: str(r.qrcode_key) || null,
+      wechatId: str(r.wechat_id) || null, contactPhone: str(r.contact_phone) || null,
+      qrcodeKey: str(r.qrcode_key) || null,
       ogImageKey: str(r.og_image_key) || null,
       portraitKey: str(r.portrait_key) || null,
       videoKey: str(r.video_key) || null, videoPosterKey: str(r.video_poster_key) || null,
@@ -603,11 +604,16 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
 
   app.put('/api/admin/site', async (req: FastifyRequest) => {
     const b = (req.body ?? {}) as Record<string, unknown>;
+    // 联系电话强校验：手机号（1[3-9] 开头 11 位）或含区号座机号（允许 - 分隔）；空值放行
+    const phoneRaw = str(b.contactPhone);
+    if (phoneRaw && !/^(1[3-9]\d{9}|0\d{2,3}-?\d{7,8})$/.test(phoneRaw)) {
+      return reply.code(400).send({ ok: false, error: '联系电话格式不正确：支持手机号（如 13800138000）或含区号座机号（如 0514-1234567）' });
+    }
     await execute(
       `UPDATE site_setting SET brand_cn=?, brand_en=?, tagline_cn=?, sub_cn=?, sub_long_cn=?,
                                byline_cn=?, bio_cn=?, stats_json=CAST(? AS JSON),
                                flow_json=CAST(? AS JSON), marquee_json=CAST(? AS JSON),
-                               hero_key=?, hero_tag_cn=?, wechat_id=?, qrcode_key=?, og_image_key=?, portrait_key=?,
+                               hero_key=?, hero_tag_cn=?, wechat_id=?, contact_phone=?, qrcode_key=?, og_image_key=?, portrait_key=?,
                                video_key=?, video_poster_key=?, video_width=?, video_height=?, video_duration=?,
                                video2_key=?, video2_poster_key=?, video2_width=?, video2_height=?, video2_duration=?,
                                video3_key=?, video3_poster_key=?, video3_width=?, video3_height=?, video3_duration=?,
@@ -618,6 +624,7 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
        str(b.bylineCn), str(b.bioCn) || null, JSON.stringify(b.statsJson ?? []),
        JSON.stringify(b.flowJson ?? []), JSON.stringify(b.marqueeJson ?? []),
        str(b.heroKey) || null, str(b.heroTagCn) || null, str(b.wechatId) || null,
+       str(b.contactPhone) || null,
        str(b.qrcodeKey) || null, str(b.ogImageKey) || null, str(b.portraitKey) || null,
        str(b.videoKey) || null, str(b.videoPosterKey) || null,
        num(b.videoWidth) || null, num(b.videoHeight) || null, num(b.videoDuration) || null,

@@ -15,8 +15,21 @@ async function load() {
 }
 onMounted(load);
 
+const PHONE_RE = /^(1[3-9]\d{9}|0\d{2,3}-?\d{7,8})$/;
+
+/** 联系电话强校验：手机号（1[3-9] 开头 11 位）或含区号座机号（允许 - 分隔）；空值放行 */
+function checkPhone(): boolean {
+  const v = s.value?.contactPhone?.trim() ?? '';
+  if (v && !PHONE_RE.test(v)) {
+    ElMessage.error('联系电话格式不正确：支持手机号（如 13800138000）或含区号座机号（如 0514-1234567）');
+    return false;
+  }
+  return true;
+}
+
 async function save(kind: string) {
   if (!s.value) return;
+  if (kind === '首页' && !checkPhone()) return;
   saving.value = true;
   try {
     await api.put('/api/admin/site', s.value);
@@ -328,6 +341,9 @@ function clearVideo(slot: VidSlot) {
                       @focus="syncMarqueeOut" @change="syncMarqueeIn" />
           </el-form-item>
           <el-form-item label="微信号"><el-input v-model="s.wechatId" style="width:240px" /></el-form-item>
+          <el-form-item label="联系电话">
+            <el-input v-model="s.contactPhone" style="width:240px" placeholder="手机号或座机（如 13800138000 / 0514-1234567）" @blur="checkPhone" />
+          </el-form-item>
           <el-form-item label="二维码图">
             <div class="pic-field">
               <el-image v-if="s.qrcodeKey" :src="s.qrcodeKey" class="pic-thumb qr-thumb" :preview-src-list="[s.qrcodeKey]" preview-teleported />
