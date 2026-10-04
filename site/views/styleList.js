@@ -79,7 +79,7 @@ export function styleList(style) {
       <header class="the-head">
         <div class="row">
           <a class="back" href="${head.back}" aria-label="返回系列" style="font-size:19px;color:var(--muted)">←</a>
-          ${style === 'chinese' ? '<span class="seal-mini">妍</span>' : '<span class="en">Albums</span>'}
+          ${style === 'chinese' ? '<span class="seal-mini">妝</span>' : '<span class="en">Albums</span>'}
         </div>
         <div class="cd">${head.cd}</div>
         <div class="hrjade">

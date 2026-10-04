@@ -63,7 +63,7 @@ export async function about(el) {
         <div class="sub2en">Bridal &amp; Daily</div>
         <span class="hairline"></span>
         <div class="cn" style="font-size:11px;letter-spacing:.22em;color:var(--muted)">${s?.taglineCn || ''}</div>
-        <span class="sealv" style="margin:20px auto 0" aria-hidden="true">予<br/>時<br/>妍</span>
+        <span class="sealv" style="margin:20px auto 0" aria-hidden="true">茉<br/>與<br/>妝</span>
       </div>
 
       <div class="qrb glass reveal" id="contact">

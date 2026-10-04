@@ -11,7 +11,7 @@
  * ============================================================ */
 // @ts-check
 
-import { symbolSVG } from '../components/brandMark.js?v=20261005b';
+import { symbolSVG } from '../components/brandMark.js?v=20261005c';
 import { registerGroup } from '../components/viewer.js';
 import { getHome } from '../api.js';
 
@@ -142,7 +142,7 @@ export async function home(el) {
     <header class="topnav">
       <a class="brandlock" href="/" aria-label="茉與妝 MO·BEAUTÉ">
         ${symbolSVG()}
-        <span class="cn">予时<span class="ac">妍</span></span>
+        <span class="cn">茉與<span class="ac">妝</span></span>
       </a>
       <span class="right">
         <a class="whoami" href="/collection" aria-label="浏览作品系列">
@@ -154,8 +154,8 @@ export async function home(el) {
     </header>
 
     <section class="hero">
-      <p class="en">Yué Atelier · Est. 2018</p>
-      <h1 class="lead">予时<span class="rose">妍</span></h1>
+      <p class="en">MO·BEAUTÉ · Est. 2018</p>
+      <h1 class="lead">茉與<span class="rose">妝</span></h1>
       <div class="sub"><span class="cn">${data.taglineCn || FALLBACK.subCn}</span></div>
       <p class="en enline">Makeup &amp; Hair · Bridal &amp; Daily</p>
       ${data.heroKey ? `
@@ -172,7 +172,7 @@ export async function home(el) {
           <span class="n">${byline.nameCn} · ${byline.roleCn}</span>
           <span class="en">Tianmo · Personal Portfolio</span>
         </span>
-        <span class="seal-mini" aria-hidden="true">妍</span>
+        <span class="seal-mini" aria-hidden="true">妝</span>
       </a>
     </section>
 

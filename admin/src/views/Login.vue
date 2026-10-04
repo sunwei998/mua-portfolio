@@ -58,7 +58,7 @@ async function submit() {
     <section class="panel">
       <div class="form">
         <header class="brand">
-          <span class="mark" aria-hidden="true">妍</span>
+          <span class="mark" aria-hidden="true">妝</span>
           <h1>茉與妝</h1>
           <p class="sub"><span>MO·BEAUTÉ</span><i aria-hidden="true"></i><span>管理后台</span></p>
         </header>
