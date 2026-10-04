@@ -27,23 +27,6 @@ let titleText = '';
 /** 动画进行中（commit/cancel 未落定）——期间忽略新的翻页输入 */
 let anim = false;
 
-/* ---- 缩放状态（双指捏合 / 双击切换，放大后单指平移看局部） ---- */
-let scale = 1;        // 当前缩放（1=原始，双击拉大看中心）
-let panX = 0, panY = 0;
-
-/** 按 scale 即时变换图片（双击放大时带过渡） */
-function applyZoom(smooth) {
-  if (!ui) return;
-  ui.img.style.transition = smooth ? EASE : 'none';
-  ui.img.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
-  ui.stage.classList.toggle('is-zoom', scale > 1.05);
-}
-/** 复位到 1×（换页/捏回/双击缩小时调用） */
-function resetZoom() {
-  scale = 1; panX = 0; panY = 0;
-  applyZoom(true);
-}
-
 /**
  * 视图渲染时注册一组可查看的照片（路由切换时自动清空）。
  * @param {string} id
@@ -70,7 +53,7 @@ function renderMeta() {
   ui.title.textContent = titleText;
   ui.count.textContent = `${idx + 1} / ${list.length}`;
   ui.fill.style.width = `${((idx + 1) / list.length) * 100}%`;
-  resetZoom();
+  ui.stage.classList.remove('is-zoom');
   Array.from(ui.thumbs.children).forEach((el, i) =>
     (/** @type {HTMLElement} */ (el)).classList.toggle('on', i === idx));
   for (const n of [idx + 1, idx - 1]) {
@@ -310,10 +293,7 @@ export function initViewer() {
   stage.addEventListener('click', (e) => {
     if (dragged) return; // 翻页手势不触发双击判定
     const now = Date.now();
-    if (now - lastTap < 300) {
-      if (scale > 1.05) resetZoom();
-      else { scale = 2.5; applyZoom(true); }
-    }
+    if (now - lastTap < 300) stage.classList.toggle('is-zoom');
     lastTap = now;
     void e;
   });

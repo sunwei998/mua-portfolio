@@ -45,9 +45,7 @@
   max-width:100%;max-height:100%;object-fit:contain;
   box-shadow:0 34px 90px rgba(0,0,0,.6);
   transform:scale(1);transition:transform .45s var(--ease);
-  /* 放开系统长按保存：微信/iOS 对 img 弹「保存图片」菜单 */
-  -webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto;
-  pointer-events:auto;
+  -webkit-user-select:none;user-select:none;
 }
 .viewer .v-stage.is-zoom .v-img{transform:scale(1.9)}
 .viewer .v-foot{
