@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>域名 · 备案 · COS+CDN+CI 成本测算 · 予时妍 YUÉ ATELIER</title>
+<style>
+  :root{
+    --paper:#FBF6F5; --rose:#C08994; --champagne:#C8AE84;
+    --silk:#F8F5F1; --crimson:#9E4E55; --gold:#C0A46F; --dai:#6E7C76;
+    --ink:#17130f; --ink-70:#4a423c; --ink-45:#7d746d; --ink-20:#c9c2bb;
+    --line:rgba(23,19,15,.10);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:0 20px 80px;background:var(--paper);color:var(--ink);
+       font:400 15px/1.75 "Songti SC","Source Han Serif SC",Georgia,serif;
+       -webkit-font-smoothing:antialiased}
+  .wrap{max-width:900px;margin:0 auto}
+  header{padding:72px 0 40px;border-bottom:1px solid var(--line)}
+  .kicker{font:400 11px/1 "Helvetica Neue",system-ui,sans-serif;letter-spacing:.28em;
+          color:var(--rose);text-transform:uppercase}
+  h1{margin:18px 0 10px;font-weight:400;font-size:36px;line-height:1.25;letter-spacing:.02em}
+  .sub{color:var(--ink-45);font-size:14px;letter-spacing:.04em}
+  .meta{margin-top:22px;font:400 12px/1.8 "Helvetica Neue",system-ui,sans-serif;
+        color:var(--ink-45);letter-spacing:.03em}
+  h2{margin:64px 0 6px;font-weight:400;font-size:23px;letter-spacing:.02em;
+     padding-top:26px;border-top:1px solid var(--line)}
+  h2 .no{font:400 11px/1 "Helvetica Neue",system-ui,sans-serif;letter-spacing:.2em;
+         color:var(--champagne);display:block;margin-bottom:12px}
+  h3{margin:34px 0 10px;font-weight:400;font-size:17px}
+  p{margin:12px 0}
+  .lead{color:var(--ink-70);font-size:16px}
+  ul{margin:12px 0;padding-left:0;list-style:none}
+  li{position:relative;padding-left:20px;margin:9px 0;color:var(--ink-70);font-size:14px}
+  li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;
+             background:var(--rose);border-radius:50%}
+  ol{margin:14px 0;padding-left:22px}
+  ol li{margin:10px 0;color:var(--ink-70);font-size:14px;padding-left:4px}
+  code{font:400 13px/1.5 "SF Mono",Menlo,Consolas,monospace;
+       background:rgba(23,19,15,.05);padding:2px 6px;border-radius:3px;color:var(--crimson)}
+  pre{background:var(--silk);border:1px solid var(--line);border-radius:6px;padding:16px 18px;
+      overflow-x:auto;margin:16px 0;font:400 12.5px/1.7 "SF Mono",Menlo,Consolas,monospace;
+      color:var(--ink-70)}
+  table{width:100%;border-collapse:collapse;margin:20px 0;
+        font:400 13.5px/1.6 "SF Mono",Menlo,Consolas,monospace}
+  th{text-align:left;padding:9px 12px;border-bottom:1px solid var(--ink-20);font-weight:400;
+     font-size:11px;letter-spacing:.14em;color:var(--ink-45);text-transform:uppercase}
+  td{padding:9px 12px;border-bottom:1px solid var(--line);color:var(--ink-70);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .tot td{border-top:1px solid var(--ink-20);color:var(--ink);font-weight:500}
+  .callout{margin:26px 0;padding:18px 22px;background:var(--silk);border-left:2px solid var(--crimson);
+           border-radius:0 4px 4px 0}
+  .callout.rose{border-left-color:var(--rose)}
+  .callout.gold{border-left-color:var(--champagne)}
+  .callout.dai{border-left-color:var(--dai)}
+  .callout p{margin:0;font-size:14px;color:var(--ink-70)}
+  .callout strong{font-weight:400;color:var(--ink)}
+  .tag{display:inline-block;padding:2px 9px;border-radius:2px;font-size:11px;
+       font-family:"Helvetica Neue",system-ui,sans-serif;letter-spacing:.08em;vertical-align:middle}
+  .t-p0{background:rgba(158,78,85,.12);color:var(--crimson)}
+  .t-p1{background:rgba(192,142,132,.16);color:#8a5f52}
+  .t-p2{background:rgba(110,124,118,.14);color:var(--dai)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:22px 0}
+  .card{padding:18px 20px;background:var(--silk);border:1px solid var(--line);border-radius:6px}
+  .card .k{font:400 11px/1 "Helvetica Neue",system-ui,sans-serif;letter-spacing:.18em;
+           color:var(--ink-45);text-transform:uppercase}
+  .card .v{margin-top:10px;font-size:28px;line-height:1;color:var(--ink);
+           font-family:"Helvetica Neue",system-ui,sans-serif;font-weight:300}
+  .card .v em{font-style:normal;font-size:13px;color:var(--ink-45);margin-left:3px}
+  .card .d{margin-top:8px;font-size:12.5px;color:var(--ink-45);line-height:1.6}
+  .good{color:var(--dai)}
+  .bad{color:var(--crimson)}
+  .warn{color:#8a5f52}
+  footer{margin-top:80px;padding-top:26px;border-top:1px solid var(--line);
+         font:400 12px/1.9 "Helvetica Neue",system-ui,sans-serif;color:var(--ink-45)}
+  .src{font:400 11.5px/1.7 "Helvetica Neue",system-ui,sans-serif;color:var(--ink-45);margin-top:8px}
+  .tl{margin:24px 0;padding:0;list-style:none}
+  .tl li{position:relative;padding:0 0 20px 26px;border-left:1px solid var(--ink-20);margin:0}
+  .tl li:last-child{border-left-color:transparent}
+  .tl li::before{content:"";position:absolute;left:-4px;top:8px;width:7px;height:7px;
+                 border-radius:50%;background:var(--rose)}
+  .tl .t{font-family:"Helvetica Neue",system-ui,sans-serif;font-size:12.5px;color:var(--ink-45);
+         letter-spacing:.06em}
+  .tl .b{font-size:15px;color:var(--ink);margin:2px 0 0}
+  .tl .dd{font-size:13px;color:var(--ink-70);margin-top:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Yué Atelier · Cost Estimate</div>
+  <h1>上云成本测算</h1>
+  <div class="sub">域名、备案、COS + CDN + 数据万象——按官网价格逐项算清楚</div>
+  <div class="meta">
+    2026-10-04 &nbsp;·&nbsp; 单价取自腾讯云官方定价文档与备案文档（查价当天口径）<br>
+    用量部分为假设，已列明，可按实际替换重算
+  </div>
+</header>
+
+<h2><span class="no">Part 00</span>结论</h2>
+
+<div class="grid">
+  <div class="card">
+    <div class="k">起步期 · 月</div>
+    <div class="v">2.2<em>元</em></div>
+    <div class="d">约 1500 次访问 / 月</div>
+  </div>
+  <div class="card">
+    <div class="k">正常运营 · 月</div>
+    <div class="v">6.9<em>元</em></div>
+    <div class="d">约 8000 次访问 / 月</div>
+  </div>
+  <div class="card">
+    <div class="k">单条爆款 · 月</div>
+    <div class="v">123<em>元</em></div>
+    <div class="d">约 12 万次访问的那一个月</div>
+  </div>
+  <div class="card">
+    <div class="k">固定年费</div>
+    <div class="v">33–90<em>元</em></div>
+    <div class="d">域名一项，备案与证书均为 0</div>
+  </div>
+</div>
+
+<p class="lead">一句话：<strong>钱完全不是问题，时间才是。</strong>整个上云链路里，唯一需要付费的东西是域名，每月开销在个位数到一百多元之间。真正的成本是<strong>备案等待期</strong>——最长 20 个工作日，以及它之前必须先满足的几个硬性条件。</p>
+
+<h3>年度总账</h3>
+<table>
+  <thead><tr><th>选择</th><th class="num">域名</th><th class="num">云服务（起步档）</th><th class="num">云服务（常态档）</th><th class="num">首年合计</th><th class="num">次年起合计</th></tr></thead>
+  <tbody>
+    <tr><td>.com</td><td class="num">83 / 90</td><td class="num">30 元</td><td class="num">162 元</td><td class="num"><b>113 元</b> 起</td><td class="num">120 元 起</td></tr>
+    <tr><td>.cn</td><td class="num">33 / 38</td><td class="num">30 元</td><td class="num">162 元</td><td class="num"><b>63 元</b> 起</td><td class="num">68 元 起</td></tr>
+  </tbody>
+</table>
+<div class="src">域名价格为腾讯云域名价格页标准价（非活动价），注册/续费用「/」分隔。新客活动常见首年更低的促销价，以结算页为准。</div>
+
+<h2><span class="no">Part 01</span>单价清单</h2>
+<table>
+  <thead><tr><th>项目</th><th>单价</th><th>对我们是否收费</th></tr></thead>
+  <tbody>
+    <tr><td>域名 .com</td><td>注册 83 元/年，续费 90 元/年</td><td>若要品牌感选它</td></tr>
+    <tr><td>域名 .cn / .com.cn</td><td>注册 33 元/年，续费 38 元/年</td><td class="good">国内为主，性价比最高</td></tr>
+    <tr><td>ICP 备案</td><td><b>0 元</b></td><td>必办，管局不收钱</td></tr>
+    <tr><td>SSL 证书</td><td><b>0 元</b>（免费型 DV）</td><td>有效期 90 天，到期续；CDN 用</td></tr>
+    <tr><td>COS 标准存储</td><td>0.13 元/GB/月</td><td>约 3.1 GB → 0.4 元/月</td></tr>
+    <tr><td>COS 深度归档存储</td><td>约 0.033 元/GB/月</td><td>原图/原片底稿 20 GB → 0.7 元/月</td></tr>
+    <tr><td>COS CDN 回源流量</td><td>0.15 元/GB</td><td>仅未命中时发生，约 10%</td></tr>
+    <tr><td>COS 外网直出流量</td><td>0.64 元/GB</td><td class="good">走 CDN 就不会用到</td></tr>
+    <tr><td>COS 读 / 写请求</td><td>0.01 元/万次</td><td>每月几毛钱，可忽略</td></tr>
+    <tr><td>CDN 流量（大陆）</td><td><b>0.21 元/GB</b>（0–2TB 阶梯）</td><td>主要开销项</td></tr>
+    <tr><td>CDN HTTPS 请求数</td><td>每月 300 万次免费，超出 0.05 元/万次</td><td class="good">我们的量远不到，0 元</td></tr>
+    <tr><td>数据万象 · 基础图片处理</td><td>≤ 10 TB/月 <b>免费</b>，超出 0.025 元/GB</td><td class="good">0 元</td></tr>
+    <tr><td>数据万象 · 极智压缩</td><td>0.1 元/千次</td><td class="warn">建议不开（见 Part 04）</td></tr>
+    <tr><td>数据万象 · AVIF 高级压缩</td><td>0.3 元/千次</td><td class="warn">不用（微信场景不支持）</td></tr>
+  </tbody>
+</table>
+<div class="src">来源：腾讯云官方《COS 产品定价》《CDN 基础服务计费》《CDN HTTPS 请求数计费公告》《数据万象图片处理费用》《域名价格》。部分地域存在更低的活动单价，以控制台实时价为准。</div>
+
+<h2><span class="no">Part 02</span>用量假设</h2>
+<p>这些数字可以按实际替换，我把它们列出来是因为<strong>所有成本结论都依赖它们</strong>。</p>
+<table>
+  <thead><tr><th>项</th><th>取值</th><th>依据</th></tr></thead>
+  <tbody>
+    <tr><td>存储 · 交付层</td><td>3.1 GB</td><td>400 张 WebP 展示档 ~75 MB + 480w 缩略 ~12 MB + 视频交付版 ~3 GB</td></tr>
+    <tr><td>存储 · 归档层</td><td>20 GB</td><td>原图 400 张 ~4.5 GB + 原片 ~15 GB，放深度归档</td></tr>
+    <tr><td>每次访问看图量</td><td>2.0 MB</td><td>约 20 张 × 平均 100 KB（WebP 混合档）</td></tr>
+    <tr><td>视频播放率</td><td>15%</td><td>大部分访客只看照片</td></tr>
+    <tr><td>单次视频实际传输</td><td>8 MB</td><td>多数人不会看到底，Range 分片不会拉全文件</td></tr>
+    <tr><td>CDN 命中率</td><td>90%</td><td>作品集是典型「写入少、读取多」的静态场景</td></tr>
+  </tbody>
+</table>
+
+<h3>三档测算结果</h3>
+<table>
+  <thead><tr><th>场景</th><th class="num">访问量</th><th class="num">CDN 流量</th><th class="num">流量费</th><th class="num">回源</th><th class="num">存储</th><th class="num">请求</th><th class="num">合计</th></tr></thead>
+  <tbody>
+    <tr><td>A 起步</td><td class="num">1,500 PV</td><td class="num">4.7 GB</td><td class="num">1.0</td><td class="num">0.1</td><td class="num">1.1</td><td class="num">0.0</td><td class="num"><b>2.2 元</b></td></tr>
+    <tr><td>B 常态</td><td class="num">8,000 PV</td><td class="num">25.0 GB</td><td class="num">5.2</td><td class="num">0.4</td><td class="num">1.1</td><td class="num">0.2</td><td class="num"><b>6.9 元</b></td></tr>
+    <tr><td>C 爆款</td><td class="num">120,000 PV</td><td class="num">527 GB</td><td class="num">110.7</td><td class="num">7.9</td><td class="num">1.1</td><td class="num">3.0</td><td class="num"><b>122.7 元</b></td></tr>
+  </tbody>
+</table>
+
+<div class="callout gold">
+  <p><strong>值得留意：</strong>爆款那一档，527 GB 流量花 123 元——但如果没有前面的图片优化，同样 8000 PV 就要传 312 GB，每月 <strong>70 元</strong>，是优化后的 <strong>10 倍</strong>，而且用户体验还更差。<strong>素材瘦身这笔工是直接从账单上省的，不会因为将来上 CDN 而白做。</strong></p>
+</div>
+
+<h2><span class="no">Part 03</span>时间与流程（真正的成本）</h2>
+<ul class="tl">
+  <li><div class="t">T+0</div><div class="b">买域名并完成实名</div><div class="dd">实名信息与备案主体必须一致（个人就走个人）。33–83 元。</div></li>
+  <li><div class="t">T+3</div><div class="b">提交备案</div><div class="dd">腾讯云明确要求：<strong>域名实名认证成功后需等待 3 天</strong>才能提交。</div></li>
+  <li><div class="t">T+3 ~ T+23</div><div class="b">管局审核</div><div class="dd">官方口径<strong>最长 20 个工作日</strong>，实际多数省份更快。这段时间站点继续用 IP 访问，不影响。</div></li>
+  <li><div class="t">备案通过后</div><div class="b">绑自定义 CDN 域名 + 申请证书 + 迁素材</div><div class="dd">此时 CDN 才能接入——国内 CDN 加速域名必须备案。</div></li>
+</ul>
+
+<h3>⚠️ 三个必须在动手前核实的硬条件</h3>
+<div class="callout">
+  <p><strong>1. 轻量服务器的付费时长。</strong> 腾讯云备案文档规定：用轻量应用服务器备案，需要<strong>包年包月、购买时长 ≥ 90 天，且备案期间剩余有效期 ≥ 30 天</strong>。我们这台 119.45.182.37 是否满足要去控制台确认——<strong>如果剩余不足 30 天，备案会被卡住，需要先续到 3 个月以上</strong>，这是唯一可能产生额外支出的一环。</p>
+</div>
+<div class="callout rose">
+  <p><strong>2. 单台实例的备案域名上限是 5 个。</strong> 这台机器上已经跑了 sanhe，配额是共享的。我们只需要 1 个，够用，但要知道有这个上限。</p>
+</div>
+<div class="callout gold">
+  <p><strong>3. 域名注册费用的长期账。</strong> 首年便宜的音后缀可能在次年跳涨；选 .cn 续费 38 元最稳。<strong>建议别注册多个后缀</strong>——每个都要单独备案、单独证书，工作量比钱更值钱。</p>
+</div>
+
+<h2><span class="no">Part 04</span>能省的地方与不能省的防护</h2>
+
+<h3>能省：不要用「按次收费」的处理能力</h3>
+<p>数据万象里有两类东西：</p>
+<ul>
+  <li><strong>基础图片处理</strong>（缩放、裁剪、格式转换、质量调整）—— ≤ 10 TB/月 <strong>免费</strong>。就是 URL 加参数那一类：<code>?imageMogr2/thumbnail/780x/format/webp</code>。</li>
+  <li><strong>极智压缩</strong>（0.1 元/千次）、<strong>AVIF 高级压缩</strong>（0.3 元/千次）——按<strong>每次访问</strong>计费。它「开通后访问图片即自动压缩」，听起来很省心，但 PV 一上来就在持续按次数烧钱。</li>
+</ul>
+<div class="callout dai">
+  <p><strong>我们的做法：只用基础图片处理 + CDN 缓存。</strong>同一个 URL 被 CDN 缓存后就是一次普通静态文件下载，不产生任何处理费。<strong>压缩这件事留给本地流水线在上传时做一次</strong>，不在云端每次访问做。这也正好和我们已经计划的「上传时转 WebP」完全重合。</p>
+</div>
+
+<h3>原图放深度归档</h3>
+<p>作为印刷/高清底稿的原图和原片，几乎不会被读取，放进深度归档（约 0.033 元/GB/月）比标准存储省 <strong>约 4 倍</strong>。20 GB 也就 0.7 元/月。</p>
+
+<h3>不能省：防盗刷</h3>
+<div class="callout">
+  <p>CDN 一旦暴露在公网，<strong>被盗刷是所有低成本架构里唯一的财务风险</strong>——不是会不会发生，而是什么时候发生。上 CDN 当天必须配好三件事：</p>
+  <p style="margin-top:10px">① <strong>Referer 防盗链</strong>白名单（只允许我们自己的域名引用）<br>
+  ② <strong>IP 访问限频</strong> + 疑似盗刷 IP 自动识别<br>
+  ③ <strong>成本告警阈值</strong>——在费用中心设一条，月度超过比如 50 元就短信通知</p>
+</div>
+<p>这三项都是免费的，只需要花十分钟配置。</p>
+
+<h2><span class="no">Part 05</span>备案通过之前</h2>
+<p>过渡期有几条路，我把它们的代价说清楚：</p>
+<table>
+  <thead><tr><th>方案</th><th>是否可行</th><th>代价</th></tr></thead>
+  <tbody>
+    <tr><td>继续用 IP 访问（现状）</td><td class="good">可行</td><td>带宽 532 KB/s；微信里分享体验差；不算正式形态</td></tr>
+    <tr><td>COS 默认域名临时托管图片</td><td class="bad">不可行</td><td>腾讯云规定：2024-01-01 后新建的桶，默认域名访问<strong>一律下载而非预览</strong></td></tr>
+    <tr><td>海外 CDN / CDN 免备案节点</td><td class="warn">技术上可行</td><td>国内访问延迟高且不稳定；作品集是视觉交付，不推荐</td></tr>
+    <tr><td>本地先把素材压一遍</td><td class="good">现在就能做</td><td>零成本，直接把 532 KB/s 用得更值，且将来上 CDN 后账单也小 10 倍</td></tr>
+  </tbody>
+</table>
+
+<footer>
+  予时妍 YUÉ ATELIER · 上云成本测算 · 2026-10-04<br>
+  单价口径取自腾讯云官方文档，用量为假设。本稿未包含轻量服务器本身的持有成本（已在跑，非增量）。
+</footer>
+
+</div>
+</body>
+</html>

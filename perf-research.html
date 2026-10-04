@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>业界怎么做 · 图片 / 视频 / 导航 · 予时妍 YUÉ ATELIER</title>
+<style>
+  :root{
+    --paper:#FBF6F5; --rose:#C08994; --champagne:#C8AE84;
+    --silk:#F8F5F1; --crimson:#9E4E55; --gold:#C0A46F; --dai:#6E7C76;
+    --ink:#17130f; --ink-70:#4a423c; --ink-45:#7d746d; --ink-20:#c9c2bb;
+    --line:rgba(23,19,15,.10);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:0 20px 80px;
+    background:var(--paper); color:var(--ink);
+    font:400 15px/1.75 "Songti SC","Source Han Serif SC",Georgia,serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:900px;margin:0 auto}
+  header{padding:72px 0 40px;border-bottom:1px solid var(--line)}
+  .kicker{
+    font:400 11px/1 "Helvetica Neue",system-ui,sans-serif;
+    letter-spacing:.28em; color:var(--rose); text-transform:uppercase;
+  }
+  h1{margin:18px 0 10px;font-weight:400;font-size:36px;line-height:1.25;letter-spacing:.02em}
+  .sub{color:var(--ink-45);font-size:14px;letter-spacing:.04em}
+  .meta{margin-top:22px;font:400 12px/1.8 "Helvetica Neue",system-ui,sans-serif;color:var(--ink-45);letter-spacing:.03em}
+  h2{
+    margin:64px 0 6px;font-weight:400;font-size:23px;letter-spacing:.02em;
+    padding-top:26px;border-top:1px solid var(--line);
+  }
+  h2 .no{font:400 11px/1 "Helvetica Neue",system-ui,sans-serif;letter-spacing:.2em;color:var(--champagne);display:block;margin-bottom:12px}
+  h3{margin:34px 0 10px;font-weight:400;font-size:17px}
+  h4{margin:26px 0 8px;font-weight:400;font-size:15px;color:var(--ink);
+     font-family:"Helvetica Neue",system-ui,sans-serif;letter-spacing:.02em}
+  p{margin:12px 0}
+  .lead{color:var(--ink-70);font-size:16px}
+  ul{margin:12px 0;padding-left:0;list-style:none}
+  li{position:relative;padding-left:20px;margin:9px 0;color:var(--ink-70);font-size:14px}
+  li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;background:var(--rose);border-radius:50%}
+  ol{margin:14px 0;padding-left:22px}
+  ol li{margin:10px 0;color:var(--ink-70);font-size:14px;padding-left:4px}
+  code{
+    font:400 13px/1.5 "SF Mono",Menlo,Consolas,monospace;
+    background:rgba(23,19,15,.05);padding:2px 6px;border-radius:3px;color:var(--crimson);
+  }
+  pre{
+    background:var(--silk);border:1px solid var(--line);border-radius:6px;
+    padding:16px 18px;overflow-x:auto;margin:16px 0;
+    font:400 12.5px/1.7 "SF Mono",Menlo,Consolas,monospace;color:var(--ink-70);
+  }
+  table{width:100%;border-collapse:collapse;margin:20px 0;font:400 13.5px/1.6 "SF Mono",Menlo,Consolas,monospace}
+  th{
+    text-align:left;padding:9px 12px;border-bottom:1px solid var(--ink-20);
+    font-weight:400;font-size:11px;letter-spacing:.14em;color:var(--ink-45);text-transform:uppercase;
+  }
+  td{padding:9px 12px;border-bottom:1px solid var(--line);color:var(--ink-70);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .callout{margin:26px 0;padding:18px 22px;background:var(--silk);border-left:2px solid var(--crimson);border-radius:0 4px 4px 0}
+  .callout.rose{border-left-color:var(--rose)}
+  .callout.gold{border-left-color:var(--champagne)}
+  .callout.dai{border-left-color:var(--dai)}
+  .callout p{margin:0;font-size:14px;color:var(--ink-70)}
+  .callout strong{font-weight:400;color:var(--ink)}
+  .tag{display:inline-block;padding:2px 9px;border-radius:2px;font-size:11px;
+       font-family:"Helvetica Neue",system-ui,sans-serif;letter-spacing:.08em;vertical-align:middle}
+  .t-p0{background:rgba(158,78,85,.12);color:var(--crimson)}
+  .t-p1{background:rgba(192,142,132,.16);color:#8a5f52}
+  .t-p2{background:rgba(110,124,118,.14);color:var(--dai)}
+  .t-doc{background:rgba(23,19,15,.06);color:var(--ink-45)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:22px 0}
+  .card{padding:18px 20px;background:var(--silk);border:1px solid var(--line);border-radius:6px}
+  .card .k{font:400 11px/1 "Helvetica Neue",system-ui,sans-serif;letter-spacing:.18em;color:var(--ink-45);text-transform:uppercase}
+  .card .v{margin-top:10px;font-size:28px;line-height:1;color:var(--ink);
+            font-family:"Helvetica Neue",system-ui,sans-serif;font-weight:300}
+  .card .v em{font-style:normal;font-size:13px;color:var(--ink-45);margin-left:3px}
+  .card .d{margin-top:8px;font-size:12.5px;color:var(--ink-45);line-height:1.6}
+  .good{color:var(--dai)}
+  .bad{color:var(--crimson)}
+  .warn{color:#8a5f52}
+  footer{margin-top:80px;padding-top:26px;border-top:1px solid var(--line);
+         font:400 12px/1.9 "Helvetica Neue",system-ui,sans-serif;color:var(--ink-45)}
+  .src{font:400 11.5px/1.7 "Helvetica Neue",system-ui,sans-serif;color:var(--ink-45);margin-top:8px}
+  .layer{margin:26px 0;padding:20px 22px;border:1px solid var(--line);border-radius:6px;background:#fff}
+  .layer .lh{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+  .layer .lh b{font-weight:400;font-size:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Yué Atelier · Industry Research</div>
+  <h1>业界怎么做</h1>
+  <div class="sub">图片慢、视频变形、点了没反应——成熟产品在这三件事上的通用解法，与我们的差距</div>
+  <div class="meta">
+    2026-10-04 &nbsp;·&nbsp; 纯研究稿，未修改任何项目代码<br>
+    数据来源：腾讯云官方文档、Next.js 官方文档、MDN、web.dev、caniuse 口径的第三方汇总，以及本机对本项目素材的实测
+  </div>
+</header>
+
+<h2><span class="no">Part 00</span>一句话结论</h2>
+<p class="lead">成熟团队处理这三类问题，靠的是<strong>同一套分层配方</strong>：先让图片别从自己的应用服务器发出去，再让图片本身足够小、尺寸刚好、有占位、有优先级。我们的问题没有一处是特殊难题，全部落在标准答案里。</p>
+
+<div class="callout">
+  <p><strong>但对我们要额外加一条约束：</strong>配方里收益最大的第一层（对象存储 + CDN）需要<strong>已备案域名</strong>。腾讯云官方文档写明：2024 年 1 月 1 日后新建的存储桶，用默认域名访问会<strong>一律直接下载而不是预览</strong>，必须绑自定义域名；而国内 CDN 加速域名又要求备案。所以这条路不是不想走，是<strong>被备案卡住</strong>。在备案下来之前，唯一能动的杠杆是「字节数」和「加载顺序」。</p>
+</div>
+
+<h2><span class="no">Part 01</span>图片：业界的五层配方</h2>
+<p class="lead">从上到下依次是「最高收益」到「最细打磨」。绝大部分站的性能问题，卡在第 2、3 层没做。</p>
+
+<div class="layer">
+  <div class="lh"><b>第 1 层 · 图不从应用服务器发</b><span class="tag t-p0">最高收益</span><span class="tag t-p1">我们：被备案卡住</span></div>
+  <p>把原图放进对象存储（COS / OSS / S3 / R2），由 CDN 边缘发出。<strong>字节数一项没变，但吞吐量从 0.5 MB/s 变成几百 MB/s</strong>，并且 URL 带处理参数就能实时转格式、裁尺寸。</p>
+  <p>腾讯云这一侧的原生能力（数据万象 CI）已经很完整，这也是我们项目早期定方案时就写好的路线：</p>
+  <pre>https://bucket.cos.ap-xx.myqcloud.com/photo.jpg?imageMogr2/thumbnail/780x/format/webp/rquality/90</pre>
+  <ul>
+    <li>处理结果由 CDN 缓存，同一 URL 二次命中不重复计费。</li>
+    <li>腾讯云 COS 官方文档：中国大陆单账号单地域默认上行/下行各 <strong>15 Gbit/s</strong>，QPS 3 万；对比我们实测 <strong>532 KB/s</strong>，差三个数量级。</li>
+    <li>还有「极智压缩」这类开关式能力：开通后访问图片即自动压缩，平均省一半体积，客户端完全不用改。</li>
+  </ul>
+  <div class="src">来源：腾讯云 COS《规格与限制》《域名管理概述》《基础图片处理》；<strong>关键限制</strong>见《上传与下载》——2024-01-01 后创建的桶，默认域名（含静态网站域名、全球加速域名）访问任意类型文件均不支持预览，只能通过<strong>已备案的自定义域名</strong>。</div>
+</div>
+
+<div class="layer">
+  <div class="lh"><b>第 2 层 · 换现代格式</b><span class="tag t-p0">最高收益</span><span class="tag t-p1">我们：未做</span></div>
+  <p>业界标准是三层 <code>&lt;picture&gt;</code>：AVIF 优先 → WebP 兜底 → JPEG 最后兜底。浏览器按 <code>type</code> 挑第一个能解的，不支持自动降级，不需要任何 JS。</p>
+  <pre>&lt;picture&gt;
+  &lt;source srcset="photo.avif" type="image/avif"&gt;
+  &lt;source srcset="photo.webp" type="image/webp"&gt;
+  &lt;img src="photo.jpg" width="1024" height="1536" alt="…"&gt;
+&lt;/picture&gt;</pre>
+  <p><strong>但对我们这个类目（微信分享是主要入口）建议只用两层：WebP + JPEG。</strong>理由是 <strong>AVIF 在微信场景不成立</strong>：</p>
+  <table>
+    <thead><tr><th>格式</th><th>全球覆盖</th><th>最早支持版本</th><th>微信 / 国内场景</th></tr></thead>
+    <tbody>
+      <tr><td>WebP</td><td class="num">约 96–97%</td><td>Safari 14（2020）、Chrome 32</td><td class="good">X5 内核普遍支持</td></tr>
+      <tr><td>AVIF</td><td class="num">约 93–95%</td><td>Safari 16.4（2023）、Chrome 85</td><td class="bad">X5 基于旧 Chromium，支持率显著偏低</td></tr>
+    </tbody>
+  </table>
+  <p>AVIF 的另一半代价是<strong>编码慢</strong>——同一张图 WebP 约 0.2–0.5 秒，AVIF 默认档 0.35 秒但换成高质量档可以到十几秒。对于「上传时批量处理」的流水线，这是一笔不划算的账。</p>
+  <div class="src">来源：caniuse 口径第三方汇总（2026 上半年）；编码耗时来自 xconvert / pixconv 的实测对照。<em>注：第三方博客给出的「微信场景 AVIF 低于 12%」这类具体数字可信度存疑，此处只采用方向性结论——AVIF 在国内移动端，尤其微信内置浏览器，覆盖明显差于 WebP。</em></div>
+  <div class="callout gold"><p><strong>一句话：AVIF 可以留作以后加，但现在不要为它增加任何流水线复杂度。WebP 是我们要的地。</strong></p></div>
+</div>
+
+<div class="layer">
+  <div class="lh"><b>第 3 层 · 分辨率分级（srcset / sizes）</b><span class="tag t-p0">最高收益</span><span class="tag t-p1">我们：未做 &nbsp;|&nbsp; 我上一份设计稿：漏掉了</span></div>
+  <p>这是<strong>成熟 site 和我们之间最明确的一条差距</strong>：我们每种资源只交付一种尺寸，列表缩略图和点开的大图是同一个文件。业界做法是<strong>按显示宽度分级 + 由浏览器按 DPR 和布局宽度自选</strong>：</p>
+  <pre>&lt;img src="photo-780.webp"
+     srcset="photo-480.webp 480w, photo-780.webp 780w, photo-1024.webp 1024w"
+     sizes="(max-width: 700px) 46vw, 320px"
+     width="1024" height="1536" loading="lazy" decoding="async"&gt;</pre>
+  <p>拿我们的十张首页精选实测，WebP q90 下各档位是这个量级：</p>
+  <table>
+    <thead><tr><th>档位</th><th class="num">十张合计</th><th class="num">单张均值</th><th class="num">相对现状</th><th class="num">532KB/s 下耗时</th><th>适用图位</th></tr></thead>
+    <tbody>
+      <tr><td>PNG 现状（1024 源）</td><td class="num">19.12 MB</td><td class="num">1958 KB</td><td class="num">1.0×</td><td class="num">36.8 s</td><td>我们现在就这样</td></tr>
+      <tr><td>WebP q90 480w</td><td class="num">0.30 MB</td><td class="num">30 KB</td><td class="num">61.7×</td><td class="num">0.6 s</td><td>瀑布流缩略、两列网格</td></tr>
+      <tr><td>WebP q90 640w</td><td class="num">0.49 MB</td><td class="num">50 KB</td><td class="num">37.2×</td><td class="num">0.9 s</td><td>DPR2 小图位</td></tr>
+      <tr><td>WebP q90 780w</td><td class="num">0.69 MB</td><td class="num">71 KB</td><td class="num">26.3×</td><td class="num">1.3 s</td><td>手机全宽 @DPR2</td></tr>
+      <tr><td>WebP q90 1024w（源）</td><td class="num">1.84 MB</td><td class="num">188 KB</td><td class="num">9.9×</td><td class="num">3.5 s</td><td>详情大图、@DPR3</td></tr>
+    </tbody>
+  </table>
+  <p><strong>但这里有个反直觉的结论，必须说清楚：不要一刀切降分辨率。</strong>我按「手机真机观看尺寸 780 物理像素」做了画质比对：</p>
+  <table>
+    <thead><tr><th>方案</th><th class="num">十张合计</th><th class="num">PSNR 均值</th><th class="num">最差单张</th><th>判读</th></tr></thead>
+    <tbody>
+      <tr><td>WebP q92 全分辨率</td><td class="num">2.17 MB</td><td class="num">44.1 dB</td><td class="num">40.5 dB</td><td class="good">余量充足</td></tr>
+      <tr><td>WebP q90 全分辨率</td><td class="num">1.84 MB</td><td class="num">43.2 dB</td><td class="num">40.0 dB</td><td class="good">肉眼不可辨</td></tr>
+      <tr><td>WebP q92 @780</td><td class="num">0.81 MB</td><td class="num">40.2 dB</td><td class="num">34.9 dB</td><td>仍可接受，但余量明显变薄</td></tr>
+      <tr><td>WebP q90 @780</td><td class="num">0.69 MB</td><td class="num">39.4 dB</td><td class="num">34.7 dB</td><td class="warn">DPR3 屏上会看出偏软</td></tr>
+      <tr><td>WebP q85 @780</td><td class="num">0.50 MB</td><td class="num">37.9 dB</td><td class="num">33.9 dB</td><td class="warn">开始有涂抹感</td></tr>
+    </tbody>
+  </table>
+  <p>换句话说：<strong>降级是要拿画质换的，而且账面上不算便宜</strong>——降分辨率带来的收益是把 1.84 MB 再压到 0.69 MB，但画质余量从 43 dB 掉到 39 dB。<strong>真正的大头是第 2 层（19 MB → 1.84 MB），不是第 3 层。</strong></p>
+  <div class="callout"><p><strong>所以正确姿势不是「全部替换成小图」，而是「分场景给」</strong>：列表 / 瀑布流 / 网格只给 480–780 档，点开看的大图给 1024 全档。这同时解决了另外一个隐性缺陷——我们现在<strong>没有缩略图概念</strong>，列表和查看器共用同一份 2 MB 文件。</p></div>
+  <div class="src">本机实测：Pillow 12.3 + NumPy。所有方案统一呈现到 780 物理像素后与原图在同尺寸下的最佳渲染逐像素比 PSNR；耗时按服务器实测 532 KB/s 估算。</div>
+</div>
+
+<div class="layer">
+  <div class="lh"><b>第 4 层 · 占位，消灭空白</b><span class="tag t-p0">最高收益</span><span class="tag t-p1">我们：未做</span></div>
+  <p>这是「初开全白」唯一的正解——图没到之前，先给一个<strong>内联在 HTML 里、零额外请求</strong>的模糊轮廓。业界四种成熟做法：</p>
+  <table>
+    <thead><tr><th>技术</th><th class="num">每张开销</th><th>是否需要 JS 解码</th><th>代表使用者</th><th>判读</th></tr></thead>
+    <tbody>
+      <tr><td>主色调</td><td class="num">约 4 B</td><td>否</td><td>Pinterest 风格</td><td>最低成本消灭「纯白」，但无形无构图</td></tr>
+      <tr><td>BlurHash</td><td class="num">约 28 B</td><td>是（约 1–2 ms）</td><td>Mastodon、Signal</td><td>经典，不带 alpha 与宽高比</td></tr>
+      <tr><td>ThumbHash</td><td class="num">25–35 B</td><td>是（约 1–2 ms）</td><td>新一代默认推荐</td><td class="good">比 BlurHash 更准，且自带宽高比与透明度</td></tr>
+      <tr><td>LQIP（极小图 data URI）</td><td class="num">200–800 B</td><td>否（纯 CSS 放大）</td><td>medium 风格老做法</td><td>实现最简单，体积最贵</td></tr>
+    </tbody>
+  </table>
+  <p>我们的素材实测：20px 长边的 WebP 占位图（base64 内联）<strong>平均 190 字节 / 张，十张合计不到 1.9 KB</strong>。按 BlurHash / ThumbHash 只会更小。<strong>用不到 2 KB 换掉「开屏全白」，是这一整套里性价比最高的一笔。</strong></p>
+  <div class="callout rose"><p>顺带：CSS 的 <code>filter: blur()</code> 只会作用在<strong>那张极小的占位图</strong>上，不要加在大图本身，低端机会掉帧。</p></div>
+  <div class="src">来源：media-delivery / w3tweaks / pixotter 的占位技术对照；体积为本机实测。</div>
+</div>
+
+<div class="layer">
+  <div class="lh"><b>第 5 层 · 加载数量与优先级</b><span class="tag t-p1">打磨项</span></div>
+  <ul>
+    <li><strong>每张 img 都写 width / height</strong>——让浏览器在解码前就知道比例。<span class="tag t-p2">我们已做</span>（首页精选瀑布流的 <code>&lt;img width height&gt;</code> 是合规的）。</li>
+    <li><strong>LCP 图加 <code>fetchpriority="high"</code> + 不要 lazy</strong>。浏览器视口内图片默认 Low，布局结束后才提升——这个提升本身是滞后的。基线在 2024 年就地稳固（Chrome 101 / Safari 17.2 / Firefox 132），老浏览器直接忽略，零副作用。</li>
+    <li><strong>其余图 lazy + <code>decoding="async"</code></strong>，避开主线程解码阻塞。</li>
+    <li><strong>别让首屏一次抓十张</strong>——减少并发大图数量本身就是带宽治理。</li>
+  </ul>
+  <div class="src">来源：MDN / web.dev Fetch Priority API。</div>
+  <div class="callout gold">
+    <p><strong>关于「给 API 加优先级就能不被图片压后」——这条路走不通，别抱期望。</strong> <code>fetch()</code> 在 Chrome 里<strong>默认已经是 High</strong>，没有提升空间；图片虽然默认 Low，但布局完成后视口内的图会被提升到 High，且 Chrome 117 起前 5 张大图会直接抬到 Medium 并允许并行取两张。所以现象的根因是<strong>「大图太多 + HTTP/1.1 只有 6 条连接」</strong>，不是优先级没调。真解决办法是下面 Part 03 的三条。</p>
+  </div>
+</div>
+
+<h2><span class="no">Part 02</span>视频：业界的四条铁律</h2>
+
+<p>先说好消息——对照业界标准，我们的视频<strong>做对了两条</strong>：</p>
+<table>
+  <thead><tr><th>业界做法</th><th>我们</th></tr></thead>
+  <tbody>
+    <tr><td><code>poster</code> 首帧封面必须有，压缩到几十 KB</td><td class="good">有 poster（116 KB）</td></tr>
+    <tr><td><code>+faststart</code>：把 moov 元数据移到文件头，实现边下边播</td><td class="good">已验证：三个 mp4 顶层顺序都是 <code>ftyp → moov → mdat</code>，元数据在文件首部</td></tr>
+  </tbody>
+</table>
+
+<p>还差两条：</p>
+<h4>① 容器比例必须来自真实数据，不能写死</h4>
+<p>现在 <code>views.css</code> 里写死了 <code>9/16</code>（竖屏），拍横屏的内容就被硬塞进竖框再 <code>cover</code> 裁切，这就是你看到的变形。业界做法是 <strong>把宽高当成数据，和图片一样随接口下发</strong>，第一帧就用真实比例占好位置：</p>
+<pre>&lt;div class="vinner" style="aspect-ratio: 1920 / 1080"&gt;
+  &lt;video poster="…" preload="none" playsinline&gt;&lt;/video&gt;
+&lt;/div&gt;</pre>
+<p>我们后端 <code>probeVideo()</code> 早已用 ffprobe 读到了宽高，<strong>只是没落库也没下发</strong>——而同一个 <code>/api/home</code> 里，图片的 featured 字段是<strong>有</strong> <code>w/h/ratio</code> 的。这是一处明显的口径遗漏。</p>
+
+<h4>② 大数据按需加载，不要预取</h4>
+<ul>
+  <li><code>preload="none"</code> 起手，滚动进视口或用户点击后再给 <code>src</code>（IntersectionObserver）。业界默认就是这个——<code>preload="metadata"</code> 已经会比预期多下载一段，<code>auto</code> 基本不该出现。</li>
+  <li><code>&lt;video loading="lazy"&gt;</code> 现在也能自动懒掉 poster 和数据。</li>
+  <li><strong>自动循环的轻量背景视频，行业共识控制在 2–5 MB 以内。</strong>我们首页那个 20 MB 的主视频，无论其它优化做到什么程度，它都仍是首屏最重的单项。</li>
+  <li>长视频才需要 HLS / DASH 自适应码率 + CDN 分片。<span class="tag t-p2">对我们属于以后再说</span></li>
+</ul>
+<div class="src">来源：web.dev《Lazy loading video》、insync 的 ffmpeg 管线实践。</div>
+
+<h2><span class="no">Part 03</span>导航点了没反应：业界的三条解法</h2>
+<p class="lead">这一项<strong>不是 JS 崩溃</strong>。本质是「等待期间没有任何可见变化」。成熟框架对此的答案是同一句话：<strong>让「过渡状态」成为一个渲染出来的东西，而不是一段沉默。</strong></p>
+
+<h4>① 骨架屏必须是「立即显示」的，不是「加载完再显示」</h4>
+<p>Next.js App Router 把这件事做成了框架默认约定——路由目录下放一个 <code>loading.tsx</code>，它被自动包进 Suspense 边界，<strong>点击的瞬间先渲染 skeleton 换掉旧页面，数据到了再替换</strong>。官方文档明确的好处里就有：「<strong>即时导航与视觉反馈</strong>」「过渡可被打断」「不必等整段内容加载完」。</p>
+<p>我们现在的架构是 <code>await route.view(shell)</code> 的<strong>离屏渲染</strong>——取数期间 DOM 一个字都不动，好处是不白屏，代价就是你说的「点了没反应」。</p>
+
+<h4>② 并行请求，别串行瀑布</h4>
+<p>这是最朴素的业界共识：<strong>两个互不依赖的请求不要写成 <code>await a; await b</code></strong>。</p>
+<pre>// 瀑布：第二轮必须等第一轮
+const cols = await getCollections()
+const counts = await Promise.all(cols.map(getCount))   // 第二轮才开始
+
+// 并行：两个请求同时在飞
+const [cols, counts] = await Promise.all([getCollections(), getCountAll()])</pre>
+<p>我们 <code>collection</code> 视图正好是这种两轮串行。</p>
+
+<h4>③ 避免 API 和图片抢同一批连接</h4>
+<p>这一条是「HTTP/1.1 + 没有 HTTPS」的专属问题，业界早已不在这个处境里，但我们可以对症：</p>
+<ul>
+  <li><strong>HTTP/2 / HTTP/3 多路复用</strong>——业界常态，直接消除队头阻塞。<span class="tag t-p2">我们需要域名 + 证书后才能有</span></li>
+  <li><strong>关键数据在应用启动时就预热</strong>，不等路由触发再去请求。</li>
+  <li><strong>把 API 挪到独立源（不同端口或子域）</strong>——浏览器的连接池按 <em>scheme + host + port</em> 划分，不同端口就是另一个池子，<strong>额外 6 条连接</strong>，图片再多也压不到 API 头上。这是 HTTP/1.1 时代的经典手段，今天仍然是零成本立刻可用的解法。</li>
+</ul>
+
+<h2><span class="no">Part 04</span>差距总表</h2>
+<table>
+  <thead><tr><th>业界标配</th><th>我们现在</th><th>能否立刻做</th></tr></thead>
+  <tbody>
+    <tr><td>图片由对象存储 + CDN 发出</td><td class="bad">从 2 核轻量服务器发出，实测 532 KB/s</td><td class="warn">需已备案域名（绑定自定义 CDN / 源站域名）</td></tr>
+    <tr><td>WebP（+AVIF）+ picture 降级</td><td class="bad">全部 PNG，无降级</td><td class="good">能</td></tr>
+    <tr><td>srcset 分辨率分级、缩略图与大图分开</td><td class="bad">只有一种尺寸，列表和大图同一份</td><td class="good">能</td></tr>
+    <tr><td>内联占位图消去空白</td><td class="bad">无，加载期纯白</td><td class="good">能</td></tr>
+    <tr><td>LCP 图 fetchpriority=high，其余 lazy</td><td class="warn">lazy 有，优先级无</td><td class="good">能</td></tr>
+    <tr><td>img 必须有 width / height</td><td class="good">已做</td><td>—</td></tr>
+    <tr><td>视频容器比例由接口下发的真实宽高决定</td><td class="bad">CSS 写死 9/16，接口不下发宽高</td><td class="good">能</td></tr>
+    <tr><td>视频 preload=none + 懒起播</td><td class="warn">preload=metadata，有 poster，已 faststart</td><td class="good">能</td></tr>
+    <tr><td>视频 / 长资源走 CDN 分片</td><td class="bad">自托管直传</td><td class="warn">同备案</td></tr>
+    <tr><td>路由切换立即显示骨架</td><td class="bad">离屏渲染，等待期零反馈</td><td class="good">能</td></tr>
+    <tr><td>多个请求并行，不做瀑布</td><td class="bad">collection 视图两轮串行</td><td class="good">能</td></tr>
+    <tr><td>HTTP/2 多路复用</td><td class="bad">HTTP/1.1，同域 6 并发</td><td class="warn">需 HTTPS</td></tr>
+    <tr><td>API 与静态资源分流</td><td class="bad">同源同端口共享连接池</td><td class="good">能（改 API 基址即可）</td></tr>
+  </tbody>
+</table>
+
+<h2><span class="no">Part 05</span>对我上一份设计稿的复盘</h2>
+<p class="lead">既然放一边了，就直接说清楚它对在哪、漏在哪。</p>
+<table>
+  <thead><tr><th>设计稿条目</th><th>结论</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td>上传时处理，不在访问时压缩</td><td class="good">对</td><td>符合业界共识</td></tr>
+    <tr><td>保留原图做底稿</td><td class="good">对</td><td>出印刷品、后续重压都靠它</td></tr>
+    <tr><td>WebP q90–q92</td><td class="good">对</td><td>实测 q90 全分辨率 43.2 dB、最差 40.0 dB，稳在肉眼不可辨区间</td></tr>
+    <tr><td>排除 AVIF</td><td class="good">对</td><td>微信场景支持率不稳；编码成本不划算</td></tr>
+    <tr><td>内联模糊占位图</td><td class="good">对</td><td>实测 190 B / 张</td></tr>
+    <tr><td>视频宽高入库并下发</td><td class="good">对</td><td>ffprobe 已有数据</td></tr>
+    <tr><td>两轮请求合并、加骨架屏</td><td class="good">对</td><td>与框架官方推荐一致</td></tr>
+    <tr><td class="warn">只交付单一尺寸的展示图</td><td class="bad">漏了</td><td>缺 srcset 分级，也没区分「列表缩略」与「点开大图」两级</td></tr>
+    <tr><td class="warn">未涉及加载优先级与连接竞争</td><td class="bad">漏了</td><td>缺 API 与静态分流的低成本解法</td></tr>
+    <tr><td class="warn">CDN 排在最后「以后再说」</td><td class="bad">定位偏了</td><td>它是收益最大的一层，只是恰好被备案卡住——应当标为「已排期，等待备案」，而不是「可选优化」</td></tr>
+    <tr><td class="warn">未做 URL 抽象</td><td class="bad">漏了</td><td>将来切 CDN 时全站图片地址要统一走一个函数，现在埋进去成本几乎为零</td></tr>
+  </tbody>
+</table>
+
+<div class="callout dai">
+  <p><strong>顺带上一份长期隐患：</strong>素材里 <code>murpboe2-4608157c.png</code> 实际是 379 字节的 HTML 错误页，却被当成 PNG 存下来、并以 <code>image/png</code> 返回 200。目前没有接口引用它，不影响线上，但它说明上传链路曾经放过不该放的东西。任何一道「真解码校验」都能拦住它。</p>
+</div>
+
+<h2><span class="no">Part 06</span>建议的推进顺序（待确认）</h2>
+<ol>
+  <li><strong>素材加工链</strong>——WebP 展示档 + 480/780 两个缩略档 + 几十字节占位 hash，一次跑完。不动原图，随时回滚。</li>
+  <li><strong>URL 抽象层</strong>——所有图片地址收敛到一个函数里去拼，为将来切 CDN 做准备，此刻成本几乎为零。</li>
+  <li><strong>视频宽高入库下发 + CSS 用真实比例</strong>——改动集中在下发与消费两端。</li>
+  <li><strong>交互反馈</strong>——骨架屏 + 请求并行化 + API 独立端口，与前两项无耦合。</li>
+  <li><strong>上传流水线接入同一套加工</strong>——防止新素材复发，前四项验证通过再动。</li>
+  <li><strong>域名备案一下来</strong>——立刻把图迁进 COS + CDN + 数据万象，那时候今天的加工逻辑可以直接改由 URL 参数在云端完成，本地流水线可以整体退役。</li>
+</ol>
+
+<footer>
+  予时妍 YUÉ ATELIER · 业界做法调研 · 2026-10-04<br>
+  纯研究稿，未改动任何代码。数据来自腾讯云官方文档、Next.js 官方文档、MDN、web.dev，及本机对本仓库素材的实测。
+</footer>
+
+</div>
+</body>
+</html>

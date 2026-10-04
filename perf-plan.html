@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>性能与交互根治方案 · 予时妍 YUÉ ATELIER</title>
+<style>
+  :root{
+    --paper:#FBF6F5; --rose:#C08994; --champagne:#C8AE84;
+    --silk:#F8F5F1; --crimson:#9E4E55; --gold:#C0A46F; --dai:#6E7C76;
+    --ink:#17130f; --ink-70:#4a423c; --ink-45:#7d746d; --ink-20:#c9c2bb;
+    --line:rgba(23,19,15,.10);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:0 20px 80px;
+    background:var(--paper); color:var(--ink);
+    font:400 15px/1.75 "Songti SC","Source Han Serif SC",Georgia,serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px;margin:0 auto}
+  header{padding:72px 0 40px;border-bottom:1px solid var(--line)}
+  .kicker{
+    font:400 11px/1 "Helvetica Neue",system-ui,sans-serif;
+    letter-spacing:.28em; color:var(--rose); text-transform:uppercase;
+  }
+  h1{
+    margin:18px 0 10px; font-weight:400; font-size:38px; line-height:1.25;
+    letter-spacing:.02em;
+  }
+  .sub{color:var(--ink-45);font-size:14px;letter-spacing:.04em}
+  .meta{
+    margin-top:22px;font:400 12px/1.8 "Helvetica Neue",system-ui,sans-serif;
+    color:var(--ink-45);letter-spacing:.03em
+  }
+  h2{
+    margin:64px 0 6px; font-weight:400; font-size:23px; letter-spacing:.02em;
+    padding-top:26px; border-top:1px solid var(--line);
+  }
+  h2 .no{
+    font:400 11px/1 "Helvetica Neue",system-ui,sans-serif;
+    letter-spacing:.2em; color:var(--champagne); display:block; margin-bottom:12px;
+  }
+  h3{margin:34px 0 10px;font-weight:400;font-size:17px;color:var(--ink)}
+  p{margin:12px 0}
+  .lead{color:var(--ink-70);font-size:16px}
+  ul{margin:12px 0;padding-left:0;list-style:none}
+  li{
+    position:relative;padding-left:20px;margin:9px 0;color:var(--ink-70);font-size:14px;
+  }
+  li::before{
+    content:"";position:absolute;left:2px;top:.72em;
+    width:5px;height:5px;background:var(--rose);border-radius:50%;
+  }
+  code{
+    font:400 13px/1.5 "SF Mono",Menlo,Consolas,monospace;
+    background:rgba(23,19,15,.05);padding:2px 6px;border-radius:3px;color:var(--crimson);
+  }
+  table{
+    width:100%;border-collapse:collapse;margin:20px 0;
+    font:400 13.5px/1.6 "SF Mono",Menlo,Consolas,monospace;
+  }
+  th{
+    text-align:left;padding:9px 12px;border-bottom:1px solid var(--ink-20);
+    font-weight:400;font-size:11px;letter-spacing:.14em;color:var(--ink-45);
+    text-transform:uppercase;
+  }
+  td{padding:9px 12px;border-bottom:1px solid var(--line);color:var(--ink-70)}
+  tr:last-child td{border-bottom:none}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .tot td{border-top:1px solid var(--ink-20);color:var(--ink);font-weight:500}
+  .callout{
+    margin:26px 0;padding:18px 22px;background:var(--silk);
+    border-left:2px solid var(--crimson);border-radius:0 4px 4px 0;
+  }
+  .callout.rose{border-left-color:var(--rose)}
+  .callout.gold{border-left-color:var(--champagne)}
+  .callout p{margin:0;font-size:14px;color:var(--ink-70)}
+  .callout strong{font-weight:400;color:var(--ink)}
+  .tag{
+    display:inline-block;padding:2px 9px;border-radius:2px;font-size:11px;
+    font-family:"Helvetica Neue",system-ui,sans-serif;letter-spacing:.08em;
+    vertical-align:middle;
+  }
+  .t-p0{background:rgba(158,78,85,.12);color:var(--crimson)}
+  .t-p1{background:rgba(192,142,132,.16);color:#8a5f52}
+  .t-p2{background:rgba(110,124,118,.14);color:var(--dai)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:22px 0}
+  .card{
+    padding:18px 20px;background:var(--silk);border:1px solid var(--line);border-radius:6px;
+  }
+  .card .k{
+    font:400 11px/1 "Helvetica Neue",system-ui,sans-serif;letter-spacing:.18em;
+    color:var(--ink-45);text-transform:uppercase;
+  }
+  .card .v{
+    margin-top:10px;font-size:30px;line-height:1;color:var(--ink);
+    font-family:"Helvetica Neue",system-ui,sans-serif;font-weight:300;
+  }
+  .card .v em{font-style:normal;font-size:14px;color:var(--ink-45);margin-left:3px}
+  .card .d{margin-top:8px;font-size:12.5px;color:var(--ink-45);line-height:1.6}
+  .good{color:var(--dai)}
+  .bad{color:var(--crimson)}
+  footer{
+    margin-top:80px;padding-top:26px;border-top:1px solid var(--line);
+    font:400 12px/1.9 "Helvetica Neue",system-ui,sans-serif;color:var(--ink-45);
+  }
+  .rule{height:1px;background:var(--line);margin:40px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Yué Atelier · Performance Plan</div>
+  <h1>性能与交互根治方案</h1>
+  <div class="sub">图片加载、视频构图、导航响应——三个现象的定位结论与施工设计</div>
+  <div class="meta">
+    2026-10-04 &nbsp;·&nbsp; 状态：待确认，未动代码<br>
+    全部数据来自生产环境实测（119.45.182.37），非估算
+  </div>
+</header>
+
+<h2><span class="no">Part 01</span>实测现状</h2>
+<p class="lead">先看清楚问题有多大，再谈怎么修。</p>
+
+<div class="grid">
+  <div class="card">
+    <div class="k">首页精选图总量</div>
+    <div class="v">21.0<em>MB</em></div>
+    <div class="d">10 张 PNG，单张 1.3–2.5MB</div>
+  </div>
+  <div class="card">
+    <div class="k">服务器实测带宽</div>
+    <div class="v">532<em>KB/s</em></div>
+    <div class="d">云服务器上限，本地回环为 206MB/s</div>
+  </div>
+  <div class="card">
+    <div class="k">首屏满载耗时</div>
+    <div class="v bad">40<em>秒</em></div>
+    <div class="d">弱网测算约需 38–40 秒</div>
+  </div>
+  <div class="card">
+    <div class="k">API 被抢占后</div>
+    <div class="v bad">11.0<em>秒</em></div>
+    <div class="d">单独请求仅需 0.03 秒，慢 365 倍</div>
+  </div>
+</div>
+
+<h3>这三个现象不是三个独立问题</h3>
+<p>它们有一条共同的因果链：<strong>超大 PNG 占满带宽 → HTTP/1.1 六并发被吃光 → API 请求排队 → 页面无响应</strong>。根治第一项，后两项会自动大幅缓解，但各有自己的独立根因，需要分别处理。</p>
+
+<h2><span class="no">Part 02</span>根因定位</h2>
+
+<h3>现象一 · 图片加载慢、开头全空白</h3>
+<ul>
+  <li><strong>照片被存成了 PNG。</strong> PNG 是为图形设计的无损格式，存连续色调的照片时效率极低——同一张图 WebP 只需七分之一体积。</li>
+  <li><strong>上传时没有任何处理。</strong> 后端接收后直接落盘，既不转码也不生成缩略图。</li>
+  <li><strong>首屏图片拿不到懒加载保护。</strong> <code>loading="lazy"</code> 只对视口外的图生效，精选区就在首屏，必然立即并发拉取。</li>
+  <li><strong>没有占位机制。</strong> 图没到之前 DOM 是真空的，所以你看到的是一片白。</li>
+</ul>
+<div class="callout rose">
+  <p><strong>注意：</strong>Nginx 这一侧的缓存与压缩配置<strong>全部正确</strong>——gzip 已生效、静态资源有 immutable 长缓存、Range 分片正常。问题出在素材本身和上传流程，<strong>不需要改 Nginx</strong>。</p>
+</div>
+
+<h3>现象二 · 视频初始竖屏变形</h3>
+<ul>
+  <li>视频容器 CSS 写死了 <code>aspect-ratio: 9/16</code>（竖屏），横屏视频被塞进竖框，由 <code>object-fit: cover</code> 强行裁切——这就是你看到的变形。</li>
+  <li>真实比例要等 <code>loadedmetadata</code> 事件才能写入，而该事件依赖元数据下载完成，慢网下要等很久。</li>
+  <li><strong>接口没有下发视频宽高。</strong> <code>/api/home</code> 的 <code>videos</code> 字段只有 <code>key</code> 和 <code>posterKey</code>。对比之下，同一个 <code>/api/home</code> 接口的 <code>featured</code> 图片是<strong>有</strong> <code>w</code>/<code>h</code>/<code>ratio</code> 的——设计时想到了图片，视频这块漏了。</li>
+  <li>后端 <code>probeVideo()</code> 早已用 ffprobe 读到了宽高，只是没有落库也没有下发。</li>
+</ul>
+
+<h3>现象三 · 点了「作品」「联系」没反应 <span class="tag t-p1">非 JS 崩溃</span></h3>
+<ul>
+  <li>路由采用<strong>离屏渲染</strong>：<code>await</code> 取数期间旧页面保持可见，DOM 一个字都不改。好处是不会白屏，代价是等待期完全静默。</li>
+  <li><code>collection</code> 视图存在<strong>两轮串行等待</strong>——先拉系列列表，再并行拉各系列册数。</li>
+  <li>HTTP/1.1（没有 HTTPS 就没有 HTTP/2）下浏览器<strong>每域名仅 6 条并发</strong>，API 请求排在八张 PNG 后面慢慢等。</li>
+  <li>等待期唯一的视觉反馈是顶部一条进度条，几乎察觉不到。</li>
+</ul>
+
+<h2><span class="no">Part 03</span>画质会不会下降</h2>
+<p class="lead">这是最关键的问题，用实测回答，不用感觉。</p>
+
+<p>取首屏最大的一张（1024×1536，2.53MB），按<strong>手机真实观看条件</strong>比对——CSS 宽 390px、二倍屏即 780 物理像素，所有方案统一缩到这个尺寸后再与原图逐像素计算 PSNR。PSNR 达到 40dB 即为肉眼不可分辨。</p>
+
+<table>
+  <thead><tr><th>方案</th><th class="num">体积</th><th class="num">缩小</th><th class="num">PSNR</th><th class="num">平均误差</th><th>肉眼判断</th></tr></thead>
+  <tbody>
+    <tr><td>PNG 现状</td><td class="num">2586 KB</td><td class="num">—</td><td class="num">99.0 dB</td><td class="num">0.00</td><td>比对基准</td></tr>
+    <tr><td>WebP q95</td><td class="num">499 KB</td><td class="num">5.2×</td><td class="num">41.8 dB</td><td class="num">1.41</td><td class="good">不可分辨</td></tr>
+    <tr><td>WebP q90　<span class="tag t-p0">推荐</span></td><td class="num">356 KB</td><td class="num">7.3×</td><td class="num">40.0 dB</td><td class="num">1.75</td><td class="good">不可分辨</td></tr>
+    <tr><td>WebP q85</td><td class="num">276 KB</td><td class="num">9.4×</td><td class="num">38.3 dB</td><td class="num">2.12</td><td>极轻微</td></tr>
+    <tr><td>WebP q80</td><td class="num">229 KB</td><td class="num">11.3×</td><td class="num">37.0 dB</td><td class="num">2.43</td><td>极轻微</td></tr>
+    <tr><td>JPEG q90</td><td class="num">427 KB</td><td class="num">6.1×</td><td class="num">39.0 dB</td><td class="num">1.87</td><td>极轻微</td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <p><strong>结论：不会。</strong> 推荐档 WebP q90 的平均像素偏差是 1.75（灰度 0–255），折合 <strong>0.7%</strong>——远低于屏幕本身色差、环境光和观看距离能分辨的程度。更重要的是<strong>分辨率完全不变</strong>，1024×1536 一个像素都没减，只换了编码方式。这不是压缩，是去掉格式浪费。</p>
+</div>
+
+<p>考虑到这是作品集、你对画面要求高，我建议走<strong>保守档 q92</strong>：仍比现在小约 6 倍，但画质余量更足。也可以按你的判断用 q90。</p>
+
+<h2><span class="no">Part 04</span>根治设计</h2>
+<p class="lead">核心思路：<strong>访客访问时不做任何压缩，所有工作在上传那一刻完成。</strong></p>
+
+<h3><span class="tag t-p0">P0</span> 素材流水线（上传时处理一次）</h3>
+<p>后台接收文件后增加一道处理环节，产出三类文件：</p>
+<ul>
+  <li><strong>原始文件</strong>——移入归档区，不作为前台交付源。你将来出印刷品、做高清输出仍有底稿。<span class="tag t-p2">按你的选择保留</span></li>
+  <li><strong>WebP 展示版</strong>——尺寸维持原始分辨率，q90–q92。前台实际加载这份。</li>
+  <li><strong>模糊占位图</strong>——约 1KB 的极低分辨率版本。它随接口内联下发，图没到之前先显示模糊轮廓，<strong>直接消灭「开头全白」</strong>。</li>
+</ul>
+<p>顺带解决一个隐患：处理环节第一步做<strong>真实解码校验</strong>。当前素材里已发现一个假图片——<code>murpboe2-4608157c.png</code> 实际是 379 字节的 HTML 错误页，却被存成 PNG 并以 <code>image/png</code> 返回 200。目前它没有被任何接口引用，属历史残留，但足以说明链路曾经出过问题。</p>
+<p><strong>JPEG 兜底</strong>：iOS 14+ 与微信 X5 均支持 WebP，但为极少数老环境保留一份 JPEG，由 <code>&lt;picture&gt;</code> 标签自动降级。AVIF 不予考虑——压缩率略好，但微信内置浏览器支持不稳。</p>
+
+<h3><span class="tag t-p0">P0</span> 存量素材一次性处理</h3>
+<p>现有 20 张有效静态图用同样规格批量重做，历史素材同步瘦身：</p>
+<table>
+  <thead><tr><th>范围</th><th class="num">现在</th><th class="num">WebP q90</th><th class="num">WebP q95</th></tr></thead>
+  <tbody>
+    <tr><td>20 张有效静态图</td><td class="num">21.01 MB</td><td class="num">2.96 MB</td><td class="num">4.57 MB</td></tr>
+    <tr class="tot"><td>压缩比</td><td class="num">—</td><td class="num">7.1×</td><td class="num">4.6×</td></tr>
+    <tr class="tot"><td>首屏耗时（0.52MB/s）</td><td class="num">40.4 秒</td><td class="num">5.7 秒</td><td class="num">8.8 秒</td></tr>
+  </tbody>
+</table>
+<p>原图全部保留，随时可回滚——这是一道不可逆性很低的改动。</p>
+
+<h3><span class="tag t-p1">P1</span> 视频元信息补充</h3>
+<ul>
+  <li>后端已有 ffprobe 数据，补两个字段落库：<code>video_width</code>、<code>video_height</code>。</li>
+  <li><code>/api/home</code> 的 <code>videos</code> 增加 <code>w</code>/<code>h</code> 下发，与图片字段口径对齐。</li>
+  <li>前端用真实比例初始化容器宽高比——<strong>第一帧即正确构图</strong>，不再依赖 <code>loadedmetadata</code>。</li>
+  <li>CSS 默认值从写死的 <code>9/16</code> 改为：有元信息时用元信息，没有时才回退。</li>
+</ul>
+
+<h3><span class="tag t-p1">P1</span> 交互反馈</h3>
+<ul>
+  <li><code>collection</code> 视图的两轮串行等待合并为一次并行请求。</li>
+  <li>路由切换时立即给出明确反馈——骨架屏或当前区域的脉动占位，而不是只有一条几乎看不见的顶部进度条。</li>
+  <li>图片进入视口的过程保留现有的淡入动效，配合占位图形成完整的加载叙事。</li>
+</ul>
+
+<div class="callout gold">
+  <p><strong>关于视频本身：</strong>当前 20MB 的主视频即使在优化后仍是首屏最重的单项。建议本次<strong>不动视频文件</strong>（它的封面图正常、也有 Range 分片，播放体验尚可），只修构图问题。等前端这一轮稳定后，再单独评估是否需要压制视频码率或改走 CDN。</p>
+</div>
+
+<h2><span class="no">Part 05</span>验收标准</h2>
+<p>每一项都要能用数据回答，不接受「感觉快了」。</p>
+
+<table>
+  <thead><tr><th>指标</th><th class="num">现在</th><th class="num">目标</th><th>验收方式</th></tr></thead>
+  <tbody>
+    <tr><td>首页精选图总下载量</td><td class="num">21.0 MB</td><td class="num">≤ 3.5 MB</td><td>逐个拉取累加字节数</td></tr>
+    <tr><td>首屏视觉完整耗时</td><td class="num">≈40 秒</td><td class="num">≤ 8 秒</td><td>限速至 500KB/s 后实测</td></tr>
+    <tr><td>首屏是否出现全白</td><td class="num">会</td><td class="num">不会</td><td>慢网下逐帧观察占位是否先于图片出现</td></tr>
+    <tr><td>视频首帧构图</td><td class="num">竖屏变形</td><td class="num">正确</td><td>清除缓存后立即截图，不等播放</td></tr>
+    <tr><td>点击导航到内容出现</td><td class="num">≈11 秒</td><td class="num">≤ 1.5 秒</td><td>图片加载同时进行时点击计时</td></tr>
+    <tr><td>点击后是否有即时反馈</td><td class="num">几乎无</td><td class="num">有</td><td>骨架屏应在 100ms 内出现</td></tr>
+  </tbody>
+</table>
+
+<h2><span class="no">Part 06</span>执行顺序与风险</h2>
+<ol style="padding-left:22px;margin:14px 0">
+  <li style="padding-left:4px;margin:10px 0;font-size:14px;color:var(--ink-70)"><strong>存量素材批处理</strong>（风险最低，立竿见影）。原图归档，失败可随时回滚。</li>
+  <li style="padding-left:4px;margin:10px 0;font-size:14px;color:var(--ink-70)"><strong>视频宽高字段</strong>（一次迁移 + 少量代码）。已有 ffprobe 数据，改动集中在下发与消费两端。</li>
+  <li style="padding-left:4px;margin:10px 0;font-size:14px;color:var(--ink-70)"><strong>交互反馈</strong>（纯前端）。与前两项无耦合。</li>
+  <li style="padding-left:4px;margin:10px 0;font-size:14px;color:var(--ink-70)"><strong>上传流水线改造</strong>（防复发，改动最大）。前三项验证通过后再动。</li>
+</ol>
+
+<div class="callout">
+  <p><strong>唯一的真实成本：</strong>上传时每张图多花 1–3 秒做转码。按当前素材量，后台上传一张 2.5MB 的图约增加 2 秒等待——换来的是每位访客节省 30 秒以上。这笔账明显划算。</p>
+</div>
+
+<footer>
+  予时妍 YUÉ ATELIER · 性能与交互根治方案 · 2026-10-04<br>
+  状态：待确认。本稿为施工设计，尚未修改任何项目代码。
+</footer>
+
+</div>
+</body>
+</html>
