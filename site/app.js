@@ -5,18 +5,18 @@
 
 import { initRouter } from './router.js';
 import { initGlass } from './components/glass.js';
-import { mountDock } from './components/dock.js?v=20261005h';
+import { mountDock } from './components/dock.js?v=20261005i';
 import { initViewer } from './components/viewer.js';
 import { initInk } from './components/ink.js';
 import { initAmbient, bindReveals } from './components/reveal.js';
 import { initBackdrop } from './components/ambient.js';
-import { home } from './views/home.js?v=20261005h';
+import { home } from './views/home.js?v=20261005i';
 import { collection } from './views/collection.js';
 import { wedding } from './views/wedding.js';
-import { styleList } from './views/styleList.js?v=20261005h';
-import { album } from './views/album.js?v=20261005h';
-import { gallery } from './views/gallery.js?v=20261005h';
-import { about } from './views/about.js?v=20261005h';
+import { styleList } from './views/styleList.js?v=20261005i';
+import { album } from './views/album.js?v=20261005i';
+import { gallery } from './views/gallery.js?v=20261005i';
+import { about } from './views/about.js?v=20261005i';
 import { stub } from './views/stub.js';
 
 initGlass();

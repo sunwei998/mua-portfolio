@@ -80,18 +80,41 @@ export async function about(el) {
   `;
 
   // CTA：复制微信号（一期转化路径 = 加微信，不做在线表单）
+  // 微信 X5（http 非安全上下文）navigator.clipboard 不可用 → execCommand fallback
+  const copyText = (t) => {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(t).then(() => true, () => legacyCopy(t));
+    }
+    return Promise.resolve(legacyCopy(t));
+  };
+  const legacyCopy = (t) => {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = t;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;top:-999px;left:-999px;opacity:0;';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      ta.setSelectionRange(0, ta.value.length);
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    } catch {
+      return false;
+    }
+  };
   const cta = /** @type {HTMLButtonElement | null} */ (el.querySelector('#cta'));
   if (cta && s?.wechatId) {
-    cta.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(s.wechatId || '');
-        cta.innerHTML = '<span class="scrim"></span>已复制 · 去微信粘贴<em>Copied</em>';
-      } catch {
-        cta.innerHTML = `<span class="scrim"></span>微信号 ${s.wechatId}<em>Manual</em>`;
-      }
-      setTimeout(() => {
-        if (cta) cta.innerHTML = '<span class="scrim"></span>复制微信号<em>Book Now</em>';
-      }, 2400);
+    cta.addEventListener('click', () => {
+      copyText(s.wechatId || '').then((ok) => {
+        cta.innerHTML = ok
+          ? '<span class="scrim"></span>已复制 · 去微信粘贴<em>Copied</em>'
+          : `<span class="scrim"></span>微信号 ${s.wechatId}<em>Manual</em>`;
+        setTimeout(() => {
+          if (cta) cta.innerHTML = '<span class="scrim"></span>复制微信号<em>Book Now</em>';
+        }, 2400);
+      });
     });
   }
 }
