@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="予时妍 图标">
-  <title>予时妍 · 图标 / Favicon</title>
-  <desc>小尺寸专用版：笔画加粗到 4.4（symbol.svg 是 1.8），保证缩到 16px 仍是清晰的环与点。</desc>
-  <rect width="64" height="64" rx="15" fill="#9E4E55"/>
-  <!-- 圆周 2πr = 106.8；dasharray 88 + 18.8 -->
-  <circle cx="32" cy="32" r="17" fill="none" stroke="#FBF6F5" stroke-width="4.4"
-          stroke-linecap="round" stroke-dasharray="91.8 15" transform="rotate(155.5 32 32)"/>
-  <circle cx="32" cy="32" r="5.2" fill="#FBF6F5"/>
-</svg>
