@@ -37,7 +37,8 @@ FORCE="${FORCE:-0}"
 BACKUP_DIR="${BACKUP_DIR:-/opt/mua/backups}"
 
 # 对外端口（与 env.example 一致；update.sh 里的自检要用）
-HTTP_PORT="${HTTP_PORT:-8083}"
+# 2026-10-04 端口互换后 mua 占 80（sanhe-web 挪 8083）
+HTTP_PORT="${HTTP_PORT:-80}"
 
 say() { echo "[$(date '+%F %T')] $*"; }
 
@@ -125,7 +126,7 @@ if [ -f "$SCRIPT_DIR/.env" ]; then
   set -a; . "$SCRIPT_DIR/.env"; set +a
   MUA_DB_USER="${DB_USER:-mua}"
   MUA_DB_PASSWORD="${DB_PASSWORD:-}"
-  HTTP_PORT="${HTTP_PORT:-8083}"
+  HTTP_PORT="${HTTP_PORT:-80}"
 fi
 if [ -z "${MUA_DB_PASSWORD:-}" ]; then
   say "✗ deploy/.env 里没有 DB_PASSWORD —— 无法备份数据库，拒绝更新。"
