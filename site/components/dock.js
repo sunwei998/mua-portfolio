@@ -4,7 +4,7 @@
  * ============================================================ */
 // @ts-check
 
-import { symbolSVG } from './brandMark.js?v=20261005f';
+import { symbolSVG } from './brandMark.js?v=20261005g';
 
 /** Dock 三项（2026-10-03：关于页更名「联系」，dock 收为 首页/作品/联系） */
 const ITEMS = /** @type {const} */ ([
