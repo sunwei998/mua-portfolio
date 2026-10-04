@@ -143,6 +143,8 @@ export interface Collection {
   showTagEn: boolean;
   coverKey: string;
   strips: string[];
+  /** 该系列已发布册数（/api/collections 子查询直接下发，省掉前台逐系列计数的 N+1） */
+  albumCount: number;
   sort: number;
 }
 

@@ -45,7 +45,7 @@ export async function about(el) {
       <div class="cnsub">沟通档期 · 试妆 · 报价</div>
     </header>
     <div class="ab">
-      <div class="portrait reveal"><img src="/img/portrait.png" alt="化妆师肖像" /></div>
+      <div class="portrait reveal"><img src="/img/portrait.webp" alt="化妆师肖像" /></div>
       <div class="name cd reveal">化妆师 ${s?.byline?.nameCn || '甜茉'}</div>
       <div class="role">${s?.subLongCn || ''}</div>
       ${s?.bioCn ? `<div class="bio">${s.bioCn}</div>` : ''}

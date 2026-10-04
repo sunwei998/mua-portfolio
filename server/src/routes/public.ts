@@ -83,6 +83,7 @@ function mapCollection(r: Row): Collection {
     showTagEn: num(r.show_tag_en ?? 1) === 1,
     coverKey: str(r.cover_key),
     strips: Array.isArray(r.strips_json) ? (r.strips_json as string[]) : [],
+    albumCount: num(r.album_count ?? 0),
     sort: num(r.sort),
   };
 }
@@ -193,7 +194,11 @@ export async function registerPublicRoutes(app: FastifyInstance): Promise<void> 
   /* ③ 双封面（western/chinese，sort 保证西式在前）+ V7 新系列注册表
    *   enabled=0 的系列不返回（admin 禁用后前台整体隐藏，2026-10-02） */
   app.get('/api/collections', async (): Promise<Collection[]> => {
-    const rows = await query<Row>('SELECT * FROM collection WHERE enabled = 1 ORDER BY sort');
+    /* album_count 用相关子查询直接下发，前台不再逐系列发 /albums 请求计数（N+1 → 1） */
+    const rows = await query<Row>(
+      `SELECT c.*,
+              (SELECT COUNT(*) FROM album a WHERE a.style = c.style AND a.published = 1) AS album_count
+         FROM collection c WHERE c.enabled = 1 ORDER BY c.sort`);
     return rows.map(mapCollection);
   });
 

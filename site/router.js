@@ -96,6 +96,8 @@ async function render() {
 
   // 生命周期起点：顶部进度条起步（M5 ink，2026-10-03 改造：不再全屏遮罩）
   document.dispatchEvent(new CustomEvent('route:start'));
+  // 点击即时反馈：旧页面立即降透明 + 居中加载指示，弱网下不再像"点了没反应"
+  viewEl.classList.add('route-loading');
 
   // 主题提前切：body 背景色有 .45s 过渡，提前给过渡留时间
   const root = document.documentElement;
@@ -111,6 +113,7 @@ async function render() {
     override = (await route.view(shell, params)) || {};
   } catch (err) {
     console.error('[router] view render failed:', err);
+    viewEl.classList.remove('route-loading');
     document.dispatchEvent(new CustomEvent('route:abort'));
     return; // 旧页面原样保留
   }
@@ -127,6 +130,7 @@ async function render() {
   }
 
   viewEl.classList.remove('is-entering');
+  viewEl.classList.remove('route-loading');
   viewEl.replaceChildren(...shell.childNodes);
 
   scrollTo(0, 0);

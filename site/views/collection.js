@@ -5,7 +5,7 @@
  * ============================================================ */
 // @ts-check
 
-import { getCollections, getAlbumsByStyle } from '../api.js';
+import { getCollections } from '../api.js';
 
 /** @typedef {import('../api.js').AlbumStyle} AlbumStyle */
 
@@ -41,9 +41,9 @@ export const coverCard = (c, count) => {
 
 /** 更多时刻入口缩略图（demo 资产；M7 换真图）。engagement 稿定 w-b（婚礼次封面） */
 const THUMB_BY_STYLE = /** @type {Record<string, string>} */ ({
-  engagement: '/img/w-b.png',
-  maternity: '/img/portrait.png',
-  family: '/img/family.png',
+  engagement: '/img/w-b.webp',
+  maternity: '/img/portrait.webp',
+  family: '/img/family.webp',
 });
 
 /**
@@ -56,15 +56,10 @@ export async function collection(el) {
   const wedding = cols.filter((c) => WEDDING_STYLES.includes(c.style));
   const more = cols.filter((c) => !WEDDING_STYLES.includes(c.style));
 
-  // 双封面册数 + 更多时刻各系列册数（并行拉取）
-  const [we, cn, ...moreCounts] = await Promise.all([
-    getAlbumsByStyle('western').catch(() => []),
-    getAlbumsByStyle('chinese').catch(() => []),
-    ...more.map((c) => getAlbumsByStyle(c.style).catch(() => [])),
-  ]);
+  // 册数由后端随 /api/collections 直接下发（albumCount），无需再逐系列发请求
   /** @type {Record<string, number>} */
-  const counts = { western: we.length, chinese: cn.length };
-  more.forEach((c, i) => { counts[c.style] = (moreCounts[i] || []).length; });
+  const counts = {};
+  cols.forEach((c) => { counts[c.style] = c.albumCount || 0; });
 
   el.innerHTML = `
     <header class="ihead">
@@ -82,7 +77,7 @@ export async function collection(el) {
       ${more.map((c, i) => `
       <a class="row glass light reveal" href="/style/${c.style}">
         <span class="scrim"></span>
-        <img src="${THUMB_BY_STYLE[c.style] || '/img/hero.png'}" alt="" loading="lazy" />
+        <img src="${THUMB_BY_STYLE[c.style] || '/img/hero.webp'}" alt="" loading="lazy" />
         <span class="m">
           <span class="cd">${c.bigCn}</span>
           <span class="en">${c.taglineEn}</span>

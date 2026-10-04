@@ -17,7 +17,7 @@ import { getHome } from '../api.js';
 
 /** 兜底常量 —— featured/video 留空：降级时不虚构精选内容 */
 const FALLBACK = /** @type {const} */ ({
-  heroKey: '/img/hero.png',
+  heroKey: '/img/hero.webp',
   heroTagCn: '2026 婚礼季',
   marquee: ['婚礼跟妆', '订婚宴', '出阁宴', '孕妇照', '亲子照', '日常妆'],
   entries: [],
@@ -146,7 +146,7 @@ export async function home(el) {
       </a>
       <span class="right">
         <a class="whoami" href="/collection" aria-label="浏览作品系列">
-          <span class="pt"><img src="/img/portrait.png" alt="甜茉" /></span>
+          <span class="pt"><img src="/img/portrait.webp" alt="甜茉" /></span>
           <span class="n">${byline.nameCn}</span>
         </a>
         <span class="menu" aria-hidden="true"><span></span><span></span></span>
@@ -167,7 +167,7 @@ export async function home(el) {
       <div class="cue"><i></i><span>向下浏览</span></div>
       <a class="byline glass light" href="/collection">
         <span class="scrim"></span>
-        <span class="pt"><img src="/img/portrait.png" alt="甜茉" /></span>
+        <span class="pt"><img src="/img/portrait.webp" alt="甜茉" /></span>
         <span class="tx">
           <span class="n">${byline.nameCn} · ${byline.roleCn}</span>
           <span class="en">Tianmo · Personal Portfolio</span>

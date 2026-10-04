@@ -30,6 +30,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import sharp from 'sharp';
 import { query, execute, transaction } from './db/index.ts';
 
 const execFileP = promisify(execFile);
@@ -762,14 +763,37 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
     if (!data) return reply.code(400).send({ ok: false, error: '没有文件' });
     const mime = str(data.mimetype);
     if (!mime.startsWith('image/')) return reply.code(400).send({ ok: false, error: `只收图片，收到 ${mime}` });
-    const ext = mime === 'image/png' ? 'png' : mime === 'image/webp' ? 'webp' : mime === 'image/gif' ? 'gif' : 'jpg';
     const buf = await (data as unknown as { toBuffer: () => Promise<Buffer> }).toBuffer();
     if (buf.length > 12 * 1024 * 1024) return reply.code(400).send({ ok: false, error: '单张 ≤ 12MB' });
 
     mkdirSync(UPLOAD_DIR, { recursive: true });
-    const name = `${Date.now().toString(36)}-${randomUUID().slice(0, 8)}.${ext}`;
-    writeFileSync(path.join(UPLOAD_DIR, name), buf);
-    return { ok: true, key: `/img/uploads/${name}` };
+    const stamp = `${Date.now().toString(36)}-${randomUUID().slice(0, 8)}`;
+
+    /* GIF 动图原样落盘（sharp 会把动图压成静态首帧），只补宽高 */
+    if (mime === 'image/gif') {
+      const name = `${stamp}.gif`;
+      writeFileSync(path.join(UPLOAD_DIR, name), buf);
+      const m = await sharp(buf).metadata().catch(() => null);
+      return { ok: true, key: `/img/uploads/${name}`, w: m?.width ?? 0, h: m?.height ?? 0 };
+    }
+
+    /* 其余一律转 WebP q90（分辨率不变），并取真实宽高——防止 PNG 大图原样堆积 */
+    let out: Buffer;
+    let width: number;
+    let height: number;
+    try {
+      const img = sharp(buf);
+      const m = await img.metadata();
+      width = m.width ?? 0;
+      height = m.height ?? 0;
+      if (!width || !height) return reply.code(400).send({ ok: false, error: '图片无法识别（无有效宽高）' });
+      out = await img.webp({ quality: 90 }).toBuffer();
+    } catch (err) {
+      return reply.code(400).send({ ok: false, error: `图片处理失败：${err instanceof Error ? err.message : err}` });
+    }
+    const name = `${stamp}.webp`;
+    writeFileSync(path.join(UPLOAD_DIR, name), out);
+    return { ok: true, key: `/img/uploads/${name}`, w: width, h: height };
   });
 
   /* ---------- 视频上传（018：首页视频位；2026-10-03 接自动转码管线） ----------

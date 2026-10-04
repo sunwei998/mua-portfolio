@@ -101,6 +101,7 @@
  *  @property {boolean} [showTagCn] 卡片左下角中文描述显隐（admin 配置）
  *  @property {boolean} [showTagEn] 卡片左下角英文描述显隐（admin 配置）
  *  @property {string[]} strips
+ *  @property {number} albumCount 该系列已发布册数（后端直接下发）
  *  @property {number} sort
  */
 
@@ -179,7 +180,7 @@ const BASE = '/api';
  */
 export async function getJSON(path) {
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), 8000);
+  const timer = setTimeout(() => ctrl.abort(), 15000);
   try {
     const res = await fetch(BASE + path, { signal: ctrl.signal, headers: { Accept: 'application/json' } });
     if (!res.ok) throw new Error(`API ${res.status} · ${path}`);
