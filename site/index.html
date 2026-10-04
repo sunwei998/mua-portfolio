@@ -15,15 +15,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300&family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Jost:wght@300;400&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="/styles/tokens.css" />
-  <link rel="stylesheet" href="/styles/base.css" />
-  <link rel="stylesheet" href="/styles/ambient.css" />
-  <link rel="stylesheet" href="/styles/glass.css" />
-  <link rel="stylesheet" href="/styles/views.css" />
-  <link rel="stylesheet" href="/styles/quality.css" />
+  <!-- 静态资源版本号：每次部署改一次（?v=git短hash），配合 nginx 协商缓存双保险，
+       防微信 X5 缓存旧版导致"部署了看不到"。下次部署把下面所有 v= 换成新 commit hash -->
+  <link rel="stylesheet" href="/styles/tokens.css?v=1bb4a68" />
+  <link rel="stylesheet" href="/styles/base.css?v=1bb4a68" />
+  <link rel="stylesheet" href="/styles/ambient.css?v=1bb4a68" />
+  <link rel="stylesheet" href="/styles/glass.css?v=1bb4a68" />
+  <link rel="stylesheet" href="/styles/views.css?v=1bb4a68" />
+  <link rel="stylesheet" href="/styles/quality.css?v=1bb4a68" />
 
   <!-- 零构建入口：浏览器原生 ES modules。X5 兼容性四项在 M1 验收时真机实测 -->
-  <script type="module" src="/app.js"></script>
+  <script type="module" src="/app.js?v=1bb4a68"></script>
 </head>
 <body>
   <div id="app" class="page">
