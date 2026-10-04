@@ -8,22 +8,27 @@ import { getSite } from '../api.js';
 
 /** 关于页完整字标（内联 SVG，继承 currentColor；三字等大 · 呼吸感字距 = Logo 资产口径） */
 const WORDMARK = `
-<svg viewBox="0 0 240 100" aria-label="予时妍 YUÉ ATELIER">
+<svg viewBox="0 0 240 100" aria-label="茉與妝 MO·BEAUTÉ">
   <g transform="translate(4,26) scale(0.75)" fill="none">
-    <circle cx="32" cy="32" r="22.5" stroke="currentColor" stroke-width="2.4"
-            stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
-    <circle cx="32" cy="32" r="5.1" fill="currentColor" stroke="none"/>
+    <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+      <ellipse cx="32" cy="18.5" rx="6.5" ry="11" transform="rotate(0 32 32)"/>
+      <ellipse cx="32" cy="18.5" rx="6.5" ry="11" transform="rotate(72 32 32)"/>
+      <ellipse cx="32" cy="18.5" rx="6.5" ry="11" transform="rotate(144 32 32)"/>
+      <ellipse cx="32" cy="18.5" rx="6.5" ry="11" transform="rotate(216 32 32)"/>
+      <ellipse cx="32" cy="18.5" rx="6.5" ry="11" transform="rotate(288 32 32)"/>
+    </g>
+    <circle cx="32" cy="32" r="3.4" fill="currentColor" stroke="none"/>
   </g>
   <line x1="63" y1="26" x2="63" y2="74" stroke="currentColor" stroke-width="0.7" opacity="0.22"/>
   <text font-family="Noto Serif SC,serif" font-weight="200" fill="currentColor">
-    <tspan x="76" y="58" font-size="33">予</tspan>
-    <tspan x="118.9" y="58" font-size="33">时</tspan>
-    <tspan x="165.1" y="58" font-size="33" fill="var(--accent)">妍</tspan>
+    <tspan x="76" y="58" font-size="33">茉</tspan>
+    <tspan x="121" y="58" font-size="33">與</tspan>
+    <tspan x="167" y="58" font-size="33" fill="var(--accent)">妝</tspan>
   </text>
   <circle cx="85" cy="68.6" r="1.7" fill="var(--gold)"/>
   <line x1="90" y1="68.6" x2="198" y2="68.6" stroke="var(--gold)" stroke-width="0.9" stroke-linecap="round"/>
   <text x="85" y="86" font-size="8.6" letter-spacing="3.5" fill="currentColor" opacity="0.74"
-        font-family="Bodoni Moda,Georgia,serif">YUÉ ATELIER</text>
+        font-family="Bodoni Moda,Georgia,serif">MO·BEAUTÉ</text>
 </svg>`;
 
 /**

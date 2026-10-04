@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /* Layout.vue —— 登录后的壳：侧栏 + 内容路由出口（2026-10-03 品牌化重做）
  * 侧栏：暖纸底 + 金线右缘；brand 区为真 logo（内联 symbol SVG，currentColor 上色）
- * + 予时妍 serif 字标 + YUÉ ATELIER 9px 疏排。菜单 serif 疏排，active = 玫瑰字 + 金线前缀。
+ * + 茉與妝 serif 字标 + MO·BEAUTÉ 9px 疏排。菜单 serif 疏排，active = 玫瑰字 + 金线前缀。
  * 逻辑不变：401 统一踢回 /login；退出清 token。
  */
 import { computed } from 'vue';
@@ -35,8 +35,8 @@ function logout() {
                   stroke-linecap="round" stroke-dasharray="121.4 20" transform="rotate(155.5 32 32)"/>
           <circle cx="32" cy="32" r="5.1" fill="currentColor"/>
         </svg>
-        <p class="wm">予时妍</p>
-        <p class="en"><i aria-hidden="true"></i><span>YUÉ ATELIER · ADMIN</span><i aria-hidden="true"></i></p>
+        <p class="wm">茉與妝</p>
+        <p class="en"><i aria-hidden="true"></i><span>MO·BEAUTÉ · ADMIN</span><i aria-hidden="true"></i></p>
       </div>
 
       <el-menu :default-active="active" router class="menu">

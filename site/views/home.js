@@ -11,7 +11,7 @@
  * ============================================================ */
 // @ts-check
 
-import { symbolSVG } from '../components/brandMark.js';
+import { symbolSVG } from '../components/brandMark.js?v=20261005b';
 import { registerGroup } from '../components/viewer.js';
 import { getHome } from '../api.js';
 
@@ -140,7 +140,7 @@ export async function home(el) {
 
   el.innerHTML = `
     <header class="topnav">
-      <a class="brandlock" href="/" aria-label="予时妍 YUÉ ATELIER">
+      <a class="brandlock" href="/" aria-label="茉與妝 MO·BEAUTÉ">
         ${symbolSVG()}
         <span class="cn">予时<span class="ac">妍</span></span>
       </a>

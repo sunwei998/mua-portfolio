@@ -59,8 +59,8 @@ async function submit() {
       <div class="form">
         <header class="brand">
           <span class="mark" aria-hidden="true">妍</span>
-          <h1>予时妍</h1>
-          <p class="sub"><span>YUÉ ATELIER</span><i aria-hidden="true"></i><span>管理后台</span></p>
+          <h1>茉與妝</h1>
+          <p class="sub"><span>MO·BEAUTÉ</span><i aria-hidden="true"></i><span>管理后台</span></p>
         </header>
 
         <el-form label-position="top" @submit.prevent="submit">
@@ -83,7 +83,7 @@ async function submit() {
           </el-button>
         </el-form>
 
-        <p class="foot">仅限授权人员访问 · 予时妍 YUÉ ATELIER</p>
+        <p class="foot">仅限授权人员访问 · 茉與妝 MO·BEAUTÉ</p>
       </div>
     </section>
   </div>

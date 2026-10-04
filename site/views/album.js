@@ -322,7 +322,7 @@ function renderSection(sec, style, gid, pos) {
   const media = isMulti ? multiGrid(sec.photos, sec, gid) : shotFlow(sec.photos, sec, gid);
 
   // v6 第 11 屏：走 mg 体系（多张）的段落头升级为「章节落款」形态 ——
-  // 大序号 + 段名 + 英文 + 右端竖排三字印（全站唯一繁体「予時妍」落款，
+  // 大序号 + 段名 + 英文 + 右端竖排三字印（全站唯一繁体「茉與妝」落款，
   // 放在章节开头而非结尾，避免与「下一册」分页器打架）。
   // 单张 moon 段保留普通章节头（对齐 v6 05/06 屏）。
   // 2026-10-03：序号与中文段名改逐字上浮（.ln），英文副行走整体快起 —— 快慢两层错位。
@@ -335,7 +335,7 @@ function renderSection(sec, style, gid, pos) {
           <span class="en">${sec.titleEn} · ${sec.photos.length} photos</span>
         </span>
       </span>
-      <span class="sealv" aria-hidden="true">予<br/>時<br/>妍</span>
+      <span class="sealv" aria-hidden="true">茉<br/>與<br/>妝</span>
     </div>`
     : `
     <div class="crow"><span class="cnum">${lineChars(num)}</span><span class="bar"></span><span class="en">${sec.titleEn}</span></div>
@@ -471,7 +471,7 @@ function renderFlat(el, a, siblings) {
 
   bindInteract(el, a);
 
-  return { theme: THEME_BY_STYLE[a.style] || 'ms', title: `${a.titleCn} · 予时妍 YUÉ ATELIER` };
+  return { theme: THEME_BY_STYLE[a.style] || 'ms', title: `${a.titleCn} · 茉與妝 MO·BEAUTÉ` };
 }
 
 /**
@@ -486,7 +486,7 @@ export async function album(el, params) {
     /* 404 = slug 无效或所属系列在后台被禁用（enabled=0），统一口径 */
     el.innerHTML = `<div class="stub"><span class="no">404</span><h1>内容暂未开放</h1>
       <a class="back" href="/collection">返回系列</a></div>`;
-    return { theme: 'ms', title: '内容暂未开放 · 予时妍 YUÉ ATELIER' };
+    return { theme: 'ms', title: '内容暂未开放 · 茉與妝 MO·BEAUTÉ' };
   }
   const theme = THEME_BY_STYLE[a.style] || 'ms';
 
@@ -535,5 +535,5 @@ export async function album(el, params) {
   bindInteract(el, a);
   trackViewAndPaint(el, a.slug);
 
-  return { theme, title: `${a.titleCn} · 予时妍 YUÉ ATELIER` };
+  return { theme, title: `${a.titleCn} · 茉與妝 MO·BEAUTÉ` };
 }

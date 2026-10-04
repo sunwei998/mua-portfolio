@@ -17,7 +17,7 @@ export async function gallery(el, params) {
   if (!g) {
     el.innerHTML = `<div class="stub"><span class="no">404</span><h1>图集不存在</h1>
       <a class="back" href="/">返回首页</a></div>`;
-    return { title: '图集不存在 · 予时妍 YUÉ ATELIER' };
+    return { title: '图集不存在 · 茉與妝 MO·BEAUTÉ' };
   }
 
   registerGroup('gallery', g.photos, g.titleCn);
@@ -37,7 +37,7 @@ export async function gallery(el, params) {
     <div class="cue" style="margin-top:26px"><i></i><em>END</em></div>
   `;
 
-  return { title: `${g.titleCn} · 予时妍 YUÉ ATELIER` };
+  return { title: `${g.titleCn} · 茉與妝 MO·BEAUTÉ` };
 }
 
 /**

@@ -68,11 +68,11 @@ export function styleList(style) {
     } catch {
       /* 404 = 系列在后台被禁用（enabled=0），与「尚无册目」区分 */
       el.innerHTML = `<div class="stub"><h1>系列暂未开放</h1><a class="back" href="/collection">返回系列</a></div>`;
-      return { title: `${head.cnsub} · 予时妍 YUÉ ATELIER` };
+      return { title: `${head.cnsub} · 茉與妝 MO·BEAUTÉ` };
     }
     if (albums.length === 0) {
       el.innerHTML = `<div class="stub"><h1>尚无册目</h1><p>后台发布后这里会出现册列表</p><a class="back" href="/collection">返回系列</a></div>`;
-      return { title: `${head.cnsub} · 予时妍 YUÉ ATELIER` };
+      return { title: `${head.cnsub} · 茉與妝 MO·BEAUTÉ` };
     }
 
     el.innerHTML = `
