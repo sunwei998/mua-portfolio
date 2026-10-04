@@ -96,10 +96,6 @@
   font-weight: 200;
   line-height: 1.25;
 }
-.hero .lead .mo-glyph {
-  stroke-width: 1.7;
-  vertical-align: -0.13em;
-}
 .hero .lead .rose {
   color: var(--accent);
 }

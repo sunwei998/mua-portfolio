@@ -9,7 +9,6 @@
 
 import { getAlbum, getAlbumsByStyle } from '../api.js';
 import { ICON_EYE, ICON_HEART } from '../components/icons.js';
-import { moGlyphSVG } from '../components/brandMark.js?v=20261005d';
 import { registerGroup } from '../components/viewer.js';
 import { isLiked, likeAlbum, trackView } from '../components/interact.js';
 
@@ -336,7 +335,7 @@ function renderSection(sec, style, gid, pos) {
           <span class="en">${sec.titleEn} · ${sec.photos.length} photos</span>
         </span>
       </span>
-      <span class="sealv" aria-hidden="true">${moGlyphSVG()}<br/>與<br/>妝</span>
+      <span class="sealv" aria-hidden="true">茉<br/>與<br/>妝</span>
     </div>`
     : `
     <div class="crow"><span class="cnum">${lineChars(num)}</span><span class="bar"></span><span class="en">${sec.titleEn}</span></div>

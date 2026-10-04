@@ -5,7 +5,6 @@
 // @ts-check
 
 import { getSite } from '../api.js';
-import { moGlyphSVG } from '../components/brandMark.js?v=20261005d';
 
 /** 关于页完整字标（内联 SVG，继承 currentColor；三字等大 · 呼吸感字距 = Logo 资产口径） */
 const WORDMARK = `
@@ -22,20 +21,7 @@ const WORDMARK = `
   </g>
   <line x1="63" y1="26" x2="63" y2="74" stroke="currentColor" stroke-width="0.7" opacity="0.22"/>
   <text font-family="Noto Serif SC,serif" font-weight="200" fill="currentColor">
-    <g transform="translate(62.7,23.5) scale(0.516)" fill="none">
-      <g stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-        <ellipse cx="32" cy="13.5" rx="6.2" ry="10.5" transform="rotate(0 32 24)"/>
-        <ellipse cx="32" cy="13.5" rx="6.2" ry="10.5" transform="rotate(72 32 24)"/>
-        <ellipse cx="32" cy="13.5" rx="6.2" ry="10.5" transform="rotate(144 32 24)"/>
-        <ellipse cx="32" cy="13.5" rx="6.2" ry="10.5" transform="rotate(216 32 24)"/>
-        <ellipse cx="32" cy="13.5" rx="6.2" ry="10.5" transform="rotate(288 32 24)"/>
-        <path d="M22 43.5 H42"/>
-        <path d="M32 43.5 V59.5"/>
-        <path d="M30 49 Q25 54.5 21.5 61"/>
-        <path d="M34 49 Q39 54.5 42.5 61"/>
-      </g>
-      <circle cx="32" cy="24" r="3" fill="currentColor" stroke="none"/>
-    </g>
+    <tspan x="76" y="58" font-size="33">茉</tspan>
     <tspan x="121" y="58" font-size="33">與</tspan>
     <tspan x="167" y="58" font-size="33" fill="var(--accent)">妝</tspan>
   </text>
@@ -77,7 +63,7 @@ export async function about(el) {
         <div class="sub2en">Bridal &amp; Daily</div>
         <span class="hairline"></span>
         <div class="cn" style="font-size:11px;letter-spacing:.22em;color:var(--muted)">${s?.taglineCn || ''}</div>
-        <span class="sealv" style="margin:20px auto 0" aria-hidden="true">${moGlyphSVG()}<br/>與<br/>妝</span>
+        <span class="sealv" style="margin:20px auto 0" aria-hidden="true">茉<br/>與<br/>妝</span>
       </div>
 
       <div class="qrb glass reveal" id="contact">
