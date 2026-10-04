@@ -106,6 +106,7 @@ function mapSettings(r: Row): SiteSettings {
     wechatId: strN(r.wechat_id),
     qrcodeKey: strN(r.qrcode_key),
     ogImageKey: strN(r.og_image_key),
+    portraitKey: strN(r.portrait_key),
   };
 }
 
@@ -186,6 +187,7 @@ export async function registerPublicRoutes(app: FastifyInstance): Promise<void> 
       entries,
       byline: { nameCn: bylineParts[0] ?? '', roleCn: bylineParts[1] ?? '' },
       taglineCn: str(st.tagline_cn),
+      portraitKey: strN(st.portrait_key),
       featured,
       videos,
     };

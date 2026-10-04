@@ -1916,3 +1916,23 @@ html.noblur .ab-back {
   text-indent: 0.42em;
   color: rgba(243, 233, 216, 0.45);
 }
+
+/* ---------- 茉字呼吸 loading（027）：大图加载完成前，占位区显示「茉」字呼吸 ----------
+ * 纯 CSS：容器 isolation 建独立层，::before 茉字 z-index:-1 沉底呼吸，
+ * img 一加载即自然盖住；头像（.pt/.portrait）与二维码小图不参与。 */
+.ph { isolation: isolate; }
+.ph::before {
+  content: '茉';
+  position: absolute; inset: 0; z-index: -1;
+  display: flex; align-items: center; justify-content: center;
+  font-family: "Noto Serif SC", serif; font-weight: 200; font-size: 17px;
+  letter-spacing: 0.08em; color: rgba(154, 143, 132, 0.85);
+  animation: mo-breathe 2.2s ease-in-out infinite alternate;
+}
+@keyframes mo-breathe {
+  from { opacity: 0.3; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ph::before { animation: none; opacity: 0.55; }
+}

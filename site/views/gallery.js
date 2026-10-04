@@ -52,5 +52,5 @@ export async function gallery(el, params) {
  */
 function figImg(p, wide = false) {
   const wh = !p.w || !p.h ? '' : ` width="${p.w}" height="${p.h}"`;
-  return `<span class="rv-fig${wide ? ' wide' : ''}"><img class="fit" src="${p.cosKey}" alt="${p.captionCn || ''}"${wh} loading="lazy" decoding="async" /></span>`;
+  return `<span class="rv-fig ph${wide ? ' wide' : ''}"><img class="fit" src="${p.cosKey}" alt="${p.captionCn || ''}"${wh} loading="lazy" decoding="async" /></span>`;
 }

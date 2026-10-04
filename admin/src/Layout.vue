@@ -63,7 +63,7 @@ function logout() {
 }
 
 /* ---- 品牌区 ---- */
-.brand { padding: 30px 0 24px; text-align: center; }
+.brand { padding: 24px 0 22px; text-align: center; }
 .brand .wm {
   margin: 12px 0 0;
   font-family: var(--mua-serif, serif); font-weight: 300;

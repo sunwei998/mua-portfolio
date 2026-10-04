@@ -215,6 +215,7 @@ export interface AdminSite {
   wechatId: string | null;
   qrcodeKey: string | null;
   ogImageKey: string | null;
+  portraitKey: string | null;
   /** 018 建列；020 扩双位、021 扩五位（video2~5*；null = 该位占位态）；022 加宽高时长 */
   videoKey: string | null;
   videoPosterKey: string | null;

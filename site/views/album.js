@@ -138,7 +138,7 @@ const whAttr = (p) => (!p || typeof p === 'string' || !p.w || !p.h
  */
 const figImg = (p, alt = '', wide = false) => {
   const src = typeof p === 'string' ? p : p.cosKey;
-  return `<span class="rv-fig${wide ? ' wide' : ''}"><img src="${src}" alt="${alt}"${whAttr(p)} loading="lazy" decoding="async" /></span>`;
+  return `<span class="rv-fig ph${wide ? ' wide' : ''}"><img src="${src}" alt="${alt}"${whAttr(p)} loading="lazy" decoding="async" /></span>`;
 };
 
 /**
@@ -214,7 +214,7 @@ function trackViewAndPaint(el, slug) {
  *  wide：跳过 clip-path 裁剪。duo 并排小图必须 wide ——
  *  它的圆角 + 投影按 views.css 挂在包裹层上，clip-path 会把自身 box-shadow 一起裁掉。 */
 const vimg = (p, gid, i, alt = '', wide = true) =>
-  `<span class="rv-fig${wide ? ' wide' : ''}" data-vgroup="${gid}" data-vi="${i}"><img src="${p.cosKey}" alt="${alt}"${whAttr(p)} loading="lazy" decoding="async" /></span>`;
+  `<span class="rv-fig ph${wide ? ' wide' : ''}" data-vgroup="${gid}" data-vi="${i}"><img src="${p.cosKey}" alt="${alt}"${whAttr(p)} loading="lazy" decoding="async" /></span>`;
 
 /* ---------- 前四段：shot 体系 ---------- */
 /**
@@ -444,7 +444,7 @@ function renderFlat(el, a, siblings) {
   trackViewAndPaint(el, a.slug);
 
   el.innerHTML = `
-    <div class="ab-hero short">
+    <div class="ab-hero short ph">
       <a class="ab-back" href="/style/${a.style}" aria-label="返回册页">
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12.5 4.5 7 10l5.5 5.5"/></svg>
         <span>册页</span>
@@ -509,7 +509,7 @@ export async function album(el, params) {
     a.sections.map(() => '<i></i>').join('')}</div>`;
 
   el.innerHTML = `
-    <div class="ab-hero">
+    <div class="ab-hero ph">
       <a class="ab-back" href="/style/${a.style}" aria-label="返回册页">
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12.5 4.5 7 10l5.5 5.5"/></svg>
         <span>册页</span>

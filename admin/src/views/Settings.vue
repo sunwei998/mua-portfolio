@@ -31,8 +31,8 @@ async function save(kind: string) {
 /* ---------- 折叠面板：单次只展开一类 ---------- */
 const open = ref('brand');
 
-/** 图片字段（hero / 二维码）直接本地上传，不填地址 */
-function pickImage(field: 'heroKey' | 'qrcodeKey') {
+/** 图片字段（hero / 二维码 / 头像）直接本地上传，不填地址 */
+function pickImage(field: 'heroKey' | 'qrcodeKey' | 'portraitKey') {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'image/*';
@@ -312,6 +312,16 @@ function clearVideo(slot: VidSlot) {
               </div>
             </div>
           </el-form-item>
+          <el-form-item label="主理人头像">
+            <div class="pic-field">
+              <el-image v-if="s.portraitKey" :src="s.portraitKey" class="pic-thumb avatar-thumb" :preview-src-list="[s.portraitKey]" preview-teleported />
+              <div v-else class="pic-thumb avatar-thumb avatar-empty">未设置<br />（默认使用 /img/portrait.webp）</div>
+              <div class="pic-ops">
+                <el-button size="small" plain @click="pickImage('portraitKey')">{{ s.portraitKey ? '重新上传' : '上传图片' }}</el-button>
+                <el-button v-if="s.portraitKey" size="small" text type="danger" @click="s.portraitKey = ''">移除</el-button>
+              </div>
+            </div>
+          </el-form-item>
           <el-form-item label="Hero 角签"><el-input v-model="s.heroTagCn" style="width:240px" placeholder="2026 婚礼季" /></el-form-item>
           <el-form-item label="走马灯词">
             <el-input v-model="MARQUEE_TEXT" style="width:420px" placeholder="婚礼跟妆、订婚宴、孕妇照…"
@@ -390,19 +400,18 @@ function clearVideo(slot: VidSlot) {
           <el-button type="primary" :loading="saving" @click="save('视频')">保存视频</el-button>
         </div>
       </el-collapse-item>
+      <!-- ─────────── ⑤ 密码配置 ─────────── -->
+      <el-collapse-item name="password" title="密码配置">
+        <el-form label-width="110" inline>
+          <el-form-item label="旧密码"><el-input v-model="oldPw" type="password" show-password style="width:200px" /></el-form-item>
+          <el-form-item label="新密码"><el-input v-model="newPw" type="password" show-password style="width:200px" /></el-form-item>
+          <el-form-item label="确认新密码"><el-input v-model="newPw2" type="password" show-password style="width:200px" /></el-form-item>
+          <el-form-item>
+            <el-button type="warning" plain :loading="pwSaving" @click="changePw">修改密码</el-button>
+          </el-form-item>
+        </el-form>
+      </el-collapse-item>
     </el-collapse>
-
-    <el-card class="card" shadow="never">
-      <template #header>修改登录密码</template>
-      <el-form label-width="110" inline>
-        <el-form-item label="旧密码"><el-input v-model="oldPw" type="password" show-password style="width:200px" /></el-form-item>
-        <el-form-item label="新密码"><el-input v-model="newPw" type="password" show-password style="width:200px" /></el-form-item>
-        <el-form-item label="确认新密码"><el-input v-model="newPw2" type="password" show-password style="width:200px" /></el-form-item>
-        <el-form-item>
-          <el-button type="warning" plain :loading="pwSaving" @click="changePw">修改密码</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
   </div>
 </template>
 
@@ -429,6 +438,11 @@ h2 { margin: 0 0 16px; font-size: 18px; color: #221d19; }
   box-shadow: 0 0 0 1px #e3dccf inset;
 }
 .qr-thumb { width: 120px; height: 120px; }
+.avatar-thumb { width: 96px; height: 96px; border-radius: 50%; overflow: hidden; }
+.avatar-empty {
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  font-size: 11px; color: #8a8177; box-shadow: 0 0 0 1px #e3dccf inset;
+}
 .pic-ops { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
 
 /* ---------- 首页精选卡 ---------- */

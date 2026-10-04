@@ -11,7 +11,7 @@
  * ============================================================ */
 // @ts-check
 
-import { symbolSVG } from '../components/brandMark.js?v=20261005e';
+import { symbolSVG } from '../components/brandMark.js?v=20261005f';
 import { registerGroup } from '../components/viewer.js';
 import { getHome } from '../api.js';
 
@@ -25,6 +25,7 @@ const FALLBACK = /** @type {const} */ ({
   videos: [],
   byline: { nameCn: '甜茉', roleCn: '化妆师个人作品集' },
   subCn: '婚礼 与 日常',
+  portraitKey: '/img/portrait.webp',
 });
 
 /**
@@ -59,6 +60,8 @@ export async function home(el) {
   const byline = data.byline || FALLBACK.byline;
   const featured = data.featured || [];
   const videos = data.videos || [];
+  /* 主理人头像（023 起后台可上传，首页右上角 + 联系页圆形图同源） */
+  const portrait = data.portraitKey || FALLBACK.portraitKey;
 
   const marqueeHtml = data.marquee.length > 0 ? `
     <div class="marquee" aria-hidden="true"><div>
@@ -78,7 +81,7 @@ export async function home(el) {
       <div class="wf-col">
         ${col.map(({ p, i }) => `
         <figure class="wf-it reveal" data-vgroup="wf" data-vi="${i}">
-          <span class="rv-fig"><img src="${p.cosKey}" alt="" width="${p.w}" height="${p.h}" loading="lazy" decoding="async" /></span>
+          <span class="rv-fig ph"><img src="${p.cosKey}" alt="" width="${p.w}" height="${p.h}" loading="lazy" decoding="async" /></span>
         </figure>`).join('')}
       </div>`).join('')}
     </nav>` : '';
@@ -142,11 +145,10 @@ export async function home(el) {
     <header class="topnav">
       <a class="brandlock" href="/" aria-label="茉與妝 MO·BEAUTÉ">
         ${symbolSVG()}
-        <span class="cn">茉與<span class="ac">妝</span></span>
       </a>
       <span class="right">
         <a class="whoami" href="/collection" aria-label="浏览作品系列">
-          <span class="pt"><img src="/img/portrait.webp" alt="甜茉" /></span>
+          <span class="pt"><img src="${portrait}" alt="甜茉" /></span>
           <span class="n">${byline.nameCn}</span>
         </a>
         <span class="menu" aria-hidden="true"><span></span><span></span></span>
@@ -154,12 +156,12 @@ export async function home(el) {
     </header>
 
     <section class="hero">
-      <p class="en">MO·BEAUTÉ · Est. 2018</p>
+      <p class="en">MO·BEAUTÉ · Est. 2019</p>
       <h1 class="lead">茉與<span class="rose">妝</span></h1>
       <div class="sub"><span class="cn">${data.taglineCn || FALLBACK.subCn}</span></div>
       <p class="en enline">Makeup &amp; Hair · Bridal &amp; Daily</p>
       ${data.heroKey ? `
-      <div class="shot hero-shot">
+      <div class="shot hero-shot ph">
         <img src="${data.heroKey}" alt="作品精选" />
         <span class="glass dtag">Nº 01</span>
         <span class="glass hero-tag">${data.heroTagCn || FALLBACK.heroTagCn}</span>
@@ -167,12 +169,12 @@ export async function home(el) {
       <div class="cue"><i></i><span>向下浏览</span></div>
       <a class="byline glass light" href="/collection">
         <span class="scrim"></span>
-        <span class="pt"><img src="/img/portrait.webp" alt="甜茉" /></span>
+        <span class="pt"><img src="${portrait}" alt="甜茉" /></span>
         <span class="tx">
           <span class="n">${byline.nameCn} · ${byline.roleCn}</span>
           <span class="en">Tianmo · Personal Portfolio</span>
         </span>
-        <span class="seal-mini" aria-hidden="true">妝</span>
+        <span class="seal-mini" aria-hidden="true">茉</span>
       </a>
     </section>
 

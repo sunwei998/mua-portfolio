@@ -172,6 +172,7 @@ export interface SiteSettings {
   wechatId: string | null;
   qrcodeKey: string | null;
   ogImageKey: string | null;
+  portraitKey: string | null;
 }
 
 /** GET /api/albums?style= 的列表卡 —— 册页列表层用，不背六段全量 */
@@ -236,6 +237,8 @@ export interface HomePayload {
   entries: HomeEntry[];
   byline: { nameCn: string; roleCn: string };
   taglineCn: string;
+  /** 主理人头像（023 起：首页右上角 + 联系页圆形图同源；null = 前台回退 /img/portrait.webp） */
+  portraitKey: string | null;
   /** 精选瀑布流（替代原「作品系列」区；空数组 = 前台整块隐藏） */
   featured: FeaturedItem[];
   /** 首页视频（≤5 个，021 起；空数组 = 占位「COMING SOON」） */

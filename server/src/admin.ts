@@ -171,11 +171,11 @@ function verifyToken(token: string): string | null {
   return payload.sub;
 }
 
-/** 启动时兜底：账号表为空则建默认账号（ADMIN_USER / ADMIN_PASS，默认 mua / yue2026） */
+/** 启动时兜底：账号表为空则建默认账号（ADMIN_USER / ADMIN_PASS，默认 tianmo / yue2026） */
 export async function ensureAdminAccount(): Promise<void> {
   const rows = await query<Row>('SELECT id FROM admin_user WHERE id = 1');
   if (rows.length > 0) return;
-  const username = process.env.ADMIN_USER ?? 'mua';
+  const username = process.env.ADMIN_USER ?? 'tianmo';
   const password = process.env.ADMIN_PASS ?? 'yue2026';
   await execute('INSERT IGNORE INTO admin_user (id, username, pass_hash) VALUES (1, ?, ?)', [
     username, hashPassword(password),
@@ -582,6 +582,7 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
       heroKey: str(r.hero_key) || null, heroTagCn: str(r.hero_tag_cn) || null,
       wechatId: str(r.wechat_id) || null, qrcodeKey: str(r.qrcode_key) || null,
       ogImageKey: str(r.og_image_key) || null,
+      portraitKey: str(r.portrait_key) || null,
       videoKey: str(r.video_key) || null, videoPosterKey: str(r.video_poster_key) || null,
       videoWidth: num(r.video_width) || null, videoHeight: num(r.video_height) || null,
       videoDuration: num(r.video_duration) || null,
@@ -606,7 +607,7 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
       `UPDATE site_setting SET brand_cn=?, brand_en=?, tagline_cn=?, sub_cn=?, sub_long_cn=?,
                                byline_cn=?, bio_cn=?, stats_json=CAST(? AS JSON),
                                flow_json=CAST(? AS JSON), marquee_json=CAST(? AS JSON),
-                               hero_key=?, hero_tag_cn=?, wechat_id=?, qrcode_key=?, og_image_key=?,
+                               hero_key=?, hero_tag_cn=?, wechat_id=?, qrcode_key=?, og_image_key=?, portrait_key=?,
                                video_key=?, video_poster_key=?, video_width=?, video_height=?, video_duration=?,
                                video2_key=?, video2_poster_key=?, video2_width=?, video2_height=?, video2_duration=?,
                                video3_key=?, video3_poster_key=?, video3_width=?, video3_height=?, video3_duration=?,
@@ -617,7 +618,7 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
        str(b.bylineCn), str(b.bioCn) || null, JSON.stringify(b.statsJson ?? []),
        JSON.stringify(b.flowJson ?? []), JSON.stringify(b.marqueeJson ?? []),
        str(b.heroKey) || null, str(b.heroTagCn) || null, str(b.wechatId) || null,
-       str(b.qrcodeKey) || null, str(b.ogImageKey) || null,
+       str(b.qrcodeKey) || null, str(b.ogImageKey) || null, str(b.portraitKey) || null,
        str(b.videoKey) || null, str(b.videoPosterKey) || null,
        num(b.videoWidth) || null, num(b.videoHeight) || null, num(b.videoDuration) || null,
        str(b.video2Key) || null, str(b.video2PosterKey) || null,

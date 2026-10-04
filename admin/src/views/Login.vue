@@ -64,7 +64,7 @@ async function submit() {
 
         <el-form label-position="top" @submit.prevent="submit">
           <el-form-item class="field" label="用户名">
-            <el-input v-model="u" name="username" placeholder="mua" autocomplete="username" autofocus />
+            <el-input v-model="u" name="username" placeholder="tianmo" autocomplete="username" autofocus />
           </el-form-item>
           <el-form-item class="field" label="密码">
             <el-input
