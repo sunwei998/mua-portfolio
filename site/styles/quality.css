@@ -36,7 +36,7 @@
   padding:4px 8px;cursor:pointer;opacity:.8;flex:none;
 }
 .viewer .v-close:active{opacity:.45}
-.viewer .v-stage{flex:1;position:relative;display:grid;place-items:center;overflow:hidden;touch-action:none}
+.viewer .v-stage{flex:1;position:relative;display:grid;place-items:center;overflow:hidden;touch-action:pan-y}
 /* 翻页双层：动画平移 layer，缩放作用于层内 img，互不打架 */
 .viewer .v-layer{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;will-change:transform}
 .viewer .v-layer.alt{visibility:hidden}
