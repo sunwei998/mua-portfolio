@@ -2042,7 +2042,11 @@ html.noblur .ab-back {
 /* ---------- 茉字呼吸 loading（027）：大图加载完成前，占位区显示「茉」字呼吸 ----------
  * 纯 CSS：容器 isolation 建独立层，::before 茉字 z-index:-1 沉底呼吸，
  * img 一加载即自然盖住；头像（.pt/.portrait）与二维码小图不参与。 */
-.ph { isolation: isolate; }
+.ph { isolation: isolate; position: relative; }
+/* position:relative 必须与 isolation 同在：绝对定位的茉字要以 .ph 自己的盒子为
+   包含块。.rv-fig 本身无 position，而 isolation 只建层叠上下文不建包含块——
+   缺了这句，茉字会逃逸到最近的定位祖先（duo 行=整行中心 → 落进两图间的缝；
+   瀑布流=整页 .view），加载后的图永远盖不住它（2026-10-06 排查）。 */
 .ph::before {
   content: '茉';
   position: absolute; inset: 0; z-index: -1;
