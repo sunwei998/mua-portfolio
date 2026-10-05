@@ -96,6 +96,49 @@ function syncMarqueeIn() {
 }
 
 /* ============================================================
+ * 联系页服务流程（site_setting.flow_json）
+ * 增删改全开：前台按数组顺序动态渲染（about.js 只消费 titleCn），
+ * 序号 step 在保存时按位置自动生成（01/02/…），不落手工值。
+ * ⚠️ 只提供编辑能力，不改任何存量数据（改文案是用户的决定）。
+ * ============================================================ */
+const FLOW_MAX = 6;
+const FLOW_TITLE_MAX = 10;
+
+function addFlow() {
+  if (!s.value) return;
+  if (s.value.flowJson.length >= FLOW_MAX) {
+    ElMessage.warning(`流程最多 ${FLOW_MAX} 步`);
+    return;
+  }
+  s.value.flowJson.push({ step: '', title: '' });
+}
+
+function removeFlow(i: number) {
+  if (!s.value) return;
+  if (s.value.flowJson.length <= 1) {
+    ElMessage.warning('至少保留一步');
+    return;
+  }
+  s.value.flowJson.splice(i, 1);
+}
+
+function saveFlow() {
+  if (!s.value) return;
+  const rows = s.value.flowJson.map((r) => ({ ...r, title: (r.title ?? '').trim() }));
+  if (rows.some((r) => !r.title)) {
+    ElMessage.warning('步骤名称不能为空');
+    return;
+  }
+  if (rows.some((r) => r.title.length > FLOW_TITLE_MAX)) {
+    ElMessage.warning(`步骤名称最多 ${FLOW_TITLE_MAX} 个字`);
+    return;
+  }
+  // 序号按位置重排（01、02…），与前台展示顺序严格一致
+  s.value.flowJson = rows.map((r, i) => ({ step: String(i + 1).padStart(2, '0'), title: r.title }));
+  save('流程');
+}
+
+/* ============================================================
  * 首页精选（home_featured，018）—— ≤20 张（020 放宽）、拖拽排序、独立保存
  * 图注入库但输入禁用（2026-10-03 拍板：功能保留、暂不启用）。
  * 宽高为浏览器解码实测值（铁律：禁写死），ratio / sort 由服务端归一。
@@ -359,7 +402,28 @@ function clearVideo(slot: VidSlot) {
         </div>
       </el-collapse-item>
 
-      <!-- ─────────── ③ 首页精选（018） ─────────── -->
+      <!-- ─────────── ③ 联系页服务流程（flow_json） ─────────── -->
+      <el-collapse-item name="flow" title="联系页服务流程">
+        <div class="feat-head">
+          <span class="feat-hint">联系页「步骤」玻璃签 · 按此顺序渲染 · 序号自动生成 · 最多 {{ FLOW_MAX }} 步、每步 ≤ {{ FLOW_TITLE_MAX }} 字</span>
+        </div>
+        <div class="flow-list">
+          <div v-for="(f, i) in s.flowJson" :key="i" class="flow-row">
+            <span class="flow-no">{{ String(i + 1).padStart(2, '0') }}</span>
+            <el-input v-model="f.title" :maxlength="FLOW_TITLE_MAX" style="width:260px"
+                      :placeholder="['预约沟通', '试妆定型', '婚礼跟妆'][i] || '如：敬酒补妆'" />
+            <el-button size="small" text type="danger" :disabled="s.flowJson.length <= 1"
+                       @click="removeFlow(i)">移除</el-button>
+          </div>
+          <el-button v-if="s.flowJson.length < FLOW_MAX" size="small" plain class="flow-add"
+                     @click="addFlow">＋ 加一步</el-button>
+        </div>
+        <div class="sec-actions">
+          <el-button type="primary" :loading="saving" @click="saveFlow">保存流程</el-button>
+        </div>
+      </el-collapse-item>
+
+      <!-- ─────────── ④ 首页精选（018） ─────────── -->
       <el-collapse-item name="feat" title="首页精选">
         <div class="feat-head">
           <span class="feat-hint">≤ {{ FEATURED_MAX }} 张 · 拖拽图片排序 · 前台 0 张时整块隐藏 · 不影响作品菜单</span>
@@ -500,6 +564,16 @@ h2 { margin: 0 0 16px; font-size: 18px; color: #221d19; }
 .feat-add .plus { font-size: 22px; line-height: 1; }
 .feat-add .txt { font-size: 12px; letter-spacing: .08em; }
 .feat-add .cnt { font-size: 10px; opacity: .6; }
+
+/* ---------- 联系页服务流程 ---------- */
+.flow-list { display: flex; flex-direction: column; gap: 10px; max-width: 460px; }
+.flow-row { display: flex; align-items: center; gap: 10px; }
+.flow-no {
+  flex: none; width: 30px; text-align: center;
+  font-size: 12px; font-weight: 600; color: #8a8177;
+  font-family: Georgia, serif; letter-spacing: .05em;
+}
+.flow-add { align-self: flex-start; margin-top: 2px; }
 
 /* ---------- 首页视频卡 ---------- */
 .vid-block { margin-bottom: 20px; }
