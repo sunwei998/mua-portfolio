@@ -72,24 +72,31 @@ export async function about(el) {
                onerror="this.outerHTML='&lt;div class=&quot;qb&quot;&gt;微信二维码&lt;br/&gt;待替换&lt;/div&gt;'" />`
           : `<div class="qb">微信二维码<br/>待替换</div>`}
         <p class="hint">扫码或搜索添加 · 沟通档期与试妆</p>
-        <p class="cline">微信号 ${s?.wechatId || '—'}</p>
-        ${s?.contactPhone ? `<p class="cline">
-          <span>电话 ${s.contactPhone}</span>
-          <a class="dial" href="tel:${s.contactPhone}" aria-label="拨打 ${s.contactPhone}">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.7.7.5 0 .9.4.9.9v3.5c0 .5-.4.9-.9.9A17.6 17.6 0 0 1 3.1 3.1c0-.5.4-.9.9-.9h3.5c.5 0 .9.4.9.9 0 1.3.3 2.5.7 3.7.1.4 0 .7-.2 1l-2.3 2.2z"/>
-            </svg>
-          </a>
-        </p>` : ''}
+        <div class="clines">
+          <p class="cline">
+            <span>微信 ${s?.wechatId || '—'}</span>
+            <button class="ic cp" type="button" id="cp" aria-label="复制微信号">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9.2 3.6h8.3a2.9 2.9 0 0 1 2.9 2.9v8.3a.7.7 0 0 1-1.2.5l-1.6-1.6a.7.7 0 0 1-.2-.5V7.2a1 1 0 0 0-1-1H9.2a.7.7 0 0 1-.7-.7V4.3a.7.7 0 0 1 .7-.7z"/>
+                <path d="M6.5 7.7a2.9 2.9 0 0 1 2.9 2.9v7.8a1 1 0 0 0 1 1h7.5a.7.7 0 0 1 .7.7v.6a.7.7 0 0 1-.7.7H8.4a2.9 2.9 0 0 1-2.9-2.9v-9.1a1.6 1.6 0 0 1 1-1.7z"/>
+              </svg>
+            </button>
+            <em class="cfb" id="cfb" aria-live="polite"></em>
+          </p>
+          ${s?.contactPhone ? `<p class="cline">
+            <span>电话 ${s.contactPhone}</span>
+            <a class="ic" href="tel:${s.contactPhone}" aria-label="拨打 ${s.contactPhone}">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.7.7.5 0 .9.4.9.9v3.5c0 .5-.4.9-.9.9A17.6 17.6 0 0 1 3.1 3.1c0-.5.4-.9.9-.9h3.5c.5 0 .9.4.9.9 0 1.3.3 2.5.7 3.7.1.4 0 .7-.2 1l-2.3 2.2z"/>
+              </svg>
+            </a>
+          </p>` : ''}
+        </div>
       </div>
-
-      <button class="cta glass" id="cta" type="button">
-        <span class="scrim"></span>复制微信号<em>Book Now</em>
-      </button>
     </div>
   `;
 
-  // CTA：复制微信号（一期转化路径 = 加微信，不做在线表单）
+  // 复制微信号：行尾小图标（转化路径 = 加微信，不做在线表单）
   // 微信 X5（http 非安全上下文）navigator.clipboard 不可用 → execCommand fallback
   const copyText = (t) => {
     if (navigator.clipboard && window.isSecureContext) {
@@ -114,17 +121,19 @@ export async function about(el) {
       return false;
     }
   };
-  const cta = /** @type {HTMLButtonElement | null} */ (el.querySelector('#cta'));
-  if (cta && s?.wechatId) {
-    cta.addEventListener('click', () => {
+  const cfb = /** @type {HTMLElement | null} */ (el.querySelector('#cfb'));
+  const cp = /** @type {HTMLButtonElement | null} */ (el.querySelector('#cp'));
+  if (cp && cfb && s?.wechatId) {
+    let timer = 0;
+    cp.addEventListener('click', () => {
       copyText(s.wechatId || '').then((ok) => {
-        cta.innerHTML = ok
-          ? '<span class="scrim"></span>已复制 · 去微信粘贴<em>Copied</em>'
-          : `<span class="scrim"></span>微信号 ${s.wechatId}<em>Manual</em>`;
-        setTimeout(() => {
-          if (cta) cta.innerHTML = '<span class="scrim"></span>复制微信号<em>Book Now</em>';
-        }, 2400);
+        cfb.textContent = ok ? '已复制' : '请长按选择';
+        cfb.classList.add('on');
+        clearTimeout(timer);
+        timer = window.setTimeout(() => cfb.classList.remove('on'), 2000);
       });
     });
+  } else if (cp) {
+    cp.setAttribute('disabled', 'disabled');
   }
 }

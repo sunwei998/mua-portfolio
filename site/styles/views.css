@@ -1421,65 +1421,78 @@ html.noblur .ab-back {
   font-family: "Noto Serif SC", serif;
   font-weight: 300;
 }
-/* ---- 联系方式行（微信号 / 电话）----
-   2026-10-05：此前 .cline / .dial 零样式定义 ⇒ 拨号图标以裸SVG 默认尺寸渲染，
-   撑成整行巨物。这里补齐：标签与号码用同一个疏排节奏，拨号按钮收到 15px 见方。 */
+/* ---- 联系方式行（微信 / 电话）----
+   2026-10-05：此前 .cline / .dial 零样式定义 ⇒ 拨号图标以裸 SVG 默认尺寸渲染，
+   撑成整行巨物。补齐后为15px 见方极轻触点。
+   2026-10-05（第二轮）：两行改为**左对齐**并列（.clines 收窄并居中，内部行左对齐），
+   微信号行尾加复制图标，原大CTA 按钮下线（.cta 样式一并移除）。 */
+/* 行组：整块仍居中于卡片，但内部两行左对齐 ⇒ 两行起点严格对齐。 */
+.qrb .clines {
+  display: inline-block;
+  text-align: left;
+  margin-top: 7px;
+}
 .qrb .cline {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0.5em;
   margin-top: 7px;
 }
-/* 拨号按钮：15px 见方的极轻触点，描边随主题走 --gold（结构色，非彩色点）。
-   11px 的 handset 在 15px 盒子里留2px 呼吸，视觉直径约 13px。 */
-.qrb .dial {
+.qrb .cline:first-child {
+  margin-top: 0;
+}
+/* 统一的小图标按钮：拨号（a）与复制（button）共用 15px 触点。
+   描边随主题走 --gold（结构色，非彩色点），11px 图标留 2px 呼吸。 */
+.qrb .ic {
   display: inline-grid;
   place-items: center;
   width: 15px;
   height: 15px;
   flex: 0 0 auto;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
+  background: none;
   color: var(--gold);
   text-decoration: none;
+  cursor: pointer;
   transition: color 0.22s ease, background-color 0.22s ease;
   -webkit-tap-highlight-color: transparent;
 }
-.qrb .dial svg {
+.qrb .ic svg {
   width: 11px;
   height: 11px;
   display: block;
-  /* handset 为实心面：fill 承色，stroke 必须显式归零，
+  /* 图标为实心面：fill 承色，stroke 必须显式归零，
      否则某些 UA 下会双描边糊成一团。 */
   fill: currentColor;
   stroke: none;
 }
-.qrb .dial:active {
+.qrb .ic:active {
   color: var(--accent);
   background: color-mix(in srgb, var(--gold) 14%, transparent);
 }
-.cta {
-  margin-top: 16px;
-  width: 100%;
-  height: 52px;
-  --r: 16px;
-  --gb: 16px;
-  font-family: "Noto Serif SC", serif;
-  font-weight: 300;
-  font-size: 13px;
-  letter-spacing: 0.34em;
-  text-indent: 0.34em;
-  color: #221d19;
+.qrb .ic[disabled] {
+  opacity: 0.32;
+  cursor: default;
 }
-.cta em {
+/* 复制成功/失败反馈：行尾淡入的一行小字，不撑高布局。 */
+.qrb .cfb {
   font-style: normal;
-  font-size: 8.5px;
-  letter-spacing: 0.3em;
-  color: rgba(34, 29, 25, 0.5);
-  margin-left: 8px;
-  font-family: "Jost", sans-serif;
-  text-transform: uppercase;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateY(1px);
+  transition: opacity 0.24s ease, transform 0.24s ease;
+  white-space: nowrap;
 }
+.qrb .cfb.on {
+  opacity: 0.9;
+  transform: translateY(0);
+}
+/* 注：原 .cta（复制微信号大按钮）已随 2026-10-05 改版下线，样式一并移除。
+   复制能力迁至 .qrb .cline 行尾的 .ic.cp 图标。 */
 
 /* ============================================================
  * V7 —— 更多时刻系列（design-v7 屏1/2/3/4）
