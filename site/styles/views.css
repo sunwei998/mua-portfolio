@@ -1425,7 +1425,11 @@ html.noblur .ab-back {
    2026-10-05：此前 .cline / .dial 零样式定义 ⇒ 拨号图标以裸 SVG 默认尺寸渲染，
    撑成整行巨物。补齐后为15px 见方极轻触点。
    2026-10-05（第二轮）：两行改为**左对齐**并列（.clines 收窄并居中，内部行左对齐），
-   微信号行尾加复制图标，原大CTA 按钮下线（.cta 样式一并移除）。 */
+   微信号行尾加复制图标，原大CTA 按钮下线（.cta 样式一并移除）。
+   2026-10-05（第三轮）：图标升为 16px 主流描边造型（双层圆角矩形），
+   热区经 ::after 扩到 30px 但**只有图标可点**（行不抢点击）；
+   复制成功反馈改为**图标态变**（变勾 + 金环扩散，1.6s 自动回位），
+   行内文字反馈 .cfb 删除 ⇒ 反馈零布局位移；失败才走 .wx-toast 兜底。 */
 /* 行组：整块仍居中于卡片，但内部两行左对齐 ⇒ 两行起点严格对齐。 */
 .qrb .clines {
   display: inline-block;
@@ -1441,17 +1445,17 @@ html.noblur .ab-back {
 .qrb .cline:first-child {
   margin-top: 0;
 }
-/* 统一的小图标按钮：拨号（a）与复制（button）共用 15px 触点。
-   描边随主题走 --gold（结构色，非彩色点），11px 图标留 2px 呼吸。 */
+/* 统一的小图标按钮：拨号（a）与复制（button）共用规格——
+   视觉盒 16×16，::after 把命中区扩到 30×30（视觉不变）。
+   复制为描边造型（stroke 承色），拨号为实心面（fill 承色），
+   两者都由 color 走 var(--gold)，主题切换自动跟随。 */
 .qrb .ic {
-  display: inline-grid;
-  place-items: center;
-  width: 15px;
-  height: 15px;
+  position: relative;
+  width: 16px;
+  height: 16px;
   flex: 0 0 auto;
   padding: 0;
   border: 0;
-  border-radius: 50%;
   background: none;
   color: var(--gold);
   text-decoration: none;
@@ -1459,37 +1463,105 @@ html.noblur .ab-back {
   transition: color 0.22s ease, background-color 0.22s ease;
   -webkit-tap-highlight-color: transparent;
 }
+/* 命中区扩展：透明圆 ::after，只有图标本体可点 ⇒ 行为语义不变，手感达标。 */
+.qrb .ic::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  background: transparent;
+  transition: background-color 0.18s ease;
+}
 .qrb .ic svg {
-  width: 11px;
-  height: 11px;
+  position: absolute;
+  inset: 0;
+  width: 16px;
+  height: 16px;
   display: block;
-  /* 图标为实心面：fill 承色，stroke 必须显式归零，
+}
+.qrb .ic .i-dial {
+  inset: 1px;
+  width: 14px;
+  height: 14px;
+  /* handset 为实心面：fill 承色，stroke 显式归零，
      否则某些 UA 下会双描边糊成一团。 */
   fill: currentColor;
   stroke: none;
 }
 .qrb .ic:active {
   color: var(--accent);
-  background: color-mix(in srgb, var(--gold) 14%, transparent);
+}
+.qrb .ic:active::after {
+  background: color-mix(in srgb, var(--gold) 16%, transparent);
 }
 .qrb .ic[disabled] {
   opacity: 0.32;
   cursor: default;
 }
-/* 复制成功/失败反馈：行尾淡入的一行小字，不撑高布局。 */
-.qrb .cfb {
-  font-style: normal;
-  font-size: 9.5px;
-  letter-spacing: 0.16em;
+/* ---- 复制成功态变：拷贝 → 勾 同盒叠放，纯 opacity/transform（X5 安全）---- */
+.qrb .ic .i-check {
   color: var(--accent);
   opacity: 0;
-  transform: translateY(1px);
-  transition: opacity 0.24s ease, transform 0.24s ease;
-  white-space: nowrap;
+  transform: scale(0.7);
+  transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.2);
 }
-.qrb .cfb.on {
-  opacity: 0.9;
-  transform: translateY(0);
+.qrb .ic .i-copy {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.qrb .ic.done .i-copy {
+  opacity: 0;
+  transform: scale(0.85);
+}
+.qrb .ic.done .i-check {
+  opacity: 1;
+  transform: scale(1);
+}
+/* 金环：从图标向外扩散消散，0.55s，只出现一次。 */
+.qrb .ic .ring {
+  position: absolute;
+  inset: -2px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+.qrb .ic.done .ring {
+  animation: ic-ringout 0.55s ease-out forwards;
+}
+@keyframes ic-ringout {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+/* ---- 微信式 toast：仅复制失败兜底。屏幕正中深色圆角块，2.2s 自愈 ---- */
+.wx-toast {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 999;
+  transform: translate(-50%, -50%) translateY(6px);
+  max-width: 76vw;
+  padding: 11px 20px;
+  border-radius: 10px;
+  background: rgba(40, 35, 30, 0.86);
+  color: #fbf6f5;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 300;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+.wx-toast.on {
+  opacity: 1;
+  transform: translate(-50%, -50%) translateY(0);
 }
 /* 注：原 .cta（复制微信号大按钮）已随 2026-10-05 改版下线，样式一并移除。
    复制能力迁至 .qrb .cline 行尾的 .ic.cp 图标。 */

@@ -77,17 +77,20 @@ export async function about(el) {
           <p class="cline">
             <span>微信 ${s?.wechatId || '—'}</span>
             <button class="ic cp" type="button" id="cp" aria-label="复制微信号">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M9.2 3.6h8.3a2.9 2.9 0 0 1 2.9 2.9v8.3a.7.7 0 0 1-1.2.5l-1.6-1.6a.7.7 0 0 1-.2-.5V7.2a1 1 0 0 0-1-1H9.2a.7.7 0 0 1-.7-.7V4.3a.7.7 0 0 1 .7-.7z"/>
-                <path d="M6.5 7.7a2.9 2.9 0 0 1 2.9 2.9v7.8a1 1 0 0 0 1 1h7.5a.7.7 0 0 1 .7.7v.6a.7.7 0 0 1-.7.7H8.4a2.9 2.9 0 0 1-2.9-2.9v-9.1a1.6 1.6 0 0 1 1-1.7z"/>
+              <span class="ring" aria-hidden="true"></span>
+              <svg class="i-copy" viewBox="0 0 20 20" aria-hidden="true">
+                <rect x="6.8" y="2.8" width="10.4" height="12.4" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M13.2 17.2H5.4A2.6 2.6 0 0 1 2.8 14.6V7.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+              <svg class="i-check" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M4 10.6l4.2 4.2L16 5.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <em class="cfb" id="cfb" aria-live="polite"></em>
           </p>
           ${s?.contactPhone ? `<p class="cline">
             <span>电话 ${s.contactPhone}</span>
             <a class="ic" href="tel:${s.contactPhone}" aria-label="拨打 ${s.contactPhone}">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
+              <svg class="i-dial" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.7.7.5 0 .9.4.9.9v3.5c0 .5-.4.9-.9.9A17.6 17.6 0 0 1 3.1 3.1c0-.5.4-.9.9-.9h3.5c.5 0 .9.4.9.9 0 1.3.3 2.5.7 3.7.1.4 0 .7-.2 1l-2.3 2.2z"/>
               </svg>
             </a>
@@ -122,16 +125,36 @@ export async function about(el) {
       return false;
     }
   };
-  const cfb = /** @type {HTMLElement | null} */ (el.querySelector('#cfb'));
+  // 微信式 toast（唯一用途 = 复制失败兜底；成功走图标态变，不打扰）
+  const wxToast = (msg) => {
+    let t = /** @type {HTMLElement | null} */ (document.querySelector('.wx-toast'));
+    if (!t) {
+      t = document.createElement('div');
+      t.className = 'wx-toast';
+      t.setAttribute('role', 'status');
+      t.setAttribute('aria-live', 'polite');
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.classList.add('on');
+    clearTimeout(t._t);
+    t._t = window.setTimeout(() => t && t.classList.remove('on'), 2200);
+  };
+
   const cp = /** @type {HTMLButtonElement | null} */ (el.querySelector('#cp'));
-  if (cp && cfb && s?.wechatId) {
+  if (cp && s?.wechatId) {
     let timer = 0;
     cp.addEventListener('click', () => {
       copyText(s.wechatId || '').then((ok) => {
-        cfb.textContent = ok ? '已复制' : '请长按选择';
-        cfb.classList.add('on');
-        clearTimeout(timer);
-        timer = window.setTimeout(() => cfb.classList.remove('on'), 2000);
+        if (ok) {
+          cp.classList.remove('done');
+          void cp.offsetWidth;
+          cp.classList.add('done');
+          clearTimeout(timer);
+          timer = window.setTimeout(() => cp.classList.remove('done'), 1600);
+        } else {
+          wxToast('复制失败 · 可长按号码手动复制');
+        }
       });
     });
   } else if (cp) {
