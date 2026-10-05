@@ -68,13 +68,19 @@ export async function about(el) {
       <div class="qrb glass reveal" id="contact">
         <span class="scrim"></span>
         ${s?.qrcodeKey
-          ? `<img class="qc" src="${s.qrcodeKey}" alt="微信二维码" />`
+          ? `<img class="qc" src="${s.qrcodeKey}" alt="微信二维码"
+               onerror="this.outerHTML='&lt;div class=&quot;qb&quot;&gt;微信二维码&lt;br/&gt;待替换&lt;/div&gt;'" />`
           : `<div class="qb">微信二维码<br/>待替换</div>`}
         <p class="hint">扫码或搜索添加 · 沟通档期与试妆</p>
         <p class="cline">微信号 ${s?.wechatId || '—'}</p>
-        <p class="cline">电话 ${s?.contactPhone || '—'}
-          ${s?.contactPhone ? `<a class="dial" href="tel:${s.contactPhone}" aria-label="拨打 ${s.contactPhone}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>` : ''}
-        </p>
+        ${s?.contactPhone ? `<p class="cline">
+          <span>电话 ${s.contactPhone}</span>
+          <a class="dial" href="tel:${s.contactPhone}" aria-label="拨打 ${s.contactPhone}">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.7.7.5 0 .9.4.9.9v3.5c0 .5-.4.9-.9.9A17.6 17.6 0 0 1 3.1 3.1c0-.5.4-.9.9-.9h3.5c.5 0 .9.4.9.9 0 1.3.3 2.5.7 3.7.1.4 0 .7-.2 1l-2.3 2.2z"/>
+            </svg>
+          </a>
+        </p>` : ''}
       </div>
 
       <button class="cta glass" id="cta" type="button">

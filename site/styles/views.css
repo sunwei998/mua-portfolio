@@ -1421,6 +1421,43 @@ html.noblur .ab-back {
   font-family: "Noto Serif SC", serif;
   font-weight: 300;
 }
+/* ---- 联系方式行（微信号 / 电话）----
+   2026-10-05：此前 .cline / .dial 零样式定义 ⇒ 拨号图标以裸SVG 默认尺寸渲染，
+   撑成整行巨物。这里补齐：标签与号码用同一个疏排节奏，拨号按钮收到 15px 见方。 */
+.qrb .cline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  margin-top: 7px;
+}
+/* 拨号按钮：15px 见方的极轻触点，描边随主题走 --gold（结构色，非彩色点）。
+   11px 的 handset 在 15px 盒子里留2px 呼吸，视觉直径约 13px。 */
+.qrb .dial {
+  display: inline-grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  color: var(--gold);
+  text-decoration: none;
+  transition: color 0.22s ease, background-color 0.22s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.qrb .dial svg {
+  width: 11px;
+  height: 11px;
+  display: block;
+  /* handset 为实心面：fill 承色，stroke 必须显式归零，
+     否则某些 UA 下会双描边糊成一团。 */
+  fill: currentColor;
+  stroke: none;
+}
+.qrb .dial:active {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--gold) 14%, transparent);
+}
 .cta {
   margin-top: 16px;
   width: 100%;

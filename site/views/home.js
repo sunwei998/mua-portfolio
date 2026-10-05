@@ -11,7 +11,7 @@
  * ============================================================ */
 // @ts-check
 
-import { symbolSVG } from '../components/brandMark.js?v=20261005l';
+import { symbolSVG } from '../components/brandMark.js?v=20261005m';
 import { registerGroup } from '../components/viewer.js';
 import { getHome } from '../api.js';
 

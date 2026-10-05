@@ -160,8 +160,8 @@ export interface Gallery {
 
 /** site_setting 单行 —— 品牌文案全部配置化，改文案不碰代码 */
 export interface SiteSettings {
-  brandCn: string;          // 予时妍
-  brandEn: string;          // YUÉ ATELIER
+  brandCn: string;          // 茉與妝
+  brandEn: string;          // MO·BEAUTÉ
   taglineCn: string;        // 为重要时刻，留一份美
   subCn: string;            // 婚礼 与 日常（字标副标，短版）
   subLongCn: string;        // 婚礼跟妆 · 订婚宴 · 孕亲照 · 日常妆（长版，仅 meta/关于页）

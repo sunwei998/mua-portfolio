@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "予时妍 YUÉ ATELIER · 作品集站点 API（Node 22 + Fastify 5 + TS）",
+  "description": "茉與妝 MO·BEAUTÉ · 作品集站点 API（Node 22 + Fastify 5 + TS）",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",

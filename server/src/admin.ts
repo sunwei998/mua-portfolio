@@ -602,7 +602,7 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
     };
   });
 
-  app.put('/api/admin/site', async (req: FastifyRequest) => {
+  app.put('/api/admin/site', async (req: FastifyRequest, reply: FastifyReply) => {
     const b = (req.body ?? {}) as Record<string, unknown>;
     // 联系电话强校验：手机号（1[3-9] 开头 11 位）或含区号座机号（允许 - 分隔）；空值放行
     const phoneRaw = str(b.contactPhone);
