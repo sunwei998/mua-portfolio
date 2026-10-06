@@ -29,7 +29,6 @@ function checkPhone(): boolean {
 
 async function save(kind: string) {
   if (!s.value) return;
-  if (kind === '首页' && !checkPhone()) return;
   saving.value = true;
   try {
     await api.put('/api/admin/site', s.value);
@@ -41,11 +40,19 @@ async function save(kind: string) {
   }
 }
 
-/* ---------- 折叠面板：单次只展开一类 ---------- */
-const open = ref('brand');
+/* ---------- 分页签 ---------- */
+const tab = ref('brand');
 
-/** 图片字段（hero / 二维码 / 头像）直接本地上传，不填地址 */
-function pickImage(field: 'heroKey' | 'qrcodeKey' | 'portraitKey') {
+/** 品牌中文末字上色（前台口径：全站唯一彩色点），仅用于后台预览 */
+const brandSplit = computed(() => {
+  const cn = s.value?.brandCn ?? '';
+  return cn.length > 1
+    ? { head: cn.slice(0, -1), tail: cn.slice(-1) }
+    : { head: cn, tail: '' };
+});
+
+/** 图片字段直接本地上传，不填地址；ogImage 为预留字段（前台暂未消费） */
+function pickImage(field: 'heroKey' | 'qrcodeKey' | 'portraitKey' | 'ogImageKey') {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'image/*';
@@ -122,20 +129,53 @@ function removeFlow(i: number) {
   s.value.flowJson.splice(i, 1);
 }
 
-function saveFlow() {
-  if (!s.value) return;
+/** 流程规范化：校验非空/长度 + 序号按位置重排（与前台展示顺序严格一致）。
+ *  返回 false 表示校验未通过（已弹提示），调用方不要继续保存。 */
+function normalizeFlow(): boolean {
+  if (!s.value) return false;
   const rows = s.value.flowJson.map((r) => ({ ...r, title: (r.title ?? '').trim() }));
   if (rows.some((r) => !r.title)) {
     ElMessage.warning('步骤名称不能为空');
-    return;
+    return false;
   }
   if (rows.some((r) => r.title.length > FLOW_TITLE_MAX)) {
     ElMessage.warning(`步骤名称最多 ${FLOW_TITLE_MAX} 个字`);
+    return false;
+  }
+  s.value.flowJson = rows.map((r, i) => ({ step: String(i + 1).padStart(2, '0'), title: r.title }));
+  return true;
+}
+
+/* ============================================================
+ * 关于页数据条（site_setting.stats_json）
+ * 前台 about.js 已在渲染（labelCn + value），但后台一直没入口 → 此处补齐。
+ * ⚠️ 只提供编辑能力，不改任何存量数据。
+ * ============================================================ */
+const STATS_MAX = 4;
+
+function addStat() {
+  if (!s.value) return;
+  if (s.value.statsJson.length >= STATS_MAX) {
+    ElMessage.warning(`数据条最多 ${STATS_MAX} 项`);
     return;
   }
-  // 序号按位置重排（01、02…），与前台展示顺序严格一致
-  s.value.flowJson = rows.map((r, i) => ({ step: String(i + 1).padStart(2, '0'), title: r.title }));
-  save('流程');
+  s.value.statsJson.push({ label: '', value: '' });
+}
+
+function removeStat(i: number) {
+  s.value?.statsJson.splice(i, 1);
+}
+
+/** 信息配置统一保存：手机号格式 + 数据条 + 流程，全部通过才提交 */
+async function saveInfo() {
+  if (!s.value) return;
+  if (!checkPhone()) return;
+  if (!normalizeFlow()) return;
+  s.value.statsJson = s.value.statsJson.map((x) => ({
+    label: (x.label ?? '').trim(),
+    value: (x.value ?? '').trim(),
+  }));
+  await save('信息配置');
 }
 
 /* ============================================================
@@ -334,100 +374,216 @@ function clearVideo(slot: VidSlot) {
 </script>
 
 <template>
-  <div v-if="s">
-    <h2>站点设置</h2>
+  <div v-if="s" class="setpage">
+    <div class="page-head">
+      <div class="ph-main">
+        <h2>站点设置</h2>
+        <p>前台可见的文案、联系方式与首页素材 · 共 6 类</p>
+      </div>
+      <div class="ph-tip">站点配置为<b>整对象提交</b>：保存任意一类都会一并提交本页当前所有改动</div>
+    </div>
 
-    <el-collapse v-model="open" accordion>
-      <!-- ─────────── ① 品牌与文案 ─────────── -->
-      <el-collapse-item name="brand" title="品牌与文案">
-        <el-form label-width="110">
-          <el-form-item label="品牌中文"><el-input v-model="s.brandCn" style="width:240px" /></el-form-item>
-          <el-form-item label="品牌英文"><el-input v-model="s.brandEn" style="width:240px" /></el-form-item>
-          <el-form-item label="标语"><el-input v-model="s.taglineCn" style="width:320px" /></el-form-item>
-          <el-form-item label="字标副标（短）"><el-input v-model="s.subCn" style="width:240px" /></el-form-item>
-          <el-form-item label="副标长版"><el-input v-model="s.subLongCn" style="width:420px" /></el-form-item>
-          <el-form-item label="署名条"><el-input v-model="s.bylineCn" style="width:320px" placeholder="甜茉 · 化妆师个人作品集" /></el-form-item>
-          <el-form-item label="关于页简介">
-            <el-input v-model="s.bioCn" type="textarea" :rows="4" style="width:520px" />
-          </el-form-item>
-        </el-form>
-        <div class="sec-actions">
-          <el-button type="primary" :loading="saving" @click="save('品牌')">保存品牌</el-button>
+    <el-tabs v-model="tab" class="settabs">
+      <!-- ─────────── ① 品牌文案 ─────────── -->
+      <el-tab-pane name="brand">
+        <template #label><span class="tl"><el-icon><Postcard /></el-icon>品牌文案</span></template>
+        <div class="cols">
+          <div class="col-main">
+            <el-card shadow="never" class="card">
+              <template #header>
+                <div class="card-hd"><span class="t">品牌标识</span><span class="h">页头字标 · 页签标题 · 关于页大字</span></div>
+              </template>
+              <el-form label-width="88px" class="grid2">
+                <el-form-item label="品牌中文"><el-input v-model="s.brandCn" placeholder="茉與妝" /></el-form-item>
+                <el-form-item label="品牌英文"><el-input v-model="s.brandEn" placeholder="MO·BEAUTÉ" /></el-form-item>
+                <el-form-item label="标语"><el-input v-model="s.taglineCn" placeholder="为重要时刻，留一份美" /></el-form-item>
+                <el-form-item label="署名条"><el-input v-model="s.bylineCn" placeholder="甜茉 · 化妆师个人作品集" /></el-form-item>
+                <el-form-item label="字标副标"><el-input v-model="s.subCn" placeholder="MO·BEAUTÉ" /></el-form-item>
+                <el-form-item label="副标长版"><el-input v-model="s.subLongCn" placeholder="MAKEUP &amp; HAIR · BRIDAL &amp; DAILY" /></el-form-item>
+              </el-form>
+            </el-card>
+
+            <el-card shadow="never" class="card">
+              <template #header>
+                <div class="card-hd"><span class="t">关于页简介</span><span class="h">留空则该段不展示</span></div>
+              </template>
+              <el-form label-width="0">
+                <el-input v-model="s.bioCn" type="textarea" :rows="5"
+                          placeholder="一两段自我介绍：擅长风格 / 工作城市 / 接单方式…" />
+              </el-form>
+            </el-card>
+
+            <el-card shadow="never" class="card">
+              <template #header>
+                <div class="card-hd"><span class="t">分享图</span><span class="h">字段已入库 · 前台暂未接入</span></div>
+              </template>
+              <div class="pic-field">
+                <el-image v-if="s.ogImageKey" :src="s.ogImageKey" class="pic-thumb og-thumb"
+                          :preview-src-list="[s.ogImageKey]" preview-teleported />
+                <div v-else class="pic-thumb og-thumb thumb-empty">未设置</div>
+                <div class="pic-ops">
+                  <el-button size="small" plain @click="pickImage('ogImageKey')">{{ s.ogImageKey ? '重新上传' : '上传图片' }}</el-button>
+                  <el-button v-if="s.ogImageKey" size="small" text type="danger" @click="s.ogImageKey = ''">移除</el-button>
+                  <span class="pic-note">建议 1200×630 · 当前仅作备用，预留字段</span>
+                </div>
+              </div>
+            </el-card>
+
+            <div class="sec-actions">
+              <el-button type="primary" :loading="saving" @click="save('品牌文案')">保存品牌文案</el-button>
+            </div>
+          </div>
+
+          <aside class="col-side">
+            <el-card shadow="never" class="card">
+              <template #header><div class="card-hd"><span class="t">前台效果预览</span></div></template>
+              <div class="pv-brand">
+                <div class="pv-en">{{ s.brandEn || 'MO·BEAUTÉ' }}</div>
+                <div class="pv-cn"><span>{{ brandSplit.head }}</span><em v-if="brandSplit.tail">{{ brandSplit.tail }}</em></div>
+                <div class="pv-tag">{{ s.taglineCn || '标语' }}</div>
+                <div class="pv-sub">{{ s.subCn }}</div>
+                <div class="pv-byline">{{ s.bylineCn }}</div>
+              </div>
+            </el-card>
+          </aside>
         </div>
-      </el-collapse-item>
+      </el-tab-pane>
 
-      <!-- ─────────── ② 首页设置 ─────────── -->
-      <el-collapse-item name="home" title="首页设置">
-        <el-form label-width="110">
-          <el-form-item label="Hero 图">
-            <div class="pic-field">
-              <el-image v-if="s.heroKey" :src="s.heroKey" class="pic-thumb" :preview-src-list="[s.heroKey]" preview-teleported />
-              <div class="pic-ops">
-                <el-button size="small" plain @click="pickImage('heroKey')">{{ s.heroKey ? '重新上传' : '上传图片' }}</el-button>
-                <el-button v-if="s.heroKey" size="small" text type="danger" @click="s.heroKey = ''">移除</el-button>
+      <!-- ─────────── ② 信息配置 ─────────── -->
+      <el-tab-pane name="info">
+        <template #label><span class="tl"><el-icon><Iphone /></el-icon>信息配置</span></template>
+        <el-card shadow="never" class="card">
+          <template #header>
+            <div class="card-hd"><span class="t">联系信息</span><span class="h">联系页玻璃卡 · 头像 / 微信 / 电话 / 二维码</span></div>
+          </template>
+          <div class="info-grid">
+            <div class="info-pics">
+              <div class="sub-t">主理人头像</div>
+              <div class="pic-field">
+                <el-image :src="s.portraitKey || '/img/portrait.webp'" class="pic-thumb avatar-thumb"
+                          :preview-src-list="[s.portraitKey || '/img/portrait.webp']" preview-teleported />
+                <div class="pic-ops">
+                  <el-button size="small" plain @click="pickImage('portraitKey')">{{ s.portraitKey ? '重新上传' : '上传图片' }}</el-button>
+                  <el-button v-if="s.portraitKey" size="small" text type="danger" @click="s.portraitKey = ''">移除</el-button>
+                  <span class="pic-note">{{ s.portraitKey ? '已上传自定义头像' : '当前显示站点默认头像' }}</span>
+                </div>
+              </div>
+
+              <div class="sub-t">微信二维码</div>
+              <div class="pic-field">
+                <el-image v-if="s.qrcodeKey" :src="s.qrcodeKey" class="pic-thumb qr-thumb"
+                          :preview-src-list="[s.qrcodeKey]" preview-teleported />
+                <div v-else class="pic-thumb qr-thumb thumb-empty">未设置</div>
+                <div class="pic-ops">
+                  <el-button size="small" plain @click="pickImage('qrcodeKey')">{{ s.qrcodeKey ? '重新上传' : '上传图片' }}</el-button>
+                  <el-button v-if="s.qrcodeKey" size="small" text type="danger" @click="s.qrcodeKey = ''">移除</el-button>
+                  <span class="pic-note">留空则前台整块不显示</span>
+                </div>
               </div>
             </div>
-          </el-form-item>
-          <el-form-item label="主理人头像">
-            <div class="pic-field">
-              <el-image :src="s.portraitKey || '/img/portrait.webp'" class="pic-thumb avatar-thumb" :preview-src-list="[s.portraitKey || '/img/portrait.webp']" preview-teleported />
-              <div class="pic-ops">
-                <el-button size="small" plain @click="pickImage('portraitKey')">{{ s.portraitKey ? '重新上传' : '上传图片' }}</el-button>
-                <el-button v-if="s.portraitKey" size="small" text type="danger" @click="s.portraitKey = ''">移除</el-button>
-                <span class="pic-note">{{ s.portraitKey ? '已上传自定义头像' : '当前显示站点默认头像' }}</span>
-              </div>
+
+            <el-form label-width="88px" class="info-form">
+              <el-form-item label="微信号">
+                <el-input v-model="s.wechatId" placeholder="前台显示为「微信 xxx」，行尾可一键复制" />
+                <div class="tip">留空则该行不展示</div>
+              </el-form-item>
+              <el-form-item label="手机号码">
+                <el-input v-model="s.contactPhone" placeholder="13800138000 / 0514-1234567" @blur="checkPhone" />
+                <div class="tip">支持手机号或含区号座机 · 前台渲染为可点击拨号</div>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-card>
+
+        <el-card shadow="never" class="card">
+          <template #header>
+            <div class="card-hd"><span class="t">关于页数据条</span><span class="h">联系页玻璃卡上的一组数字 · ≤ {{ STATS_MAX }} 项</span></div>
+          </template>
+          <div class="stat-list">
+            <div v-for="(x, i) in s.statsJson" :key="i" class="stat-row">
+              <span class="flow-no">{{ String(i + 1).padStart(2, '0') }}</span>
+              <el-input v-model="x.value" style="width:130px" placeholder="8" />
+              <el-input v-model="x.label" style="width:190px" placeholder="从业年" />
+              <el-button size="small" text type="danger" :disabled="s.statsJson.length <= 1" @click="removeStat(i)">移除</el-button>
             </div>
-          </el-form-item>
-          <el-form-item label="Hero 角签"><el-input v-model="s.heroTagCn" style="width:240px" placeholder="2026 婚礼季" /></el-form-item>
-          <el-form-item label="走马灯词">
-            <el-input v-model="MARQUEE_TEXT" style="width:420px" placeholder="婚礼跟妆、订婚宴、孕妇照…"
-                      @focus="syncMarqueeOut" @change="syncMarqueeIn" />
-          </el-form-item>
-          <el-form-item label="微信号"><el-input v-model="s.wechatId" style="width:240px" /></el-form-item>
-          <el-form-item label="联系电话">
-            <el-input v-model="s.contactPhone" style="width:240px" placeholder="手机号或座机（如 13800138000 / 0514-1234567）" @blur="checkPhone" />
-          </el-form-item>
-          <el-form-item label="二维码图">
-            <div class="pic-field">
-              <el-image v-if="s.qrcodeKey" :src="s.qrcodeKey" class="pic-thumb qr-thumb" :preview-src-list="[s.qrcodeKey]" preview-teleported />
-              <div class="pic-ops">
-                <el-button size="small" plain @click="pickImage('qrcodeKey')">{{ s.qrcodeKey ? '重新上传' : '上传图片' }}</el-button>
-                <el-button v-if="s.qrcodeKey" size="small" text type="danger" @click="s.qrcodeKey = ''">移除</el-button>
-              </div>
+            <el-button v-if="s.statsJson.length < STATS_MAX" size="small" plain class="flow-add" @click="addStat">＋ 加一项</el-button>
+            <span v-if="!s.statsJson.length" class="tip">暂无数据 · 前台该块不显示</span>
+          </div>
+        </el-card>
+
+        <el-card shadow="never" class="card">
+          <template #header>
+            <div class="card-hd"><span class="t">联系页服务流程</span><span class="h">步骤玻璃签 · 按此顺序渲染 · 序号自动生成 · ≤ {{ FLOW_MAX }} 步、每步 ≤ {{ FLOW_TITLE_MAX }} 字</span></div>
+          </template>
+          <div class="flow-list">
+            <div v-for="(f, i) in s.flowJson" :key="i" class="flow-row">
+              <span class="flow-no">{{ String(i + 1).padStart(2, '0') }}</span>
+              <el-input v-model="f.title" :maxlength="FLOW_TITLE_MAX" style="width:260px"
+                        :placeholder="['预约沟通', '试妆定型', '婚礼跟妆'][i] || '如：敬酒补妆'" />
+              <el-button size="small" text type="danger" :disabled="s.flowJson.length <= 1" @click="removeFlow(i)">移除</el-button>
             </div>
-          </el-form-item>
-        </el-form>
+            <el-button v-if="s.flowJson.length < FLOW_MAX" size="small" plain class="flow-add" @click="addFlow">＋ 加一步</el-button>
+          </div>
+          <div class="flow-pv">
+            <span class="tip">前台预览</span>
+            <span v-for="(f, i) in s.flowJson" :key="'pv' + i" class="chip">{{ f.title || '—' }}</span>
+            <span v-if="!s.flowJson.length" class="tip">暂无步骤 · 前台整块隐藏</span>
+          </div>
+        </el-card>
+
+        <div class="sec-actions">
+          <el-button type="primary" :loading="saving" @click="saveInfo">保存信息配置</el-button>
+          <span class="tip">手机号格式 · 数据条 · 服务流程一并校验后提交</span>
+        </div>
+      </el-tab-pane>
+
+      <!-- ─────────── ③ 首页 ─────────── -->
+      <el-tab-pane name="home">
+        <template #label><span class="tl"><el-icon><HomeFilled /></el-icon>首页</span></template>
+        <el-card shadow="never" class="card">
+          <template #header>
+            <div class="card-hd"><span class="t">首屏 Hero</span><span class="h">进入首页第一眼的大图</span></div>
+          </template>
+          <div class="pic-field">
+            <el-image v-if="s.heroKey" :src="s.heroKey" class="pic-thumb" :preview-src-list="[s.heroKey]" preview-teleported />
+            <div v-else class="pic-thumb thumb-empty">未设置</div>
+            <div class="pic-ops">
+              <el-button size="small" plain @click="pickImage('heroKey')">{{ s.heroKey ? '重新上传' : '上传图片' }}</el-button>
+              <el-button v-if="s.heroKey" size="small" text type="danger" @click="s.heroKey = ''">移除</el-button>
+              <span class="pic-note">建议竖幅 3:4 以上 · 建议 1200×1600 以内</span>
+            </div>
+          </div>
+        </el-card>
+
+        <el-card shadow="never" class="card">
+          <template #header>
+            <div class="card-hd"><span class="t">首屏文案</span><span class="h">角签 · 走马灯词</span></div>
+          </template>
+          <el-form label-width="88px" class="grid2">
+            <el-form-item label="Hero 角签">
+              <el-input v-model="s.heroTagCn" placeholder="2026 婚礼季" />
+              <div class="tip">图上角标 · 留空则不显示</div>
+            </el-form-item>
+            <el-form-item label="走马灯词">
+              <el-input v-model="MARQUEE_TEXT" placeholder="婚礼跟妆、订婚宴、孕妇照…"
+                        @focus="syncMarqueeOut" @change="syncMarqueeIn" />
+              <div class="tip">顿号或逗号分隔 · 自动拆成数组存库</div>
+            </el-form-item>
+          </el-form>
+        </el-card>
+
         <div class="sec-actions">
           <el-button type="primary" :loading="saving" @click="save('首页')">保存首页</el-button>
         </div>
-      </el-collapse-item>
+      </el-tab-pane>
 
-      <!-- ─────────── ③ 联系页服务流程（flow_json） ─────────── -->
-      <el-collapse-item name="flow" title="联系页服务流程">
-        <div class="feat-head">
-          <span class="feat-hint">联系页「步骤」玻璃签 · 按此顺序渲染 · 序号自动生成 · 最多 {{ FLOW_MAX }} 步、每步 ≤ {{ FLOW_TITLE_MAX }} 字</span>
-        </div>
-        <div class="flow-list">
-          <div v-for="(f, i) in s.flowJson" :key="i" class="flow-row">
-            <span class="flow-no">{{ String(i + 1).padStart(2, '0') }}</span>
-            <el-input v-model="f.title" :maxlength="FLOW_TITLE_MAX" style="width:260px"
-                      :placeholder="['预约沟通', '试妆定型', '婚礼跟妆'][i] || '如：敬酒补妆'" />
-            <el-button size="small" text type="danger" :disabled="s.flowJson.length <= 1"
-                       @click="removeFlow(i)">移除</el-button>
-          </div>
-          <el-button v-if="s.flowJson.length < FLOW_MAX" size="small" plain class="flow-add"
-                     @click="addFlow">＋ 加一步</el-button>
-        </div>
-        <div class="sec-actions">
-          <el-button type="primary" :loading="saving" @click="saveFlow">保存流程</el-button>
-        </div>
-      </el-collapse-item>
-
-      <!-- ─────────── ④ 首页精选（018） ─────────── -->
-      <el-collapse-item name="feat" title="首页精选">
-        <div class="feat-head">
-          <span class="feat-hint">≤ {{ FEATURED_MAX }} 张 · 拖拽图片排序 · 前台 0 张时整块隐藏 · 不影响作品菜单</span>
-        </div>
+      <!-- ─────────── ④ 精选作品（018） ─────────── -->
+      <el-tab-pane name="feat">
+        <template #label><span class="tl"><el-icon><Star /></el-icon>精选作品</span></template>
+        <el-card shadow="never" class="card">
+          <template #header>
+            <div class="card-hd"><span class="t">首页精选图墙</span><span class="h">≤ {{ FEATURED_MAX }} 张 · 拖拽排序 · 前台 0 张时整块隐藏</span></div>
+          </template>
         <div class="feat-grid" v-loading="featsLoading">
           <div v-for="(f, i) in feats" :key="f.cosKey + i"
                class="feat-tile" draggable="true"
@@ -448,14 +604,18 @@ function clearVideo(slot: VidSlot) {
         </div>
         <div class="sec-actions">
           <el-button type="primary" :loading="featsSaving" @click="saveFeats">保存精选</el-button>
+          <span class="tip">排序与增删即时入库，与其它类互不影响</span>
         </div>
-      </el-collapse-item>
+        </el-card>
+      </el-tab-pane>
 
-      <!-- ─────────── ④ 首页视频（018 建列，020 扩双位，021 扩五位） ─────────── -->
-      <el-collapse-item name="video" title="首页视频">
-        <div class="feat-head">
-          <span class="feat-hint">最多 5 个 · 任意格式（mov/HEVC/4K）自动转码为 H.264 1080p · 随该类保存一起生效 · 中间槽位留空不影响其他视频</span>
-        </div>
+      <!-- ─────────── ⑤ 首页视频（018 建列，020 扩双位，021 扩五位） ─────────── -->
+      <el-tab-pane name="video">
+        <template #label><span class="tl"><el-icon><VideoCamera /></el-icon>首页视频</span></template>
+        <el-card shadow="never" class="card">
+          <template #header>
+            <div class="card-hd"><span class="t">视频槽位</span><span class="h">≤ 5 个 · 任意格式自动转码 H.264 1080p · 中间槽留空不影响其他</span></div>
+          </template>
         <div v-for="v in vidSlots" :key="v.slot" class="vid-block">
           <div class="vid-title">{{ v.label }}
             <span v-if="v.w && v.h" class="vid-meta">{{ v.w }}×{{ v.h }} · {{ v.w >= v.h ? '横屏' : '竖屏' }}<template v-if="v.duration"> · {{ Math.round(v.duration) }}s</template></span>
@@ -479,53 +639,156 @@ function clearVideo(slot: VidSlot) {
         <div class="sec-actions">
           <el-button type="primary" :loading="saving" @click="save('视频')">保存视频</el-button>
         </div>
-      </el-collapse-item>
-      <!-- ─────────── ⑤ 密码配置 ─────────── -->
-      <el-collapse-item name="password" title="密码配置">
-        <el-form label-width="110" inline>
-          <el-form-item label="旧密码"><el-input v-model="oldPw" type="password" show-password style="width:200px" /></el-form-item>
-          <el-form-item label="新密码"><el-input v-model="newPw" type="password" show-password style="width:200px" /></el-form-item>
-          <el-form-item label="确认新密码"><el-input v-model="newPw2" type="password" show-password style="width:200px" /></el-form-item>
-          <el-form-item>
-            <el-button type="warning" plain :loading="pwSaving" @click="changePw">修改密码</el-button>
-          </el-form-item>
-        </el-form>
-      </el-collapse-item>
-    </el-collapse>
+        </el-card>
+      </el-tab-pane>
+
+      <!-- ─────────── ⑥ 账号安全 ─────────── -->
+      <el-tab-pane name="sec">
+        <template #label><span class="tl"><el-icon><Lock /></el-icon>账号安全</span></template>
+        <el-card shadow="never" class="card">
+          <template #header>
+            <div class="card-hd"><span class="t">修改登录密码</span><span class="h">仅影响后台账号 · 前台访客无密码</span></div>
+          </template>
+          <el-form label-width="96px" class="pw-form">
+            <el-form-item label="当前密码">
+              <el-input v-model="oldPw" type="password" show-password style="width:260px" placeholder="修改前需验证原密码" />
+            </el-form-item>
+            <el-form-item label="新密码">
+              <el-input v-model="newPw" type="password" show-password style="width:260px" placeholder="至少 6 位" />
+            </el-form-item>
+            <el-form-item label="确认新密码">
+              <el-input v-model="newPw2" type="password" show-password style="width:260px" placeholder="再输一次" />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="warning" plain :loading="pwSaving" @click="changePw">修改密码</el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
+
+        <el-card shadow="never" class="card">
+          <template #header><div class="card-hd"><span class="t">规则说明</span></div></template>
+          <ul class="rules">
+            <li>新密码至少 6 位，两次输入需一致；修改成功后<b>下次登录</b>生效。</li>
+            <li>密码在库中以 scrypt 加盐散列存储，任何人无法反查明文。</li>
+            <li>忘记密码无法在此自助找回，需在服务器端重置账号。</li>
+            <li>前台内容配置与本 tab 相互独立，改密码不会影响任何站点设置。</li>
+          </ul>
+        </el-card>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
 <style scoped>
-h2 { margin: 0 0 16px; font-size: 18px; color: #221d19; }
-.card { margin-bottom: 16px; }
-.actions { margin-bottom: 16px; }
-
-/* ---------- 折叠面板与每类保存 ---------- */
-.sec-actions { margin-top: 16px; }
-.el-collapse { border: none; }
-.el-collapse :deep(.el-collapse-item__header) {
-  font-size: 14px; font-weight: 600; color: #221d19;
-  background: #faf7f1; border-bottom: 1px solid #efe8dc;
+/* ---------- 页头 ---------- */
+.setpage { padding-bottom: 8px; }
+.page-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 16px; margin-bottom: 4px;
 }
-.el-collapse :deep(.el-collapse-item__wrap) { background: transparent; }
-.el-collapse :deep(.el-collapse-item__content) { padding: 16px 4px 8px; }
+.page-head h2 { margin: 0; font-size: 18px; color: #221d19; letter-spacing: .04em; }
+.ph-main p { margin: 6px 0 0; font-size: 12px; color: #8a8177; letter-spacing: .06em; }
+.ph-tip {
+  flex: none; max-width: 340px; text-align: right;
+  font-size: 11px; line-height: 1.7; color: #9e4e55;
+  background: #fbf1f0; border: 1px solid #f0dcd9; border-radius: 6px; padding: 7px 10px;
+}
+.ph-tip b { font-weight: 600; }
 
-/* ---------- 图片上传字段（hero / 二维码） ---------- */
+/* ---------- 页签 ---------- */
+.settabs :deep(.el-tabs__header) { margin-bottom: 18px; }
+.settabs :deep(.el-tabs__nav-wrap::after) { height: 1px; background: #efe8dc; }
+.settabs :deep(.el-tabs__item) {
+  font-size: 13.5px; letter-spacing: .06em; color: #6b6259; padding: 0 4px; margin-right: 22px;
+}
+.settabs :deep(.el-tabs__item.is-active) { color: #221d19; font-weight: 600; }
+.settabs :deep(.el-tabs__active-bar) { background: #b0707b; height: 2px; }
+.tl { display: inline-flex; align-items: center; gap: 6px; }
+
+/* ---------- 卡片与栅格 ---------- */
+.card { margin-bottom: 16px; border-radius: 8px; }
+.card :deep(.el-card__header) {
+  padding: 12px 16px; background: #faf7f1; border-bottom: 1px solid #efe8dc; border-radius: 8px 8px 0 0;
+}
+.card :deep(.el-card__body) { padding: 16px; }
+.card-hd { display: flex; align-items: baseline; gap: 10px; }
+.card-hd .t { font-size: 13.5px; font-weight: 600; color: #221d19; }
+.card-hd .h { font-size: 11.5px; color: #8a8177; letter-spacing: .04em; }
+
+.cols { display: flex; gap: 18px; align-items: flex-start; }
+.col-main { flex: 1; min-width: 0; }
+.col-side { flex: none; width: 300px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 22px; }
+.grid2 :deep(.el-form-item) { margin-bottom: 16px; }
+.tip { font-size: 11px; color: #9a9187; letter-spacing: .04em; line-height: 1.6; }
+.sub-t { font-size: 12px; font-weight: 600; color: #5c544b; margin: 0 0 8px; }
+.sub-t:not(:first-child) { margin-top: 20px; }
+
+/* ---------- 品牌预览 ---------- */
+.pv-brand {
+  padding: 22px 18px; text-align: center; border-radius: 6px;
+  background: linear-gradient(180deg, #fbf6f5, #f6efec);
+  box-shadow: 0 0 0 1px #efe3e0 inset;
+}
+.pv-en { font-size: 9.5px; letter-spacing: .42em; text-indent: .42em; color: #b0707b; }
+.pv-cn {
+  margin-top: 12px; font-family: "Noto Serif SC", Georgia, serif; font-weight: 300;
+  font-size: 30px; letter-spacing: .1em; text-indent: .1em; color: #221d19;
+}
+.pv-cn em { font-style: normal; color: #9e4e55; }
+.pv-tag { margin-top: 12px; font-size: 12px; letter-spacing: .16em; text-indent: .16em; color: #5c544b; }
+.pv-sub { margin-top: 8px; font-size: 9px; letter-spacing: .3em; text-indent: .3em; color: #a89a90; }
+.pv-byline {
+  margin-top: 18px; padding-top: 12px; border-top: 1px solid #e8dcd8;
+  font-size: 11px; letter-spacing: .1em; color: #8a8177;
+}
+
+/* ---------- 信息配置 ---------- */
+.info-grid { display: flex; gap: 26px; align-items: flex-start; }
+.info-pics { flex: none; width: 300px; }
+.info-form { flex: 1; min-width: 0; }
+.info-form :deep(.el-form-item) { margin-bottom: 20px; }
+.stat-list, .flow-list { display: flex; flex-direction: column; gap: 10px; }
+.stat-row, .flow-row { display: flex; align-items: center; gap: 10px; }
+.flow-no {
+  flex: none; width: 30px; text-align: center;
+  font-size: 12px; font-weight: 600; color: #8a8177;
+  font-family: Georgia, serif; letter-spacing: .05em;
+}
+.flow-add { align-self: flex-start; margin-top: 2px; }
+.flow-pv {
+  margin-top: 16px; padding-top: 14px; border-top: 1px dashed #e8e0d4;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.chip {
+  font-size: 11.5px; letter-spacing: .08em; color: #6b6259;
+  background: #faf7f1; border: 1px solid #e8dfd2; border-radius: 999px; padding: 4px 12px;
+}
+.rules { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 2; color: #5c544b; }
+.rules b { color: #9e4e55; font-weight: 600; }
+.pw-form :deep(.el-form-item) { margin-bottom: 18px; }
+
+/* ---------- 缩略图 ---------- */
 .pic-field { display: flex; align-items: flex-start; gap: 12px; }
 .pic-thumb {
   width: 120px; height: 160px; flex: none;
   border-radius: 8px; background: #efe9e1; display: block;
   box-shadow: 0 0 0 1px #e3dccf inset;
 }
+.og-thumb { width: 150px; height: 79px; }
 .qr-thumb { width: 120px; height: 120px; }
 .avatar-thumb { width: 96px; height: 96px; border-radius: 50%; overflow: hidden; }
-.pic-note { font-size: 11px; color: #8a8177; letter-spacing: .05em; }
+.thumb-empty {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: #a89a90; letter-spacing: .1em;
+}
+.pic-note { font-size: 11px; color: #8a8177; letter-spacing: .05em; line-height: 1.6; }
 .pic-ops { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
 
-/* ---------- 首页精选卡 ---------- */
-.feat-head { display: flex; align-items: center; gap: 12px; }
-.feat-head > span:first-child { font-weight: 600; }
-.feat-hint { flex: 1; font-size: 12px; color: #8a8177; }
+/* ---------- 每类保存 ---------- */
+.sec-actions { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
+
+/* ---------- 精选卡 ---------- */
 .feat-grid { display: flex; flex-wrap: wrap; gap: 14px; }
 .feat-tile {
   position: relative;
@@ -564,16 +827,6 @@ h2 { margin: 0 0 16px; font-size: 18px; color: #221d19; }
 .feat-add .plus { font-size: 22px; line-height: 1; }
 .feat-add .txt { font-size: 12px; letter-spacing: .08em; }
 .feat-add .cnt { font-size: 10px; opacity: .6; }
-
-/* ---------- 联系页服务流程 ---------- */
-.flow-list { display: flex; flex-direction: column; gap: 10px; max-width: 460px; }
-.flow-row { display: flex; align-items: center; gap: 10px; }
-.flow-no {
-  flex: none; width: 30px; text-align: center;
-  font-size: 12px; font-weight: 600; color: #8a8177;
-  font-family: Georgia, serif; letter-spacing: .05em;
-}
-.flow-add { align-self: flex-start; margin-top: 2px; }
 
 /* ---------- 首页视频卡 ---------- */
 .vid-block { margin-bottom: 20px; }
